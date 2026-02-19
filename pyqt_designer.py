@@ -99,17 +99,17 @@ HTML_CONTENT = r"""<!DOCTYPE html>
 *{box-sizing:border-box}
 body{margin:0;padding:0;overflow:hidden;font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text)}
 #root{height:100vh;width:100vw;background:var(--bg)}
-:root{--bg:#09090b;--bg2:#18181b;--bg3:#27272a;--bg4:#3f3f46;--border:#27272a;--border2:#3f3f46;--text:#fafafa;--text2:#a1a1aa;--text3:#71717a;--accent:#3b82f6;--accent2:#2563eb;--accent-glow:rgba(59,130,246,0.15);--red:#ef4444;--green:#22c55e;--yellow:#eab308;--purple:#a855f7}
+:root{--bg:#1e1e1e;--bg2:#252526;--bg3:#37373d;--bg4:#454545;--border:#333333;--border2:#404040;--text:#cccccc;--text2:#aaaaaa;--text3:#808080;--accent:#007acc;--accent2:#005a9e;--accent-glow:rgba(0,122,204,0.15);--red:#f48771;--green:#89d185;--yellow:#cca700;--purple:#c586c0}
 .grid-bg{background-color:var(--bg);background-image:radial-gradient(circle,var(--border) 1px,transparent 1px);background-size:20px 20px;min-height:100%;min-width:100%}
-.scr::-webkit-scrollbar{width:5px;height:5px}
+.scr::-webkit-scrollbar{width:8px;height:8px}
 .scr::-webkit-scrollbar-track{background:transparent}
-.scr::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
-.scr::-webkit-scrollbar-thumb:hover{background:#52525b}
-input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 0 0 1px var(--accent)}
-.ctx-menu{position:fixed;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:4px;z-index:9999;box-shadow:0 20px 40px rgba(0,0,0,0.6);min-width:180px;backdrop-filter:blur(12px)}
-.ctx-item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:6px 10px;font-size:11px;border-radius:4px;color:var(--text2);border:none;background:none;cursor:pointer;transition:all 0.1s}
+.scr::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px;border:2px solid var(--bg2)}
+.scr::-webkit-scrollbar-thumb:hover{background:#555}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-glow)}
+.ctx-menu{position:fixed;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:4px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.4);min-width:180px;}
+.ctx-item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:6px 10px;font-size:11px;border-radius:4px;color:var(--text);border:none;background:none;cursor:pointer;transition:all 0.1s}
 .ctx-item:hover{background:var(--accent);color:white}
-.ctx-item.danger:hover{background:var(--red)}
+.ctx-item.danger:hover{background:var(--red);color:white}
 .ctx-sep{height:1px;background:var(--border);margin:3px 4px}
 
 /* Widget preview styles */
@@ -206,8 +206,8 @@ input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 0 0 1px var(--
 .code-view .fn{color:#fbbf24}
 .code-view .num{color:#f87171}
 
-.widget-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:grab;transition:all 0.15s;user-select:none}
-.widget-card:hover{border-color:var(--accent);background:var(--bg3);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+.widget-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:grab;transition:all 0.15s;user-select:none;color:var(--text)}
+.widget-card:hover{border-color:var(--accent);background:var(--bg3);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.3);color:var(--text)}
 .widget-card:active{transform:scale(0.96)}
 .widget-card .icon-wrap{color:var(--text3);transition:color 0.15s}
 .widget-card:hover .icon-wrap{color:var(--accent)}
@@ -228,24 +228,24 @@ const FONT_FAMILIES=['Segoe UI','Arial','Helvetica Neue','Times New Roman','Cour
 const THEMES={
     midnight:{
         name:'Midnight',
-        swatch:'#09090b',
-        ide:{bg:'#09090b',bg2:'#18181b',bg3:'#27272a',bg4:'#3f3f46',border:'#27272a',border2:'#3f3f46',text:'#fafafa',text2:'#a1a1aa',text3:'#71717a',accent:'#3b82f6',accent2:'#2563eb','accent-glow':'rgba(59,130,246,0.15)',red:'#ef4444',green:'#22c55e',yellow:'#eab308',purple:'#a855f7'},
-        canvas:'#1e1e2e',
-        widget:{btnBg:'linear-gradient(180deg,#484860,#3a3a50)',btnBorder:'#6a6a80',btnColor:'#e8e8f0',inputBg:'#2e2e42',inputBorder:'#5a5a70',inputColor:'#e0e0ea',comboBg:'#2e2e42',comboBorder:'#5a5a70',comboColor:'#e0e0ea',checkColor:'#e0e0ea',groupBorder:'#5a5a70',groupColor:'#e0e0ea',frameBorder:'#5a5a70',progressBg:'#2a2a3e',progressBorder:'#5a5a70',progressFill:'linear-gradient(90deg,#06b6d4,#3b82f6)',sliderTrack:'#3a3a50',sliderThumb:'#3b82f6',sliderThumbBorder:'#fff',spinBg:'#2e2e42',spinBorder:'#5a5a70',spinColor:'#e0e0ea',lcdBg:'#0a0a1e',lcdColor:'#00ff88',listBg:'#2a2a3e',listBorder:'#5a5a70',listColor:'#e0e0ea',listSelBg:'#3b82f6',listSelColor:'#fff',listItemBorder:'#3a3a50',treeBg:'#2a2a3e',treeBorder:'#5a5a70',treeColor:'#e0e0ea',tableBg:'#2a2a3e',tableBorder:'#5a5a70',tableColor:'#e0e0ea',tableHeaderBg:'#363650',tabBarBg:'#363650',tabActiveBg:'#2e2e42',tabBorder:'#5a5a70',tabColor:'#ccc',calBg:'#2a2a3e',calBorder:'#5a5a70',calColor:'#e0e0ea',calHeaderBg:'#363650',calCellColor:'#ccc',dateBg:'#2e2e42',dateBorder:'#5a5a70',dateColor:'#e0e0ea',scrollBg:'#3a3a50',dialBg:'conic-gradient(from 220deg,#3b82f6 0%,#3b82f6 45%,#3a3a50 45%,#3a3a50 100%)',dialBorder:'#6a6a80',labelColor:'#e0e0ea'}
+        swatch:'#1e1e1e',
+        ide:{bg:'#1e1e1e',bg2:'#252526',bg3:'#37373d',bg4:'#454545',border:'#333333',border2:'#404040',text:'#ffffff',text2:'#cccccc',text3:'#909090',accent:'#007acc',accent2:'#005a9e','accent-glow':'rgba(0,122,204,0.15)',red:'#f48771',green:'#89d185',yellow:'#cca700',purple:'#c586c0'},
+        canvas:'#1e1e1e',
+        widget:{btnBg:'linear-gradient(180deg,#3a3a3a,#303030)',btnBorder:'#555555',btnColor:'#ffffff',inputBg:'#303030',inputBorder:'#555555',inputColor:'#ffffff',comboBg:'#303030',comboBorder:'#555555',comboColor:'#ffffff',checkColor:'#ffffff',groupBorder:'#555555',groupColor:'#ffffff',frameBorder:'#555555',progressBg:'#252526',progressBorder:'#555555',progressFill:'linear-gradient(90deg,#007acc,#0098ff)',sliderTrack:'#444444',sliderThumb:'#007acc',sliderThumbBorder:'#fff',spinBg:'#303030',spinBorder:'#555555',spinColor:'#ffffff',lcdBg:'#000000',lcdColor:'#00ff00',listBg:'#252526',listBorder:'#555555',listColor:'#ffffff',listSelBg:'#004c75',listSelColor:'#ffffff',listItemBorder:'#3e3e3e',treeBg:'#252526',treeBorder:'#555555',treeColor:'#ffffff',tableBg:'#252526',tableBorder:'#555555',tableColor:'#ffffff',tableHeaderBg:'#3e3e3e',tabBarBg:'#252526',tabActiveBg:'#1e1e1e',tabBorder:'#555555',tabColor:'#ffffff',calBg:'#252526',calBorder:'#555555',calColor:'#ffffff',calHeaderBg:'#3e3e3e',calCellColor:'#ffffff',dateBg:'#303030',dateBorder:'#555555',dateColor:'#ffffff',scrollBg:'#3e3e3e',dialBg:'conic-gradient(from 220deg,#007acc 0%,#007acc 45%,#333333 45%,#333333 100%)',dialBorder:'#555555',labelColor:'#ffffff',bg:'#1e1e1e',bg2:'#303030'}
     },
     snow:{
         name:'Snow',
-        swatch:'#f8fafc',
-        ide:{bg:'#f1f5f9',bg2:'#ffffff',bg3:'#e2e8f0',bg4:'#cbd5e1',border:'#e2e8f0',border2:'#cbd5e1',text:'#0f172a',text2:'#475569',text3:'#94a3b8',accent:'#2563eb',accent2:'#1d4ed8','accent-glow':'rgba(37,99,235,0.12)',red:'#dc2626',green:'#16a34a',yellow:'#ca8a04',purple:'#7c3aed'},
+        swatch:'#ffffff',
+        ide:{bg:'#f3f3f3',bg2:'#ffffff',bg3:'#e8e8e8',bg4:'#d0d0d0',border:'#e0e0e0',border2:'#c0c0c0',text:'#202020',text2:'#444444',text3:'#666666',accent:'#0078d4',accent2:'#0067b8','accent-glow':'rgba(0,120,212,0.1)',red:'#d13438',green:'#107c10',yellow:'#ffb900',purple:'#881798'},
         canvas:'#ffffff',
-        widget:{btnBg:'linear-gradient(180deg,#f0f0f5,#dcdce5)',btnBorder:'#b0b0c0',btnColor:'#212529',inputBg:'#fafafe',inputBorder:'#b0b0c0',inputColor:'#212529',comboBg:'#fafafe',comboBorder:'#b0b0c0',comboColor:'#212529',checkColor:'#212529',groupBorder:'#9a9ab0',groupColor:'#212529',frameBorder:'#b0b0c0',progressBg:'#e9ecf2',progressBorder:'#b0b0c0',progressFill:'linear-gradient(90deg,#06b6d4,#3b82f6)',sliderTrack:'#d0d0dd',sliderThumb:'#fff',sliderThumbBorder:'#3b82f6',spinBg:'#fafafe',spinBorder:'#b0b0c0',spinColor:'#212529',lcdBg:'#1a1a2e',lcdColor:'#00ff88',listBg:'#fafafe',listBorder:'#b0b0c0',listColor:'#212529',listSelBg:'#3b82f6',listSelColor:'#fff',listItemBorder:'#e8e8f0',treeBg:'#fafafe',treeBorder:'#b0b0c0',treeColor:'#212529',tableBg:'#fafafe',tableBorder:'#b0b0c0',tableColor:'#212529',tableHeaderBg:'#f0f0f5',tabBarBg:'#e4e4ee',tabActiveBg:'#fafafe',tabBorder:'#b0b0c0',tabColor:'#212529',calBg:'#fafafe',calBorder:'#b0b0c0',calColor:'#212529',calHeaderBg:'#f0f0f5',calCellColor:'#333',dateBg:'#fafafe',dateBorder:'#b0b0c0',dateColor:'#212529',scrollBg:'#d4d4de',dialBg:'conic-gradient(from 220deg,#3b82f6 0%,#3b82f6 45%,#d0d0dd 45%,#d0d0dd 100%)',dialBorder:'#9a9ab0',labelColor:'#212529'}
+        widget:{btnBg:'linear-gradient(180deg,#f0f0f0,#e0e0e0)',btnBorder:'#bbbbbb',btnColor:'#000000',inputBg:'#f5f5f5',inputBorder:'#bbbbbb',inputColor:'#000000',comboBg:'#f5f5f5',comboBorder:'#bbbbbb',comboColor:'#000000',checkColor:'#000000',groupBorder:'#bbbbbb',groupColor:'#000000',frameBorder:'#bbbbbb',progressBg:'#e6e6e6',progressBorder:'#bbbbbb',progressFill:'linear-gradient(90deg,#0078d4,#00bcf2)',sliderTrack:'#d0d0d0',sliderThumb:'#ffffff',sliderThumbBorder:'#0078d4',spinBg:'#f5f5f5',spinBorder:'#bbbbbb',spinColor:'#000000',lcdBg:'#000000',lcdColor:'#00ff00',listBg:'#ffffff',listBorder:'#bbbbbb',listColor:'#000000',listSelBg:'#cde6f7',listSelColor:'#000000',listItemBorder:'#f0f0f0',treeBg:'#ffffff',treeBorder:'#bbbbbb',treeColor:'#000000',tableBg:'#ffffff',tableBorder:'#bbbbbb',tableColor:'#000000',tableHeaderBg:'#f0f0f0',tabBarBg:'#f0f0f0',tabActiveBg:'#ffffff',tabBorder:'#bbbbbb',tabColor:'#000000',calBg:'#ffffff',calBorder:'#bbbbbb',calColor:'#000000',calHeaderBg:'#f0f0f0',calCellColor:'#000000',dateBg:'#f5f5f5',dateBorder:'#bbbbbb',dateColor:'#000000',scrollBg:'#f0f0f0',dialBg:'conic-gradient(from 220deg,#0078d4 0%,#0078d4 45%,#e0e0e0 45%,#e0e0e0 100%)',dialBorder:'#cccccc',labelColor:'#000000',bg:'#ffffff',bg2:'#f0f0f0'}
     },
     classic:{
         name:'Classic',
         swatch:'#c0c0c0',
-        ide:{bg:'#6b6b6b',bg2:'#808080',bg3:'#999999',bg4:'#aaaaaa',border:'#555555',border2:'#777777',text:'#ffffff',text2:'#dddddd',text3:'#bbbbbb',accent:'#000080',accent2:'#0000aa','accent-glow':'rgba(0,0,128,0.2)',red:'#cc0000',green:'#008800',yellow:'#ccaa00',purple:'#880088'},
-        canvas:'#c0c0c0',
-        widget:{btnBg:'linear-gradient(180deg,#e8e8e8,#d4d4d4)',btnBorder:'#888888',btnColor:'#000000',inputBg:'#ffffff',inputBorder:'#888888',inputColor:'#000000',comboBg:'#ffffff',comboBorder:'#888888',comboColor:'#000000',checkColor:'#000000',groupBorder:'#888888',groupColor:'#000000',frameBorder:'#888888',progressBg:'#e0e0e0',progressBorder:'#888888',progressFill:'linear-gradient(90deg,#000080,#0000cc)',sliderTrack:'#aaaaaa',sliderThumb:'#e8e8e8',sliderThumbBorder:'#000080',spinBg:'#fff',spinBorder:'#888888',spinColor:'#000',lcdBg:'#1a1a2e',lcdColor:'#00ff00',listBg:'#fff',listBorder:'#888888',listColor:'#000',listSelBg:'#000080',listSelColor:'#fff',listItemBorder:'#d0d0d0',treeBg:'#fff',treeBorder:'#888888',treeColor:'#000',tableBg:'#fff',tableBorder:'#888888',tableColor:'#000',tableHeaderBg:'#d0d0d0',tabBarBg:'#d0d0d0',tabActiveBg:'#e8e8e8',tabBorder:'#888888',tabColor:'#000',calBg:'#fff',calBorder:'#888888',calColor:'#000',calHeaderBg:'#d0d0d0',calCellColor:'#000',dateBg:'#fff',dateBorder:'#888888',dateColor:'#000',scrollBg:'#aaaaaa',dialBg:'conic-gradient(from 220deg,#000080 0%,#000080 45%,#aaaaaa 45%,#aaaaaa 100%)',dialBorder:'#888888',labelColor:'#000000'}
+        ide:{bg:'#d4d0c8',bg2:'#ece9d8',bg3:'#f7f6f2',bg4:'#aaa',border:'#888',border2:'#666',text:'#000',text2:'#333',text3:'#555',accent:'#000080',accent2:'#1020a0','accent-glow':'rgba(0,0,128,0.1)',red:'#c00',green:'#080',yellow:'#aa0',purple:'#808'},
+        canvas:'#d4d0c8',
+        widget:{btnBg:'linear-gradient(180deg,#fff,#ece9d8)',btnBorder:'#777',btnColor:'#000',inputBg:'#fff',inputBorder:'#777',inputColor:'#000',comboBg:'#fff',comboBorder:'#777',comboColor:'#000',checkColor:'#000',groupBorder:'#777',groupColor:'#000',frameBorder:'#777',progressBg:'#fff',progressBorder:'#777',progressFill:'linear-gradient(90deg,#000080,#0000ff)',sliderTrack:'#999',sliderThumb:'#ece9d8',sliderThumbBorder:'#444',spinBg:'#fff',spinBorder:'#777',spinColor:'#000',lcdBg:'#000',lcdColor:'#0f0',listBg:'#fff',listBorder:'#777',listColor:'#000',listSelBg:'#000080',listSelColor:'#fff',listItemBorder:'#eee',treeBg:'#fff',treeBorder:'#777',treeColor:'#000',tableBg:'#fff',tableBorder:'#777',tableColor:'#000',tableHeaderBg:'#ece9d8',tabBarBg:'#ece9d8',tabActiveBg:'#d4d0c8',tabBorder:'#777',tabColor:'#000',calBg:'#fff',calBorder:'#777',calColor:'#000',calHeaderBg:'#ece9d8',calCellColor:'#000',dateBg:'#fff',dateBorder:'#777',dateColor:'#000',scrollBg:'#ece9d8',dialBg:'conic-gradient(from 220deg,#000080 0%,#000080 45%,#ccc 45%,#ccc 100%)',dialBorder:'#777',labelColor:'#000'}
     },
     hacker:{
         name:'Hacker',
@@ -254,41 +254,38 @@ const THEMES={
         canvas:'#000800',
         widget:{btnBg:'linear-gradient(180deg,#003a00,#002800)',btnBorder:'#00cc00',btnColor:'#00ff00',inputBg:'#001800',inputBorder:'#00bb00',inputColor:'#00ff00',comboBg:'#001800',comboBorder:'#00bb00',comboColor:'#00ff00',checkColor:'#00ff00',groupBorder:'#00bb00',groupColor:'#00ff00',frameBorder:'#00bb00',progressBg:'#001800',progressBorder:'#00bb00',progressFill:'linear-gradient(90deg,#005500,#00ff00)',sliderTrack:'#004400',sliderThumb:'#00ff00',sliderThumbBorder:'#000',spinBg:'#001800',spinBorder:'#00bb00',spinColor:'#00ff00',lcdBg:'#000500',lcdColor:'#00ff00',listBg:'#001800',listBorder:'#00bb00',listColor:'#00ff00',listSelBg:'#006600',listSelColor:'#00ff00',listItemBorder:'#003300',treeBg:'#001800',treeBorder:'#00bb00',treeColor:'#00ff00',tableBg:'#001800',tableBorder:'#00bb00',tableColor:'#00ff00',tableHeaderBg:'#003300',tabBarBg:'#003300',tabActiveBg:'#001800',tabBorder:'#00bb00',tabColor:'#00ff00',calBg:'#001800',calBorder:'#00bb00',calColor:'#00ff00',calHeaderBg:'#003300',calCellColor:'#00cc00',dateBg:'#001800',dateBorder:'#00bb00',dateColor:'#00ff00',scrollBg:'#004400',dialBg:'conic-gradient(from 220deg,#00ff00 0%,#00ff00 45%,#004400 45%,#004400 100%)',dialBorder:'#00bb00',labelColor:'#00ff00'}
     },
-    ocean:{
-        name:'Ocean',
-        swatch:'#0c1222',
-        ide:{bg:'#0c1222',bg2:'#131c31',bg3:'#1a2640',bg4:'#243352',border:'#1e2d4a',border2:'#2a3d5e',text:'#e2e8f0',text2:'#94a3b8',text3:'#64748b',accent:'#06b6d4',accent2:'#0891b2','accent-glow':'rgba(6,182,212,0.15)',red:'#f43f5e',green:'#10b981',yellow:'#f59e0b',purple:'#8b5cf6'},
-        canvas:'#0f1729',
-        widget:{btnBg:'linear-gradient(180deg,#253a58,#1c3048)',btnBorder:'#3a5575',btnColor:'#e2e8f0',inputBg:'#162238',inputBorder:'#3a5575',inputColor:'#e2e8f0',comboBg:'#162238',comboBorder:'#3a5575',comboColor:'#e2e8f0',checkColor:'#e2e8f0',groupBorder:'#3a5575',groupColor:'#e2e8f0',frameBorder:'#3a5575',progressBg:'#162238',progressBorder:'#3a5575',progressFill:'linear-gradient(90deg,#06b6d4,#0891b2)',sliderTrack:'#253a58',sliderThumb:'#06b6d4',sliderThumbBorder:'#e2e8f0',spinBg:'#162238',spinBorder:'#3a5575',spinColor:'#e2e8f0',lcdBg:'#060d1a',lcdColor:'#06b6d4',listBg:'#162238',listBorder:'#3a5575',listColor:'#e2e8f0',listSelBg:'#06b6d4',listSelColor:'#fff',listItemBorder:'#253a58',treeBg:'#162238',treeBorder:'#3a5575',treeColor:'#e2e8f0',tableBg:'#162238',tableBorder:'#3a5575',tableColor:'#e2e8f0',tableHeaderBg:'#1f3350',tabBarBg:'#1f3350',tabActiveBg:'#162238',tabBorder:'#3a5575',tabColor:'#94a3b8',calBg:'#162238',calBorder:'#3a5575',calColor:'#e2e8f0',calHeaderBg:'#1f3350',calCellColor:'#94a3b8',dateBg:'#162238',dateBorder:'#3a5575',dateColor:'#e2e8f0',scrollBg:'#253a58',dialBg:'conic-gradient(from 220deg,#06b6d4 0%,#06b6d4 45%,#253a58 45%,#253a58 100%)',dialBorder:'#3a5575',labelColor:'#e2e8f0'}
-    }
 };
 
 const CATEGORIES={
-    Buttons:{icon:'mouse-pointer-2',items:['QPushButton','QToolButton','QRadioButton','QCheckBox']},
-    Input:{icon:'text-cursor',items:['QLineEdit','QTextEdit','QPlainTextEdit','QSpinBox','QDoubleSpinBox','QComboBox','QDateEdit','QTimeEdit','QDateTimeEdit']},
+    Buttons:{icon:'mouse-pointer-2',items:['QPushButton','QToolButton','QRadioButton','QCheckBox','QCommandLinkButton']},
+    Input:{icon:'text-cursor',items:['QLineEdit','QTextEdit','QPlainTextEdit','QSpinBox','QDoubleSpinBox','QKeySequenceEdit','QComboBox','QFontComboBox','QDateEdit','QTimeEdit','QDateTimeEdit']},
     Display:{icon:'monitor',items:['QLabel','QProgressBar','QLCDNumber','QCalendarWidget','QImage']},
     Controls:{icon:'sliders-horizontal',items:['QSlider','QDial','QScrollBar']},
-    Containers:{icon:'box',items:['QGroupBox','QTabWidget','QFrame','QScrollArea','QStackedWidget','QToolBox']},
+    Containers:{icon:'box',items:['QGroupBox','QTabWidget','QFrame','QScrollArea','QStackedWidget','QToolBox','QDockWidget']},
     Views:{icon:'table',items:['QListWidget','QTreeWidget','QTableWidget']},
     Separators:{icon:'minus',items:['HLine','VLine']},
 };
 
 const W={
     QPushButton:{label:'Push Button',icon:'mouse-pointer-2',dw:100,dh:30,cat:'Buttons'},
+    QCommandLinkButton:{label:'Command Link',icon:'arrow-right-circle',dw:180,dh:45,cat:'Buttons'},
     QToolButton:{label:'Tool Button',icon:'square',dw:32,dh:32,cat:'Buttons'},
     QLabel:{label:'Label',icon:'type',dw:80,dh:22,cat:'Display'},
     QLineEdit:{label:'Line Edit',icon:'text-cursor-input',dw:150,dh:26,cat:'Input'},
     QTextEdit:{label:'Text Edit',icon:'file-text',dw:200,dh:120,cat:'Input'},
     QPlainTextEdit:{label:'Plain Text',icon:'align-left',dw:200,dh:120,cat:'Input'},
+    QKeySequenceEdit:{label:'Key Seq',icon:'keyboard',dw:140,dh:26,cat:'Input'},
     QGroupBox:{label:'Group Box',icon:'box',dw:240,dh:160,cat:'Containers',container:true},
     QTabWidget:{label:'Tab Widget',icon:'panel-top',dw:320,dh:220,cat:'Containers',container:true},
     QFrame:{label:'Frame',icon:'layout',dw:200,dh:150,cat:'Containers',container:true},
     QScrollArea:{label:'Scroll Area',icon:'scroll',dw:200,dh:150,cat:'Containers',container:true},
     QStackedWidget:{label:'Stacked',icon:'layers',dw:200,dh:150,cat:'Containers',container:true},
     QToolBox:{label:'Tool Box',icon:'briefcase',dw:200,dh:200,cat:'Containers',container:true},
+    QDockWidget:{label:'Dock Widget',icon:'panel-right-open',dw:250,dh:180,cat:'Containers',container:true},
     QCheckBox:{label:'Check Box',icon:'check-square',dw:110,dh:22,cat:'Buttons'},
     QRadioButton:{label:'Radio Button',icon:'circle-dot',dw:110,dh:22,cat:'Buttons'},
     QComboBox:{label:'Combo Box',icon:'chevron-down',dw:130,dh:26,cat:'Input'},
+    QFontComboBox:{label:'Font Combo',icon:'type',dw:160,dh:26,cat:'Input'},
     QProgressBar:{label:'Progress Bar',icon:'loader',dw:200,dh:22,cat:'Display'},
     QSlider:{label:'Slider',icon:'sliders-horizontal',dw:160,dh:22,cat:'Controls'},
     QScrollBar:{label:'Scroll Bar',icon:'grip-vertical',dw:16,dh:120,cat:'Controls'},
@@ -310,6 +307,48 @@ const W={
 
 const CURSORS=["ArrowCursor","UpArrowCursor","CrossCursor","WaitCursor","IBeamCursor","SizeVerCursor","SizeHorCursor","SizeBDiagCursor","SizeFDiagCursor","SizeAllCursor","BlankCursor","SplitVCursor","SplitHCursor","PointingHandCursor","ForbiddenCursor","OpenHandCursor","ClosedHandCursor","WhatsThisCursor"];
 const SIZE_POLICIES=["Fixed","Minimum","Maximum","Preferred","Expanding","MinimumExpanding","Ignored"];
+
+const COMMON_SIGNALS={
+    QAbstractButton:['clicked()','pressed()','released()','toggled(bool)'],
+    QLineEdit:['textChanged(QString)','textEdited(QString)','returnPressed()','editingFinished()'],
+    QComboBox:['currentIndexChanged(int)','currentTextChanged(QString)'],
+    QSpinBox:['valueChanged(int)'],
+    QDoubleSpinBox:['valueChanged(double)'],
+    QSlider:['valueChanged(int)','sliderMoved(int)'],
+    QListWidget:['currentRowChanged(int)','currentTextChanged(QString)','itemClicked(QListWidgetItem*)'],
+    QTreeWidget:['currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)','itemClicked(QTreeWidgetItem*,int)'],
+    QTableWidget:['cellClicked(int,int)','cellChanged(int,int)'],
+    QCalendarWidget:['selectionChanged()','activated(QDate)'],
+    QDateEdit:['dateChanged(QDate)'],
+    QTimeEdit:['timeChanged(QTime)'],
+    QDateTimeEdit:['dateTimeChanged(QDateTime)'],
+    QKeySequenceEdit:['keySequenceChanged(QKeySequence)','editingFinished()'],
+    QDockWidget:['featuresChanged(QDockWidget::DockWidgetFeatures)','topLevelChanged(bool)','visibilityChanged(bool)']
+};
+
+const COMMON_SLOTS={
+    QWidget:['show()','hide()','close()','update()','setDisabled(bool)','setEnabled(bool)','setVisible(bool)'],
+    QLineEdit:['clear()','selectAll()','copy()','paste()'],
+    QTextEdit:['clear()','copy()','paste()','selectAll()'],
+    QAbstractButton:['click()','animateClick()','toggle()','setChecked(bool)'],
+    QComboBox:['clear()'],
+    QProgressBar:['reset()','setValue(int)'],
+    QKeySequenceEdit:['clear()','setKeySequence(QKeySequence)']
+};
+
+const getSignals=(type)=>{
+    let sigs=[];
+    if(type==='QPushButton'||type==='QToolButton'||type==='QCheckBox'||type==='QRadioButton'||type==='QCommandLinkButton')sigs.push(...COMMON_SIGNALS.QAbstractButton);
+    else if(COMMON_SIGNALS[type])sigs.push(...COMMON_SIGNALS[type]);
+    return sigs;
+};
+
+const getSlots=(type)=>{
+    let slots=[...COMMON_SLOTS.QWidget];
+    if(type==='QPushButton'||type==='QToolButton'||type==='QCheckBox'||type==='QRadioButton'||type==='QCommandLinkButton')slots.push(...COMMON_SLOTS.QAbstractButton);
+    else if(COMMON_SLOTS[type])slots.push(...COMMON_SLOTS[type]);
+    return slots;
+};
 
 /* ───── Icon Component ───── */
 const Ico=({name,size=16})=>{
@@ -338,8 +377,9 @@ const defaultEl=(type,x,y,idx,gridSize)=>{
         zIndex:idx,locked:false,
         text:type.includes('Button')?'Button':type.includes('Label')?'Label':type==='QGroupBox'?'Group':'',
         bg:'',color:'',fontSize:0,fontWeight:'normal',fontItalic:false,fontFamily:'',
-        enabled:true,visible:true,tooltip:'',
+        enabled:true,visible:true,tooltip:'',statusTip:'',
         items:type==='QComboBox'?['Item 1','Item 2','Item 3']:[],
+        description:type==='QCommandLinkButton'?'Description...':'',
         pixmap:'',cursor:'ArrowCursor',
         placeholderText:'',readOnly:false,flat:false,checkable:false,checked:false,
         tabs:type==='QTabWidget'?['Tab 1','Tab 2']:[],
@@ -379,6 +419,13 @@ const App=()=>{
     const[panOffset,setPanOffset]=useState({x:0,y:0});
     const[guides,setGuides]=useState([]);
     const[leftPanel,setLeftPanel]=useState('widgets'); // widgets | tree
+    const[rightPanel,setRightPanel]=useState('props'); // props | signals
+    const[previewMode,setPreviewMode]=useState(false); // New Preview Mode
+    const[connections,setConnections]=useState([]);
+    const[sigSender,setSigSender]=useState('MainWindow');
+    const[sigReceiver,setSigReceiver]=useState('MainWindow');
+    const[sigSignal,setSigSignal]=useState('');
+    const[sigSlot,setSigSlot]=useState('');
     const[counter,setCounter]=useState(1);
     const[activeTheme,setActiveTheme]=useState('midnight');
 
@@ -408,8 +455,8 @@ const App=()=>{
     const dragRef=useRef({mode:null,startX:0,startY:0,handle:'',initEls:[],rubberStart:null});
 
     // Push to history
-    const pushHistory=useCallback((els)=>{
-        const s=JSON.stringify(els);
+    const pushHistory=useCallback((els, conns=connections)=>{
+        const s=JSON.stringify({els,conns});
         const h=histRef.current;
         const trimmed=h.history.slice(0,h.idx+1);
         trimmed.push(s);
@@ -419,10 +466,11 @@ const App=()=>{
         setHistIdx(trimmed.length-1);
     },[]);
 
-    const updateEls=useCallback((els)=>{
+    const updateEls=useCallback((els, conns)=>{
         setElements(els);
-        pushHistory(els);
-    },[pushHistory]);
+        if(conns!==undefined)setConnections(conns);
+        pushHistory(els, conns!==undefined?conns:connections);
+    },[pushHistory, connections]);
 
     const undo=useCallback(()=>{
         const h=histRef.current;
@@ -430,7 +478,13 @@ const App=()=>{
             const ni=h.idx-1;
             histRef.current.idx=ni;
             setHistIdx(ni);
-            setElements(JSON.parse(h.history[ni]));
+            const state=JSON.parse(h.history[ni]);
+            if(Array.isArray(state)){ // Compat with old history
+                setElements(state);
+            } else {
+                setElements(state.els);
+                setConnections(state.conns||[]);
+            }
         }
     },[]);
 
@@ -440,7 +494,13 @@ const App=()=>{
             const ni=h.idx+1;
             histRef.current.idx=ni;
             setHistIdx(ni);
-            setElements(JSON.parse(h.history[ni]));
+            const state=JSON.parse(h.history[ni]);
+            if(Array.isArray(state)){
+                setElements(state);
+            } else {
+                setElements(state.els);
+                setConnections(state.conns||[]);
+            }
         }
     },[]);
 
@@ -496,7 +556,9 @@ const App=()=>{
                         const s=p.getElementsByTagName('string')[0]?.textContent;
                         const b=p.getElementsByTagName('bool')[0]?.textContent==='true';
                         if(n==='text'||n==='title')el.text=s||'';
+                        if(n==='description')el.description=s||'';
                         if(n==='toolTip')el.tooltip=s||'';
+                        if(n==='statusTip')el.statusTip=s||'';
                         if(n==='readOnly')el.readOnly=b;
                         if(n==='placeholderText')el.placeholderText=s||'';
                         if(n==='flat')el.flat=b;
@@ -551,7 +613,7 @@ const App=()=>{
         let extra='';
 
         // Whitelists for properties that only apply to certain widgets
-        const HAS_TEXT=new Set(['QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QGroupBox','QImage']);
+        const HAS_TEXT=new Set(['QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QGroupBox','QImage','QCommandLinkButton','QDockWidget']);
         const HAS_ALIGN=new Set(['QLabel','QLineEdit','QCheckBox','QRadioButton','QPushButton','QImage']);
         const HAS_PLACEHOLDER=new Set(['QLineEdit','QTextEdit','QPlainTextEdit']);
         const HAS_READONLY=new Set(['QLineEdit','QTextEdit','QPlainTextEdit','QSpinBox','QDoubleSpinBox','QDateEdit','QTimeEdit','QDateTimeEdit']);
@@ -567,8 +629,12 @@ const App=()=>{
         if(el.text&&HAS_TEXT.has(el.type)&&el.type!=='QComboBox')props+=`${indent}  `+xmlProp('text','string',el.text)+'\n';
         // GroupBox title uses 'title' property
         if(el.text&&el.type==='QGroupBox')props=props.replace(xmlProp('text','string',el.text),xmlProp('title','string',el.text));
+        // DockWidget title uses 'windowTitle' property
+        if(el.text&&el.type==='QDockWidget')props=props.replace(xmlProp('text','string',el.text),xmlProp('windowTitle','string',el.text));
+        if(el.description&&el.type==='QCommandLinkButton')props+=`${indent}  `+xmlProp('description','string',el.description)+'\n';
 
         if(el.tooltip)props+=`${indent}  `+xmlProp('toolTip','string',el.tooltip)+'\n';
+        if(el.statusTip)props+=`${indent}  `+xmlProp('statusTip','string',el.statusTip)+'\n';
         if(!el.enabled)props+=`${indent}  `+xmlProp('enabled','bool','false')+'\n';
         if(!el.visible)props+=`${indent}  `+xmlProp('visible','bool','false')+'\n';
         if(el.cursor&&el.cursor!=='ArrowCursor')props+=`${indent}  <property name="cursor"><cursorShape>${el.cursor}</cursorShape></property>\n`;
@@ -640,6 +706,15 @@ const App=()=>{
             mbar+=`  </widget>\n`;
         }
 
+        let connsXml='';
+        if(connections.length){
+            connsXml+=' <connections>\n';
+            connections.forEach(c=>{
+                connsXml+=`  <connection>\n   <sender>${c.sender}</sender>\n   <signal>${c.signal}</signal>\n   <receiver>${c.receiver}</receiver>\n   <slot>${c.slot}</slot>\n   <hints>\n    <hint type="sourcelabel">\n     <x>20</x>\n     <y>20</y>\n    </hint>\n    <hint type="destinationlabel">\n     <x>20</x>\n     <y>20</y>\n    </hint>\n   </hints>\n  </connection>\n`;
+            });
+            connsXml+=' </connections>\n';
+        }
+
         return `<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MainWindow</class>
@@ -651,7 +726,7 @@ const App=()=>{
 ${wxml}  </widget>
 ${mbar}  <widget class="QStatusBar" name="statusbar"/>
  </widget>
-</ui>`;
+${connsXml}</ui>`;
     };
 
     /* ── Python Code Generation ── */
@@ -678,8 +753,9 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
             const pyClass=cls==='Line'?'QFrame':cls;
 
             // Whitelists
-            const HAS_TEXT=new Set(['QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QImage']);
+            const HAS_TEXT=new Set(['QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QImage','QCommandLinkButton','QDockWidget']);
             const HAS_TITLE=new Set(['QGroupBox']);
+            const HAS_WINDOWTITLE=new Set(['QDockWidget']);
             const HAS_ALIGN=new Set(['QLabel','QLineEdit','QCheckBox','QRadioButton','QPushButton','QImage']);
             const HAS_PLACEHOLDER=new Set(['QLineEdit','QTextEdit','QPlainTextEdit']);
             const HAS_READONLY=new Set(['QLineEdit','QTextEdit','QPlainTextEdit','QSpinBox','QDoubleSpinBox','QDateEdit','QTimeEdit','QDateTimeEdit']);
@@ -690,9 +766,12 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
             lines.push(`        self.${el.name} = ${pyClass}(self.centralwidget)`);
             lines.push(`        self.${el.name}.setObjectName("${el.name}")`);
             lines.push(`        self.${el.name}.setGeometry(QRect(${Math.round(el.x)}, ${Math.round(el.y)}, ${Math.round(el.w)}, ${Math.round(el.h)}))`);
-            if(el.text&&HAS_TEXT.has(el.type)&&el.type!=='QComboBox')lines.push(`        self.${el.name}.setText("${el.text.replace(/"/g,'\\"')}")`);
+            if(el.text&&HAS_TEXT.has(el.type)&&el.type!=='QComboBox'&&el.type!=='QDockWidget')lines.push(`        self.${el.name}.setText("${el.text.replace(/"/g,'\\"')}")`);
             if(el.text&&HAS_TITLE.has(el.type))lines.push(`        self.${el.name}.setTitle("${el.text.replace(/"/g,'\\"')}")`);
+            if(el.text&&HAS_WINDOWTITLE.has(el.type))lines.push(`        self.${el.name}.setWindowTitle("${el.text.replace(/"/g,'\\"')}")`);
+            if(el.description&&el.type==='QCommandLinkButton')lines.push(`        self.${el.name}.setDescription("${el.description.replace(/"/g,'\\"')}")`);
             if(el.tooltip)lines.push(`        self.${el.name}.setToolTip("${el.tooltip.replace(/"/g,'\\"')}")`);
+            if(el.statusTip)lines.push(`        self.${el.name}.setStatusTip("${el.statusTip.replace(/"/g,'\\"')}")`);
             if(!el.enabled)lines.push(`        self.${el.name}.setEnabled(False)`);
             if(el.placeholderText&&HAS_PLACEHOLDER.has(el.type))lines.push(`        self.${el.name}.setPlaceholderText("${el.placeholderText.replace(/"/g,'\\"')}")`);
             if(el.readOnly&&HAS_READONLY.has(el.type))lines.push(`        self.${el.name}.setReadOnly(True)`);
@@ -742,7 +821,20 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
             lines.push(`        MainWindow.setMenuBar(self.menubar)`);
         }
         lines.push(`        self.statusbar = QStatusBar(MainWindow)`);
-        lines.push(`        MainWindow.setStatusBar(self.statusbar)\n`);
+        lines.push(`        MainWindow.setStatusBar(self.statusbar)`);
+
+        if(connections.length){
+            lines.push('');
+            connections.forEach(c=>{
+                const sig=c.signal.split('(')[0];
+                const slt=c.slot.split('(')[0];
+                if(c.receiver==='MainWindow')
+                    lines.push(`        self.${c.sender}.${sig}.connect(MainWindow.${slt})`);
+                else
+                    lines.push(`        self.${c.sender}.${sig}.connect(self.${c.receiver}.${slt})`);
+            });
+        }
+
         lines.push(`\nif __name__ == "__main__":`);
         lines.push(`    import sys`);
         lines.push(`    app = QApplication(sys.argv)`);
@@ -823,9 +915,57 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
         const dy=(e.clientY-d.startY)/zoom;
 
         if(d.mode==='move'&&d.selectedIds?.length){
+            // Smart Snapping Logic
+            let newGuides=[];
+            const primaryId=d.selectedIds[0];
+            const movingEl=d.initEls.find(el=>el.id===primaryId);
+
+            let finalDx=dx, finalDy=dy;
+
+            if(movingEl && !snapEnabled){ // Use smart guides if grid snap is OFF
+                const curX=movingEl.x+dx;
+                const curY=movingEl.y+dy;
+                const midX=curX+movingEl.w/2;
+                const midY=curY+movingEl.h/2;
+                const rightX=curX+movingEl.w;
+                const bottomY=curY+movingEl.h;
+
+                const threshold=5;
+                let snappedX=false, snappedY=false;
+
+                // Compare with all other elements
+                d.initEls.forEach(target=>{
+                    if(d.selectedIds.includes(target.id))return;
+
+                    const tMidX=target.x+target.w/2;
+                    const tMidY=target.y+target.h/2;
+                    const tRight=target.x+target.w;
+                    const tBottom=target.y+target.h;
+
+                    // Vertical Alignments (X axis)
+                    if(!snappedX){
+                        if(Math.abs(curX-target.x)<threshold){finalDx=target.x-movingEl.x; newGuides.push({type:'v',x:target.x,y:Math.min(curY,target.y),len:Math.abs(curY-target.y)+Math.max(movingEl.h,target.h)});}
+                        else if(Math.abs(curX-tRight)<threshold){finalDx=tRight-movingEl.x; newGuides.push({type:'v',x:tRight,y:Math.min(curY,target.y),len:Math.abs(curY-target.y)+Math.max(movingEl.h,target.h)});}
+                        else if(Math.abs(midX-tMidX)<threshold){finalDx=tMidX-movingEl.w/2-movingEl.x; newGuides.push({type:'v',x:tMidX,y:Math.min(curY,target.y),len:Math.abs(curY-target.y)+Math.max(movingEl.h,target.h)});}
+                        else if(Math.abs(rightX-target.x)<threshold){finalDx=target.x-movingEl.w-movingEl.x; newGuides.push({type:'v',x:target.x,y:Math.min(curY,target.y),len:Math.abs(curY-target.y)+Math.max(movingEl.h,target.h)});}
+                        else if(Math.abs(rightX-tRight)<threshold){finalDx=tRight-movingEl.w-movingEl.x; newGuides.push({type:'v',x:tRight,y:Math.min(curY,target.y),len:Math.abs(curY-target.y)+Math.max(movingEl.h,target.h)});}
+                    }
+
+                    // Horizontal Alignments (Y axis)
+                    if(!snappedY){
+                        if(Math.abs(curY-target.y)<threshold){finalDy=target.y-movingEl.y; newGuides.push({type:'h',y:target.y,x:Math.min(curX,target.x),len:Math.abs(curX-target.x)+Math.max(movingEl.w,target.w)});}
+                        else if(Math.abs(curY-tBottom)<threshold){finalDy=tBottom-movingEl.y; newGuides.push({type:'h',y:tBottom,x:Math.min(curX,target.x),len:Math.abs(curX-target.x)+Math.max(movingEl.w,target.w)});}
+                        else if(Math.abs(midY-tMidY)<threshold){finalDy=tMidY-movingEl.h/2-movingEl.y; newGuides.push({type:'h',y:tMidY,x:Math.min(curX,target.x),len:Math.abs(curX-target.x)+Math.max(movingEl.w,target.w)});}
+                        else if(Math.abs(bottomY-target.y)<threshold){finalDy=target.y-movingEl.h-movingEl.y; newGuides.push({type:'h',y:target.y,x:Math.min(curX,target.x),len:Math.abs(curX-target.x)+Math.max(movingEl.w,target.w)});}
+                        else if(Math.abs(bottomY-tBottom)<threshold){finalDy=tBottom-movingEl.h-movingEl.y; newGuides.push({type:'h',y:tBottom,x:Math.min(curX,target.x),len:Math.abs(curX-target.x)+Math.max(movingEl.w,target.w)});}
+                    }
+                });
+            }
+            setGuides(newGuides);
+
             setElements(d.initEls.map(el=>{
                 if(!d.selectedIds.includes(el.id)||el.locked)return el;
-                let nx=el.x+dx,ny=el.y+dy;
+                let nx=el.x+finalDx, ny=el.y+finalDy;
                 if(snapEnabled){nx=snap(nx,gridSize);ny=snap(ny,gridSize);}
                 return{...el,x:nx,y:ny};
             }));
@@ -867,6 +1007,7 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
         }
         dragRef.current={mode:null,startX:0,startY:0,handle:'',initEls:[],selectedIds:[],rubberStart:null};
         setRubberBand(null);
+        setGuides([]);
     },[pushHistory]);
 
     /* ── Keyboard ── */
@@ -942,43 +1083,57 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
 
     /* ── Widget Preview Renderer ── */
     const renderWidget=(el)=>{
-        const s={fontFamily:el.fontFamily||'Segoe UI',fontWeight:el.fontWeight||'normal',fontStyle:el.fontItalic?'italic':'normal',fontSize:el.fontSize?`${el.fontSize}pt`:undefined,color:el.color||undefined,backgroundColor:el.bg||undefined};
+        // Ensure default text color inherits from theme if not set
+        const baseColor = el.color || 'var(--text)';
+        const s={fontFamily:el.fontFamily||'Segoe UI',fontWeight:el.fontWeight||'normal',fontStyle:el.fontItalic?'italic':'normal',fontSize:el.fontSize?`${el.fontSize}pt`:undefined,color:baseColor,backgroundColor:el.bg||undefined};
+        const isCmd=el.type==='QCommandLinkButton';
         switch(el.type){
-            case 'QPushButton':return <div className="w-full h-full flex items-center justify-center" style={{...s,background:el.bg||tw.btnBg,border:`1px solid ${tw.btnBorder}`,borderRadius:4,color:el.color||tw.btnColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}>{el.text||'Button'}</div>;
-            case 'QToolButton':return <div className="w-full h-full flex items-center justify-center" style={{...s,background:el.bg||tw.btnBg,border:`1px solid ${tw.btnBorder}`,borderRadius:4,color:el.color||tw.btnColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}>{el.text||'...'}</div>;
+            case 'QPushButton':
+            case 'QCommandLinkButton':
+                return <div className="w-full h-full flex items-center px-2 shadow-sm transition-all" style={{...s,background:el.bg||tw.btnBg,border:`1px solid ${tw.btnBorder}`,borderRadius:4,color:el.color||tw.btnColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px',justifyContent:isCmd?'flex-start':'center',textAlign:isCmd?'left':'center',gap:isCmd?8:4}}>
+                    {isCmd&&<Ico name="arrow-right-circle" size={16}/>}
+                    <div className="flex flex-col">
+                        <span>{el.text||(isCmd?'CommandLinkButton':'Button')}</span>
+                        {isCmd&&<span style={{fontSize:'0.85em',opacity:0.75,fontWeight:'normal'}}>{el.description||'Description...'}</span>}
+                    </div>
+                </div>;
+            case 'QToolButton':return <div className="w-full h-full flex items-center justify-center shadow-sm" style={{...s,background:el.bg||tw.btnBg,border:`1px solid ${tw.btnBorder}`,borderRadius:4,color:el.color||tw.btnColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}>{el.text||'...'}</div>;
             case 'QLabel':
                 if(el.pixmap){
                     if(el.pixmap.startsWith('http'))return <img src={el.pixmap} className="w-full h-full object-contain" alt=""/>;
                     return <div className="w-full h-full flex items-center justify-center text-[9px]" style={{background:tw.inputBg,color:tw.labelColor}}><Ico name="image" size={20}/></div>;
                 }
-                return <div className="w-full h-full flex items-center justify-center" style={{...s,color:el.color||tw.labelColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}>{el.text||'Label'}</div>;
+                return <div className="w-full h-full flex items-center justify-center" style={{...s,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}>{el.text||'Label'}</div>;
             case 'QImage':
                 if(el.pixmap&&el.pixmap.startsWith('http'))return <img src={el.pixmap} className="w-full h-full object-cover" alt=""/>;
                 return <div className="w-full h-full flex items-center justify-center text-[9px]" style={{background:tw.inputBg,color:tw.labelColor,border:`1px solid ${tw.inputBorder}`}}><Ico name="image" size={24}/></div>;
-            case 'QLineEdit':return <div className="w-full h-full flex items-center px-1" style={{...s,background:el.bg||tw.inputBg,border:`1px solid ${tw.inputBorder}`,borderRadius:3,color:el.color||tw.inputColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}>{el.text||<span style={{color:tw.checkColor,opacity:0.4}}>{el.placeholderText||''}</span>}</div>;
-            case 'QTextEdit':case 'QPlainTextEdit':return <div className="w-full h-full flex items-start p-1 overflow-hidden" style={{...s,background:el.bg||tw.inputBg,border:`1px solid ${tw.inputBorder}`,borderRadius:3,color:el.color||tw.inputColor,fontSize:'10px'}}>{el.text||<span style={{color:tw.checkColor,opacity:0.4}}>{el.placeholderText||''}</span>}</div>;
-            case 'QCheckBox':return <div className="w-full h-full flex items-center gap-1" style={{...s,color:el.color||tw.checkColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}><span style={{fontSize:14}}>{el.checked?'☑':'☐'}</span>{el.text||'CheckBox'}</div>;
-            case 'QRadioButton':return <div className="w-full h-full flex items-center gap-1" style={{...s,color:el.color||tw.checkColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}><span style={{fontSize:14}}>{el.checked?'◉':'○'}</span>{el.text||'RadioButton'}</div>;
-            case 'QComboBox':return <div className="w-full h-full flex items-center justify-between px-1" style={{background:el.bg||tw.comboBg,border:`1px solid ${tw.comboBorder}`,borderRadius:3,color:el.color||tw.comboColor,fontSize:'11px'}}>{el.items[0]||'ComboBox'}<span style={{fontSize:8}}>▼</span></div>;
-            case 'QGroupBox':return <div className="w-full h-full relative" style={{border:`1px solid ${tw.groupBorder}`,borderRadius:4,paddingTop:16}}><span className="absolute left-2" style={{top:-8,background:el.bg||canvasBg,padding:'0 4px',fontSize:11,color:el.color||tw.groupColor}}>{el.text||'Group'}</span></div>;
+            case 'QLineEdit':return <div className="w-full h-full flex items-center px-2 shadow-sm" style={{...s,background:el.bg||tw.inputBg,border:`1px solid ${tw.inputBorder}`,borderRadius:3,color:el.color||tw.inputColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}>{el.text||<span style={{color:tw.checkColor,opacity:0.4}}>{el.placeholderText||''}</span>}</div>;
+            case 'QTextEdit':case 'QPlainTextEdit':return <div className="w-full h-full flex items-start p-1.5 overflow-hidden shadow-sm" style={{...s,background:el.bg||tw.inputBg,border:`1px solid ${tw.inputBorder}`,borderRadius:3,color:el.color||tw.inputColor,fontSize:'10px'}}>{el.text||<span style={{color:tw.checkColor,opacity:0.4}}>{el.placeholderText||''}</span>}</div>;
+            case 'QKeySequenceEdit':return <div className="w-full h-full flex items-center px-2 shadow-sm" style={{...s,background:el.bg||tw.inputBg,border:`1px solid ${tw.inputBorder}`,borderRadius:3,color:el.color||tw.inputColor,fontSize:'11px'}}>{'Ctrl+Shift+X'}</div>;
+            case 'QCheckBox':return <div className="w-full h-full flex items-center gap-1.5" style={{...s,color:el.color||tw.checkColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}><div className="w-3.5 h-3.5 flex items-center justify-center border rounded-sm" style={{borderColor:tw.inputBorder,background:tw.inputBg}}>{el.checked&&<div className="w-2 h-2 rounded-[1px]" style={{background:tw.accent}}/>}</div>{el.text||'CheckBox'}</div>;
+            case 'QRadioButton':return <div className="w-full h-full flex items-center gap-1.5" style={{...s,color:el.color||tw.checkColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}><div className="w-3.5 h-3.5 flex items-center justify-center border rounded-full" style={{borderColor:tw.inputBorder,background:tw.inputBg}}>{el.checked&&<div className="w-2 h-2 rounded-full" style={{background:tw.accent}}/>}</div>{el.text||'RadioButton'}</div>;
+            case 'QFontComboBox':
+            case 'QComboBox':return <div className="w-full h-full flex items-center justify-between px-2 shadow-sm" style={{background:el.bg||tw.comboBg,border:`1px solid ${tw.comboBorder}`,borderRadius:3,color:el.color||tw.comboColor,fontSize:'11px'}}>{el.type==='QFontComboBox'?'Segoe UI':(el.items[0]||'ComboBox')}<Ico name="chevron-down" size={10}/></div>;
+            case 'QGroupBox':return <div className="w-full h-full relative" style={{border:`1px solid ${tw.groupBorder}`,borderRadius:4,paddingTop:18}}><span className="absolute left-2" style={{top:-9,background:el.bg||canvasBg,padding:'0 4px',fontSize:11,color:el.color||tw.groupColor,fontWeight:600}}>{el.text||'Group'}</span></div>;
             case 'QFrame':return <div className="w-full h-full" style={{border:`1px solid ${tw.frameBorder}`,background:el.bg||'transparent'}}/>;
-            case 'QScrollArea':return <div className="w-full h-full overflow-hidden relative" style={{border:`1px solid ${tw.frameBorder}`,background:el.bg||tw.inputBg}}><div style={{position:'absolute',right:0,top:0,bottom:0,width:12,background:tw.scrollBg}}/></div>;
-            case 'QProgressBar':return <div className="w-full h-full overflow-hidden relative" style={{background:el.bg||tw.progressBg,border:`1px solid ${tw.progressBorder}`,borderRadius:3}}><div style={{height:'100%',width:`${el.value||45}%`,background:tw.progressFill,transition:'width 0.3s'}}/><span style={{position:'absolute',width:'100%',textAlign:'center',fontSize:9,lineHeight:el.h+'px',color:tw.labelColor}}>{el.value||45}%</span></div>;
-            case 'QSlider':return <div className="w-full h-full flex items-center relative"><div style={{width:'100%',height:4,background:tw.sliderTrack,borderRadius:2}}/><div style={{position:'absolute',left:`${el.value||45}%`,width:12,height:12,background:tw.sliderThumb,border:`2px solid ${tw.sliderThumbBorder}`,borderRadius:'50%',transform:'translate(-50%,-50%)',top:'50%'}}/></div>;
-            case 'QSpinBox':case 'QDoubleSpinBox':return <div className="w-full h-full flex items-center justify-between px-1" style={{background:el.bg||tw.spinBg,border:`1px solid ${tw.spinBorder}`,borderRadius:3,color:el.color||tw.spinColor,fontSize:10}}><span>{el.value||0}</span><span style={{display:'flex',flexDirection:'column',fontSize:7}}>▲▼</span></div>;
-            case 'QLCDNumber':return <div className="w-full h-full flex items-center justify-center" style={{background:tw.lcdBg,color:tw.lcdColor,fontFamily:"'Courier New',monospace",fontSize:Math.max(10,el.h*0.6),border:'2px inset #333',letterSpacing:2}}>{el.value||0}</div>;
-            case 'QDial':return <div className="w-full h-full" style={{borderRadius:'50%',background:tw.dialBg,border:`2px solid ${tw.dialBorder}`,position:'relative'}}><div style={{content:"''",position:'absolute',top:'50%',left:'50%',width:'40%',height:'40%',background:'radial-gradient(circle,#f0f0f0,#ccc)',borderRadius:'50%',transform:'translate(-50%,-50%)'}}/></div>;
-            case 'QCalendarWidget':return <div className="w-full h-full flex flex-col" style={{background:tw.calBg,border:`1px solid ${tw.calBorder}`}}><div style={{background:tw.calHeaderBg,textAlign:'center',padding:2,fontWeight:'bold',borderBottom:`1px solid ${tw.calBorder}`,fontSize:10,color:tw.calColor}}>February 2026</div><div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:1,padding:2,flex:1}}>{['M','T','W','T','F','S','S'].map((d,i)=><div key={i} style={{textAlign:'center',padding:1,fontSize:7,fontWeight:'bold',color:tw.calCellColor}}>{d}</div>)}{Array.from({length:28},(_, i)=><div key={i+7} style={{textAlign:'center',padding:1,fontSize:7,color:tw.calCellColor}}>{i+1}</div>)}</div></div>;
-            case 'QListWidget':return <div className="w-full h-full overflow-hidden" style={{background:tw.listBg,border:`1px solid ${tw.listBorder}`,fontSize:10,color:tw.listColor}}>{['Item 1','Item 2','Item 3','Item 4'].map((it,i)=><div key={i} style={{padding:'2px 6px',borderBottom:`1px solid ${tw.listItemBorder}`,background:i===0?tw.listSelBg:'transparent',color:i===0?tw.listSelColor:tw.listColor}}>{it}</div>)}</div>;
-            case 'QTreeWidget':return <div className="w-full h-full overflow-hidden" style={{background:tw.treeBg,border:`1px solid ${tw.treeBorder}`,fontSize:10,color:tw.treeColor,padding:2}}>{['▸ Parent 1','  ▸ Child 1','  ▸ Child 2','▸ Parent 2'].map((it,i)=><div key={i} style={{padding:'1px 2px'}}>{it}</div>)}</div>;
-            case 'QTableWidget':return <div className="w-full h-full flex flex-col overflow-hidden" style={{background:tw.tableBg,border:`1px solid ${tw.tableBorder}`,fontSize:9,color:tw.tableColor}}><div style={{display:'flex',background:tw.tableHeaderBg,borderBottom:`1px solid ${tw.tableBorder}`}}>{(el.columnHeaders||['A','B','C']).map((c,i)=><div key={i} style={{flex:1,padding:'2px 4px',borderRight:`1px solid ${tw.tableBorder}`,fontWeight:'bold'}}>{c}</div>)}</div>{Array.from({length:Math.min(el.rows||3,5)},(_, r)=><div key={r} style={{display:'flex',borderBottom:`1px solid ${tw.listItemBorder}`}}>{(el.columnHeaders||['','','']).map((_, c)=><div key={c} style={{flex:1,padding:'2px 4px',borderRight:`1px solid ${tw.listItemBorder}`}}>&nbsp;</div>)}</div>)}</div>;
-            case 'QTabWidget':return <div className="w-full h-full flex flex-col"><div style={{display:'flex',background:tw.tabBarBg,borderBottom:`1px solid ${tw.tabBorder}`}}>{(el.tabs||['Tab 1']).map((t,i)=><div key={i} style={{padding:'3px 10px',fontSize:10,borderRight:`1px solid ${tw.tabBorder}`,background:i===0?tw.tabActiveBg:'transparent',color:tw.tabColor,borderBottom:i===0?`1px solid ${tw.tabActiveBg}`:'none',marginBottom:i===0?-1:0,cursor:'default'}}>{t}</div>)}</div><div style={{flex:1,background:tw.tabActiveBg,border:`1px solid ${tw.tabBorder}`,borderTop:'none'}}/></div>;
-            case 'QStackedWidget':return <div className="w-full h-full flex items-center justify-center text-[9px]" style={{border:`1px solid ${tw.frameBorder}`,color:tw.labelColor,background:el.bg||'transparent'}}>{(el.pages||['Page 1'])[0]}</div>;
-            case 'QToolBox':return <div className="w-full h-full flex flex-col">{(el.pages||['Section 1']).map((p,i)=><div key={i} style={{background:tw.tabBarBg,border:`1px solid ${tw.tabBorder}`,padding:'2px 6px',fontSize:10,fontWeight:'bold',color:tw.tabColor}}>{p}</div>)}<div style={{flex:1,background:tw.tabActiveBg,border:`1px solid ${tw.tabBorder}`,borderTop:'none'}}/></div>;
-            case 'QDateEdit':return <div className="w-full h-full flex items-center justify-between px-1.5" style={{background:tw.dateBg,border:`1px solid ${tw.dateBorder}`,borderRadius:3,fontSize:10,color:tw.dateColor}}>2026-02-18 <span style={{fontSize:8}}>📅</span></div>;
-            case 'QTimeEdit':return <div className="w-full h-full flex items-center px-1.5" style={{background:tw.dateBg,border:`1px solid ${tw.dateBorder}`,borderRadius:3,fontSize:10,color:tw.dateColor}}>12:00</div>;
-            case 'QDateTimeEdit':return <div className="w-full h-full flex items-center px-1.5" style={{background:tw.dateBg,border:`1px solid ${tw.dateBorder}`,borderRadius:3,fontSize:10,color:tw.dateColor}}>2026-02-18 12:00</div>;
-            case 'QScrollBar':return <div className="w-full h-full rounded" style={{background:tw.scrollBg,border:`1px solid ${tw.frameBorder}`}}><div style={{width:el.orientation==='horizontal'?'30%':'100%',height:el.orientation==='horizontal'?'100%':'30%',background:tw.sliderThumb,borderRadius:3,opacity:0.6}}/></div>;
+            case 'QScrollArea':return <div className="w-full h-full overflow-hidden relative shadow-sm" style={{border:`1px solid ${tw.frameBorder}`,background:el.bg||tw.inputBg}}><div style={{position:'absolute',right:0,top:0,bottom:0,width:12,background:tw.scrollBg,borderLeft:`1px solid ${tw.frameBorder}`}}/></div>;
+            case 'QProgressBar':return <div className="w-full h-full overflow-hidden relative shadow-sm" style={{background:el.bg||tw.progressBg,border:`1px solid ${tw.progressBorder}`,borderRadius:3}}><div style={{height:'100%',width:`${el.value||45}%`,background:tw.progressFill,transition:'width 0.3s'}}/><span style={{position:'absolute',width:'100%',textAlign:'center',fontSize:9,fontWeight:'bold',lineHeight:el.h+'px',color:tw.labelColor,textShadow:'0 1px 2px rgba(0,0,0,0.5)'}}>{el.value||45}%</span></div>;
+            case 'QSlider':return <div className="w-full h-full flex items-center relative"><div style={{width:'100%',height:4,background:tw.sliderTrack,borderRadius:2}}/><div className="shadow-sm" style={{position:'absolute',left:`${el.value||45}%`,width:14,height:14,background:tw.sliderThumb,border:`1px solid ${tw.sliderThumbBorder}`,borderRadius:'50%',transform:'translate(-50%,-50%)',top:'50%'}}/></div>;
+            case 'QSpinBox':case 'QDoubleSpinBox':return <div className="w-full h-full flex items-center justify-between px-1 shadow-sm" style={{background:el.bg||tw.spinBg,border:`1px solid ${tw.spinBorder}`,borderRadius:3,color:el.color||tw.spinColor,fontSize:10}}><span>{el.value||0}</span><div className="flex flex-col h-full border-l" style={{borderColor:tw.spinBorder}}><div className="flex-1 px-1 flex items-center hover:bg-black/10">▴</div><div className="flex-1 px-1 flex items-center hover:bg-black/10">▾</div></div></div>;
+            case 'QLCDNumber':return <div className="w-full h-full flex items-center justify-center shadow-inner" style={{background:tw.lcdBg,color:tw.lcdColor,fontFamily:"'Courier New',monospace",fontSize:Math.max(10,el.h*0.6),border:'2px inset #444',letterSpacing:2,borderRadius:2}}>{el.value||0}</div>;
+            case 'QDial':return <div className="w-full h-full shadow-sm" style={{borderRadius:'50%',background:tw.dialBg,border:`1px solid ${tw.dialBorder}`,position:'relative'}}><div style={{content:"''",position:'absolute',top:'50%',left:'50%',width:'40%',height:'40%',background:'radial-gradient(circle,#fff,#ccc)',borderRadius:'50%',transform:'translate(-50%,-50%)',boxShadow:'0 1px 3px rgba(0,0,0,0.3)'}}/></div>;
+            case 'QCalendarWidget':return <div className="w-full h-full flex flex-col shadow-sm" style={{background:tw.calBg,border:`1px solid ${tw.calBorder}`}}><div style={{background:tw.calHeaderBg,textAlign:'center',padding:4,fontWeight:'bold',borderBottom:`1px solid ${tw.calBorder}`,fontSize:10,color:tw.calColor}}>February 2026</div><div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:0,padding:2,flex:1}}>{['M','T','W','T','F','S','S'].map((d,i)=><div key={i} style={{textAlign:'center',padding:2,fontSize:9,fontWeight:'bold',color:tw.calCellColor,opacity:0.7}}>{d}</div>)}{Array.from({length:28},(_, i)=><div key={i+7} style={{textAlign:'center',padding:2,fontSize:9,color:tw.calCellColor,background:i===17?tw.accent:'transparent',color:i===17?'white':tw.calCellColor,borderRadius:2}}>{i+1}</div>)}</div></div>;
+            case 'QListWidget':return <div className="w-full h-full overflow-hidden shadow-sm" style={{background:tw.listBg,border:`1px solid ${tw.listBorder}`,fontSize:10,color:tw.listColor}}>{['Item 1','Item 2','Item 3','Item 4'].map((it,i)=><div key={i} style={{padding:'3px 6px',borderBottom:`1px solid ${tw.listItemBorder}`,background:i===0?tw.listSelBg:'transparent',color:i===0?tw.listSelColor:tw.listColor}}>{it}</div>)}</div>;
+            case 'QTreeWidget':return <div className="w-full h-full overflow-hidden shadow-sm" style={{background:tw.treeBg,border:`1px solid ${tw.treeBorder}`,fontSize:10,color:tw.treeColor,padding:2}}>{['▸ Parent 1','  ▸ Child 1','  ▸ Child 2','▸ Parent 2'].map((it,i)=><div key={i} style={{padding:'2px 4px'}}>{it}</div>)}</div>;
+            case 'QTableWidget':return <div className="w-full h-full flex flex-col overflow-hidden shadow-sm" style={{background:tw.tableBg,border:`1px solid ${tw.tableBorder}`,fontSize:9,color:tw.tableColor}}><div style={{display:'flex',background:tw.tableHeaderBg,borderBottom:`1px solid ${tw.tableBorder}`}}>{(el.columnHeaders||['A','B','C']).map((c,i)=><div key={i} style={{flex:1,padding:'3px 4px',borderRight:`1px solid ${tw.tableBorder}`,fontWeight:'bold'}}>{c}</div>)}</div>{Array.from({length:Math.min(el.rows||3,5)},(_, r)=><div key={r} style={{display:'flex',borderBottom:`1px solid ${tw.listItemBorder}`}}>{(el.columnHeaders||['','','']).map((_, c)=><div key={c} style={{flex:1,padding:'2px 4px',borderRight:`1px solid ${tw.listItemBorder}`}}>&nbsp;</div>)}</div>)}</div>;
+            case 'QTabWidget':return <div className="w-full h-full flex flex-col"><div style={{display:'flex',background:tw.tabBarBg,borderBottom:`1px solid ${tw.tabBorder}`}}>{(el.tabs||['Tab 1']).map((t,i)=><div key={i} style={{padding:'4px 12px',fontSize:10,borderRight:`1px solid ${tw.tabBorder}`,background:i===0?tw.tabActiveBg:'transparent',color:tw.tabColor,borderBottom:i===0?`1px solid ${tw.tabActiveBg}`:'none',marginBottom:i===0?-1:0,cursor:'default',borderTop:i===0?`2px solid ${tw.accent}`:'2px solid transparent'}}>{t}</div>)}</div><div style={{flex:1,background:tw.tabActiveBg,border:`1px solid ${tw.tabBorder}`,borderTop:'none',boxShadow:'0 1px 2px rgba(0,0,0,0.1)'}}/></div>;
+            case 'QStackedWidget':return <div className="w-full h-full flex items-center justify-center text-[9px]" style={{border:`1px dashed ${tw.frameBorder}`,color:tw.labelColor,background:el.bg||'transparent'}}>{(el.pages||['Page 1'])[0]}</div>;
+            case 'QToolBox':return <div className="w-full h-full flex flex-col shadow-sm">{(el.pages||['Section 1']).map((p,i)=><div key={i} style={{background:tw.tabBarBg,border:`1px solid ${tw.tabBorder}`,padding:'4px 8px',fontSize:10,fontWeight:'bold',color:tw.tabColor,display:'flex',alignItems:'center',gap:4}}><Ico name="chevron-right" size={10}/>{p}</div>)}<div style={{flex:1,background:tw.tabActiveBg,border:`1px solid ${tw.tabBorder}`,borderTop:'none'}}/></div>;
+            case 'QDockWidget':return <div className="w-full h-full flex flex-col shadow-lg" style={{border:`1px solid ${tw.frameBorder}`,background:tw.bg}}><div style={{background:tw.tabBarBg,padding:'2px 4px',fontSize:10,fontWeight:'bold',borderBottom:`1px solid ${tw.border}`,display:'flex',justifyContent:'space-between',alignItems:'center'}}><span>{el.text||'Dock'}</span><div className="flex gap-1"><div className="w-2 h-2 rounded-full bg-red-400"></div><div className="w-2 h-2 rounded-full bg-yellow-400"></div></div></div><div style={{flex:1,background:tw.bg2}}></div></div>;
+            case 'QDateEdit':return <div className="w-full h-full flex items-center justify-between px-1.5 shadow-sm" style={{background:tw.dateBg,border:`1px solid ${tw.dateBorder}`,borderRadius:3,fontSize:10,color:tw.dateColor}}>2026-02-18 <Ico name="calendar" size={10}/></div>;
+            case 'QTimeEdit':return <div className="w-full h-full flex items-center justify-between px-1.5 shadow-sm" style={{background:tw.dateBg,border:`1px solid ${tw.dateBorder}`,borderRadius:3,fontSize:10,color:tw.dateColor}}>12:00 <Ico name="clock" size={10}/></div>;
+            case 'QDateTimeEdit':return <div className="w-full h-full flex items-center justify-between px-1.5 shadow-sm" style={{background:tw.dateBg,border:`1px solid ${tw.dateBorder}`,borderRadius:3,fontSize:10,color:tw.dateColor}}>2026-02-18 12:00 <Ico name="calendar-clock" size={10}/></div>;
+            case 'QScrollBar':return <div className="w-full h-full" style={{background:tw.scrollBg,border:`1px solid ${tw.frameBorder}`}}><div style={{width:el.orientation==='horizontal'?'30%':'100%',height:el.orientation==='horizontal'?'100%':'30%',background:tw.sliderThumb,opacity:0.6,borderRadius:2,margin:1}}/></div>;
             case 'VLine':return <div style={{width:1,height:'100%',background:tw.frameBorder,margin:'0 auto'}}/>;
             case 'HLine':return <div style={{height:1,width:'100%',background:tw.frameBorder,margin:'auto 0'}}/>;
             default:return <div className="w-full h-full flex items-center justify-center text-[9px]" style={{color:tw.labelColor}}>{el.type}</div>;
@@ -998,6 +1153,38 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
         const q=widgetSearch.toLowerCase();
         return Object.entries(W).filter(([k,v])=>k.toLowerCase().includes(q)||v.label.toLowerCase().includes(q));
     },[widgetSearch]);
+
+    /* ── Active Selection ── */
+    const activeWidget=elements.find(el=>el.id===selectedIds[0]);
+    // Effect to update Signal editor when selection changes
+    useEffect(()=>{
+        if(activeWidget){
+            setSigSender(activeWidget.name);
+            setSigReceiver('MainWindow');
+        }
+    },[activeWidget?.id]);
+
+    /* ── Render Object Tree (Recursive) ── */
+    const renderTree=(list,depth=0)=>{
+        return list.map(el=>{
+            const hasChildren=el.children&&el.children.length>0;
+            const isSel=selectedIds.includes(el.id);
+            return(
+                <div key={el.id}>
+                    <div onClick={(e)=>{e.stopPropagation();setSelectedIds(e.shiftKey?[...selectedIds,el.id]:[el.id]);}}
+                        className={`tree-item ${isSel?'selected':''}`} style={{paddingLeft:depth*12+8}}>
+                        <Ico name={W[el.type]?.icon||'box'} size={12}/>
+                        <span className="flex-1 truncate">{el.name}</span>
+                        <span className="type-badge">{el.type}</span>
+                        {el.locked&&<Ico name="lock" size={10}/>}
+                    </div>
+                    {hasChildren&&renderTree(el.children,depth+1)}
+                </div>
+            );
+        });
+    };
+
+    const treeHierarchy=useMemo(()=>buildHierarchy(elements),[elements]);
 
     /* ── Render ── */
     return(
@@ -1026,6 +1213,8 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
                     <div className="toolbar-sep"/>
 
                     <button onClick={()=>setSnapEnabled(!snapEnabled)} className={`toolbar-btn ${snapEnabled?'active':''}`} title="Snap to Grid"><Ico name="grid-3x3" size={16}/></button>
+                    <div className="toolbar-sep"/>
+                    <button onClick={()=>{setPreviewMode(!previewMode);setSelectedIds([]);}} className={`toolbar-btn ${previewMode?'active':''}`} title="Preview Mode" style={{color:previewMode?'var(--green)':'var(--text3)'}}><Ico name="play" size={16}/></button>
                     <div className="toolbar-sep"/>
                     <div className="flex items-center gap-1 px-1 py-0.5 rounded-md" style={{background:'var(--bg)'}}>
                         {Object.entries(THEMES).map(([key,t])=>(
@@ -1105,18 +1294,11 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
                         )}
                     </div>
                     ):(
-                    <div className="flex-1 overflow-y-auto scr p-2">
+                    <div className="flex-1 overflow-y-auto scr py-2">
                         {elements.length===0?
                             <div className="text-center py-8" style={{color:'var(--text3)',fontSize:11}}>No widgets yet</div>
                         :
-                            elements.map(el=>(
-                                <div key={el.id} onClick={()=>setSelectedIds([el.id])} className={`tree-item ${selectedIds.includes(el.id)?'selected':''}`}>
-                                    <Ico name={W[el.type]?.icon||'box'} size={12}/>
-                                    <span className="flex-1 truncate">{el.name}</span>
-                                    <span className="type-badge">{el.type}</span>
-                                    {el.locked&&<Ico name="lock" size={10}/>}
-                                </div>
-                            ))
+                            renderTree(treeHierarchy)
                         }
                     </div>
                     )}
@@ -1142,17 +1324,17 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
                                     const isLine=el.type==='VLine'||el.type==='HLine';
                                     return(
                                         <div key={el.id}
-                                            onMouseDown={e=>startMove(e,el.id)}
+                                            onMouseDown={e=>{if(!previewMode)startMove(e,el.id);}}
                                             onClick={e=>e.stopPropagation()}
                                             onContextMenu={e=>showCtx(e,el.id)}
                                             className="absolute"
-                                            style={{left:el.x,top:el.y,width:el.w,height:el.h,zIndex:el.zIndex,opacity:el.visible?1:0.35,outline:sel?'2px solid var(--accent)':'none',outlineOffset:-1,cursor:el.locked?'not-allowed':'move',boxShadow:isLine?'none':sel?'0 0 0 1px var(--accent), 0 2px 8px rgba(0,0,0,0.25)':'0 1px 3px rgba(0,0,0,0.2), 0 0 0 1px rgba(128,128,128,0.12)',borderRadius:isLine?0:2}}>
+                                            style={{left:el.x,top:el.y,width:el.w,height:el.h,zIndex:el.zIndex,opacity:el.visible?1:0.35,outline:(!previewMode&&sel)?'2px solid var(--accent)':'none',outlineOffset:-1,cursor:previewMode?'default':el.locked?'not-allowed':'move',boxShadow:isLine?'none':(!previewMode&&sel)?'0 0 0 1px var(--accent), 0 2px 8px rgba(0,0,0,0.25)':'0 1px 3px rgba(0,0,0,0.2), 0 0 0 1px rgba(128,128,128,0.12)',borderRadius:isLine?0:2}}>
 
-                                            <div className="w-full h-full overflow-hidden pointer-events-none">
+                                            <div className={`w-full h-full overflow-hidden ${previewMode?'':'pointer-events-none'}`}>
                                                 {renderWidget(el)}
                                             </div>
 
-                                            {sel&&!el.locked&&<>
+                                            {!previewMode&&sel&&!el.locked&&<>
                                                 <div onMouseDown={e=>startResize(e,el.id,'n')} className="resize-handle rh-n"/>
                                                 <div onMouseDown={e=>startResize(e,el.id,'s')} className="resize-handle rh-s"/>
                                                 <div onMouseDown={e=>startResize(e,el.id,'w')} className="resize-handle rh-w"/>
@@ -1168,6 +1350,17 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
                                 })}
 
                                 {rubberBand&&<div className="rubber-band" style={{left:rubberBand.x,top:rubberBand.y,width:rubberBand.w,height:rubberBand.h}}/>}
+                                {guides.map((g,i)=>(
+                                    <div key={i} className="guide-line" style={{
+                                        left:g.type==='v'?g.x:g.x,
+                                        top:g.type==='h'?g.y:g.y,
+                                        width:g.type==='h'?g.len:1,
+                                        height:g.type==='v'?g.len:1,
+                                        borderLeft:g.type==='v'?'1px dashed var(--red)':'none',
+                                        borderTop:g.type==='h'?'1px dashed var(--red)':'none',
+                                        background:'none'
+                                    }}/>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -1198,15 +1391,79 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
                     )}
                 </div>
 
-                {/* ═══ RIGHT PANEL — PROPERTIES ═══ */}
+                {/* ═══ RIGHT PANEL — PROPERTIES & SIGNALS ═══ */}
                 {tab==='design'&&(
                 <div className="w-72 shrink-0 flex flex-col border-l overflow-hidden" style={{background:'var(--bg2)',borderColor:'var(--border)'}}>
-                    <div className="py-2 px-4 border-b flex items-center gap-2" style={{borderColor:'var(--border)'}}>
-                        <Ico name="settings-2" size={12}/>
-                        <span className="text-[10px] font-bold uppercase tracking-wider" style={{color:'var(--text3)'}}>Properties</span>
+                    <div className="flex border-b" style={{borderColor:'var(--border)'}}>
+                        <button onClick={()=>setRightPanel('props')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${rightPanel==='props'?'border-blue-500 text-blue-400':'border-transparent text-zinc-500 hover:text-zinc-300'}`}>Properties</button>
+                        <button onClick={()=>setRightPanel('signals')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${rightPanel==='signals'?'border-blue-500 text-blue-400':'border-transparent text-zinc-500 hover:text-zinc-300'}`}>Signals/Slots</button>
                     </div>
                     <div className="flex-1 overflow-y-auto scr">
-                        {primaryEl?(
+                        {rightPanel==='signals'?(
+                            <div className="p-2">
+                                <div className="panel-section">
+                                    <span className="panel-label">New Connection</span>
+                                    <div className="flex flex-col gap-2">
+                                        <div>
+                                            <span className="text-[9px] text-zinc-500 block mb-1">Sender</span>
+                                            <select value={sigSender} onChange={e=>setSigSender(e.target.value)} className="prop-select">
+                                                <option value="MainWindow">MainWindow</option>
+                                                {elements.map(el=><option key={el.id} value={el.name}>{el.name} ({el.type})</option>)}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <span className="text-[9px] text-zinc-500 block mb-1">Signal</span>
+                                            <select value={sigSignal} onChange={e=>setSigSignal(e.target.value)} className="prop-select">
+                                                <option value="">-- Select --</option>
+                                                {getSignals(sigSender==='MainWindow'?'QMainWindow':elements.find(e=>e.name===sigSender)?.type).map(s=><option key={s} value={s}>{s}</option>)}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <span className="text-[9px] text-zinc-500 block mb-1">Receiver</span>
+                                            <select value={sigReceiver} onChange={e=>setSigReceiver(e.target.value)} className="prop-select">
+                                                <option value="MainWindow">MainWindow</option>
+                                                {elements.map(el=><option key={el.id} value={el.name}>{el.name} ({el.type})</option>)}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <span className="text-[9px] text-zinc-500 block mb-1">Slot</span>
+                                            <select value={sigSlot} onChange={e=>setSigSlot(e.target.value)} className="prop-select">
+                                                <option value="">-- Select --</option>
+                                                {getSlots(sigReceiver==='MainWindow'?'QMainWindow':elements.find(e=>e.name===sigReceiver)?.type).map(s=><option key={s} value={s}>{s}</option>)}
+                                            </select>
+                                        </div>
+                                        <button onClick={()=>{
+                                            if(sigSender&&sigSignal&&sigReceiver&&sigSlot){
+                                                const next=[...connections,{sender:sigSender,signal:sigSignal,receiver:sigReceiver,slot:sigSlot}];
+                                                setConnections(next);
+                                                pushHistory(elements,next);
+                                            }
+                                        }} disabled={!sigSender||!sigSignal||!sigReceiver||!sigSlot} className="w-full py-1.5 rounded bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-[10px] font-bold mt-2">Add Connection</button>
+                                    </div>
+                                </div>
+                                <div className="mt-2 space-y-1">
+                                    {connections.map((c,i)=>(
+                                        <div key={i} className="p-2 rounded bg-zinc-800 border border-zinc-700 text-[10px] relative group">
+                                            <div className="flex justify-between items-center mb-1">
+                                                <span className="text-blue-400 font-bold">{c.sender}</span>
+                                                <Ico name="arrow-right" size={10}/>
+                                                <span className="text-green-400 font-bold">{c.receiver}</span>
+                                            </div>
+                                            <div className="text-zinc-400 pl-1 border-l-2 border-zinc-600">
+                                                <div>{c.signal}</div>
+                                                <div>{c.slot}</div>
+                                            </div>
+                                            <button onClick={()=>{
+                                                const next=connections.filter((_,idx)=>idx!==i);
+                                                setConnections(next);
+                                                pushHistory(elements,next);
+                                            }} className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-300"><Ico name="x" size={12}/></button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ):
+                        primaryEl?(
                         <>
                         {/* Identity */}
                         <div className="panel-section">
@@ -1268,13 +1525,16 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
                                 <><span className="text-[9px] font-bold mb-1 block" style={{color:'var(--text3)'}}>Tabs (one per line)</span><textarea className="prop-input" rows={3} style={{resize:'none'}} value={primaryEl.tabs.join('\n')} onChange={e=>setProp('tabs',e.target.value.split('\n'))} onBlur={commitHistory}/></>
                             :(primaryEl.type==='QStackedWidget'||primaryEl.type==='QToolBox')?
                                 <><span className="text-[9px] font-bold mb-1 block" style={{color:'var(--text3)'}}>Pages (one per line)</span><textarea className="prop-input" rows={3} style={{resize:'none'}} value={primaryEl.pages.join('\n')} onChange={e=>setProp('pages',e.target.value.split('\n'))} onBlur={commitHistory}/></>
-                            :(['QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QGroupBox','QImage'].includes(primaryEl.type))?
-                                <textarea className="prop-input" rows={2} style={{resize:'none'}} placeholder={primaryEl.type==='QGroupBox'?'Title':'Text'} value={primaryEl.text} onChange={e=>setProp('text',e.target.value)} onBlur={commitHistory}/>
+                            :(['QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QGroupBox','QImage','QCommandLinkButton','QDockWidget'].includes(primaryEl.type))?
+                                <textarea className="prop-input" rows={2} style={{resize:'none'}} placeholder={primaryEl.type==='QGroupBox'?'Title':primaryEl.type==='QDockWidget'?'Window Title':'Text'} value={primaryEl.text} onChange={e=>setProp('text',e.target.value)} onBlur={commitHistory}/>
                             :
                                 <span className="text-[9px]" style={{color:'var(--text3)'}}>No text property</span>
                             }
                             {(primaryEl.type==='QLabel'||primaryEl.type==='QImage')&&
                                 <input className="prop-input mt-2" placeholder="Pixmap URL or path" value={primaryEl.pixmap} onChange={e=>setProp('pixmap',e.target.value)} onBlur={commitHistory}/>
+                            }
+                            {(primaryEl.type==='QCommandLinkButton')&&
+                                <textarea className="prop-input mt-2" rows={2} style={{resize:'none'}} placeholder="Description" value={primaryEl.description} onChange={e=>setProp('description',e.target.value)} onBlur={commitHistory}/>
                             }
                         </div>
 
@@ -1359,10 +1619,11 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
                             <textarea className="prop-input font-mono text-[10px]" rows={3} style={{resize:'vertical'}} placeholder="border-radius: 8px; ..." value={primaryEl.styleSheet} onChange={e=>setProp('styleSheet',e.target.value)} onBlur={commitHistory}/>
                         </div>
 
-                        {/* Tooltip */}
+                        {/* Tooltip & Status */}
                         <div className="panel-section">
-                            <span className="panel-label">Tooltip</span>
-                            <input className="prop-input" placeholder="Tooltip text" value={primaryEl.tooltip} onChange={e=>setProp('tooltip',e.target.value)} onBlur={commitHistory}/>
+                            <span className="panel-label">Tooltip & Status</span>
+                            <input className="prop-input mb-2" placeholder="Tooltip text" value={primaryEl.tooltip} onChange={e=>setProp('tooltip',e.target.value)} onBlur={commitHistory}/>
+                            <input className="prop-input" placeholder="Status Tip" value={primaryEl.statusTip} onChange={e=>setProp('statusTip',e.target.value)} onBlur={commitHistory}/>
                         </div>
 
                         {/* Z-Index */}
@@ -1497,8 +1758,29 @@ if __name__ == "__main__":
     PORT = 8765
     threading.Thread(target=start_server, args=(PORT,), daemon=True).start()
     app = QApplication(sys.argv)
-    if PYQT_VERSION == 5:
-        app.setStyle("Fusion")
+
+    # Set Fusion style for a professional look across platforms
+    app.setStyle("Fusion")
+
+    # Apply a dark palette to match the default "Midnight" theme
+    palette = app.palette()
+    from PyQt6.QtGui import QColor, QPalette
+    dark_gray = QColor(30, 30, 30)
+    palette.setColor(QPalette.ColorRole.Window, dark_gray)
+    palette.setColor(QPalette.ColorRole.WindowText, QColor(255, 255, 255))
+    palette.setColor(QPalette.ColorRole.Base, QColor(45, 45, 45))
+    palette.setColor(QPalette.ColorRole.AlternateBase, dark_gray)
+    palette.setColor(QPalette.ColorRole.ToolTipBase, QColor(255, 255, 255))
+    palette.setColor(QPalette.ColorRole.ToolTipText, QColor(255, 255, 255))
+    palette.setColor(QPalette.ColorRole.Text, QColor(255, 255, 255))
+    palette.setColor(QPalette.ColorRole.Button, dark_gray)
+    palette.setColor(QPalette.ColorRole.ButtonText, QColor(255, 255, 255))
+    palette.setColor(QPalette.ColorRole.BrightText, QColor(255, 0, 0))
+    palette.setColor(QPalette.ColorRole.Link, QColor(42, 130, 218))
+    palette.setColor(QPalette.ColorRole.Highlight, QColor(42, 130, 218))
+    palette.setColor(QPalette.ColorRole.HighlightedText, QColor(0, 0, 0))
+    app.setPalette(palette)
+
     window = MainWindow()
     window.show()
     if PYQT_VERSION == 6:
