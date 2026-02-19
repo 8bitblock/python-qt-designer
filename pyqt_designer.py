@@ -264,9 +264,9 @@ const THEMES={
 };
 
 const CATEGORIES={
-    Buttons:{icon:'mouse-pointer-2',items:['QPushButton','QToolButton','QRadioButton','QCheckBox']},
-    Input:{icon:'text-cursor',items:['QLineEdit','QTextEdit','QPlainTextEdit','QSpinBox','QDoubleSpinBox','QComboBox','QDateEdit','QTimeEdit','QDateTimeEdit']},
-    Display:{icon:'monitor',items:['QLabel','QProgressBar','QLCDNumber','QCalendarWidget','QImage']},
+    Buttons:{icon:'mouse-pointer-2',items:['QPushButton','QToolButton','QRadioButton','QCheckBox','QCommandLinkButton']},
+    Input:{icon:'text-cursor',items:['QLineEdit','QTextEdit','QPlainTextEdit','QSpinBox','QDoubleSpinBox','QComboBox','QFontComboBox','QKeySequenceEdit','QDateEdit','QTimeEdit','QDateTimeEdit']},
+    Display:{icon:'monitor',items:['QLabel','QProgressBar','QLCDNumber','QCalendarWidget','QImage','QTextBrowser']},
     Controls:{icon:'sliders-horizontal',items:['QSlider','QDial','QScrollBar']},
     Containers:{icon:'box',items:['QGroupBox','QTabWidget','QFrame','QScrollArea','QStackedWidget','QToolBox']},
     Views:{icon:'table',items:['QListWidget','QTreeWidget','QTableWidget']},
@@ -288,7 +288,10 @@ const W={
     QToolBox:{label:'Tool Box',icon:'briefcase',dw:200,dh:200,cat:'Containers',container:true},
     QCheckBox:{label:'Check Box',icon:'check-square',dw:110,dh:22,cat:'Buttons'},
     QRadioButton:{label:'Radio Button',icon:'circle-dot',dw:110,dh:22,cat:'Buttons'},
+    QCommandLinkButton:{label:'Command Link',icon:'link',dw:180,dh:40,cat:'Buttons'},
     QComboBox:{label:'Combo Box',icon:'chevron-down',dw:130,dh:26,cat:'Input'},
+    QFontComboBox:{label:'Font Combo',icon:'type',dw:160,dh:26,cat:'Input'},
+    QKeySequenceEdit:{label:'Key Sequence',icon:'keyboard',dw:140,dh:26,cat:'Input'},
     QProgressBar:{label:'Progress Bar',icon:'loader',dw:200,dh:22,cat:'Display'},
     QSlider:{label:'Slider',icon:'sliders-horizontal',dw:160,dh:22,cat:'Controls'},
     QScrollBar:{label:'Scroll Bar',icon:'grip-vertical',dw:16,dh:120,cat:'Controls'},
@@ -303,6 +306,7 @@ const W={
     QDateEdit:{label:'Date Edit',icon:'calendar',dw:110,dh:26,cat:'Input'},
     QTimeEdit:{label:'Time Edit',icon:'clock',dw:90,dh:26,cat:'Input'},
     QDateTimeEdit:{label:'DateTime',icon:'calendar-clock',dw:160,dh:26,cat:'Input'},
+    QTextBrowser:{label:'Text Browser',icon:'globe',dw:200,dh:150,cat:'Display'},
     QImage:{label:'Image',icon:'image',dw:100,dh:100,cat:'Display',xmlClass:'QLabel'},
     VLine:{label:'V-Line',icon:'grip-vertical',dw:3,dh:100,cat:'Separators',xmlClass:'Line'},
     HLine:{label:'H-Line',icon:'grip-horizontal',dw:100,dh:3,cat:'Separators',xmlClass:'Line'},
@@ -310,6 +314,84 @@ const W={
 
 const CURSORS=["ArrowCursor","UpArrowCursor","CrossCursor","WaitCursor","IBeamCursor","SizeVerCursor","SizeHorCursor","SizeBDiagCursor","SizeFDiagCursor","SizeAllCursor","BlankCursor","SplitVCursor","SplitHCursor","PointingHandCursor","ForbiddenCursor","OpenHandCursor","ClosedHandCursor","WhatsThisCursor"];
 const SIZE_POLICIES=["Fixed","Minimum","Maximum","Preferred","Expanding","MinimumExpanding","Ignored"];
+
+/* ───── QSS Generator ───── */
+const parseGradient=(val)=>{
+    if(!val||!val.includes('gradient'))return val;
+    if(val.startsWith('linear-gradient')){
+        const parts=val.match(/linear-gradient\((\d+)deg,\s*(.+)\)/);
+        if(!parts)return val;
+        const deg=parseInt(parts[1]);
+        const colors=parts[2].split(',').map(s=>s.trim());
+        let x1=0,y1=0,x2=0,y2=0;
+        if(deg===180){x1=0;y1=0;x2=0;y2=1;}
+        else if(deg===90){x1=0;y1=0;x2=1;y2=0;}
+        if(colors.length>=2){
+            return `qlineargradient(spread:pad, x1:${x1}, y1:${y1}, x2:${x2}, y2:${y2}, stop:0 ${colors[0]}, stop:1 ${colors[1]})`;
+        }
+        return colors[0];
+    }
+    if(val.startsWith('conic-gradient')){
+        const match=val.match(/#[0-9a-fA-F]{3,6}/);
+        return match?match[0]:'transparent';
+    }
+    return val;
+};
+
+const generateThemeQSS=(themeName)=>{
+    const t=THEMES[themeName];if(!t)return '';
+    const w=t.widget;
+    const btnBg=parseGradient(w.btnBg);
+    const progressFill=parseGradient(w.progressFill);
+
+    return `
+/* Global Defaults */
+QWidget{font-family:'Segoe UI',sans-serif;font-size:11px}
+/* QPushButton */
+QPushButton{background-color:${btnBg};border:1px solid ${w.btnBorder};border-radius:4px;color:${w.btnColor};padding:4px 12px}
+QPushButton:hover{background-color:${w.btnBorder}}
+QPushButton:pressed{background-color:${w.btnColor};color:${w.btnBg.includes('gradient')?'#000':'#fff'}}
+/* QToolButton */
+QToolButton{background-color:${btnBg};border:1px solid ${w.btnBorder};border-radius:4px;color:${w.btnColor}}
+/* QLineEdit, QAbstractSpinBox */
+QLineEdit,QAbstractSpinBox,QDateEdit,QTimeEdit,QDateTimeEdit{background-color:${w.inputBg};border:1px solid ${w.inputBorder};border-radius:3px;color:${w.inputColor};padding:2px 4px}
+QLineEdit:focus,QAbstractSpinBox:focus{border:1px solid ${t.ide.accent}}
+/* QTextEdit, QPlainTextEdit */
+QTextEdit,QPlainTextEdit{background-color:${w.inputBg};border:1px solid ${w.inputBorder};border-radius:3px;color:${w.inputColor}}
+/* QComboBox */
+QComboBox{background-color:${w.comboBg};border:1px solid ${w.comboBorder};border-radius:3px;color:${w.comboColor};padding:2px 4px}
+QComboBox::drop-down{border:none;background:transparent}
+QComboBox::down-arrow{image:none;border-left:1px solid ${w.comboBorder};width:12px;height:12px;background:${w.comboBorder}}
+/* QCheckBox, QRadioButton */
+QCheckBox,QRadioButton{color:${w.checkColor};spacing:5px}
+QCheckBox::indicator,QRadioButton::indicator{width:14px;height:14px;border:1px solid ${w.inputBorder};background:${w.inputBg};border-radius:2px}
+QRadioButton::indicator{border-radius:7px}
+QCheckBox::indicator:checked,QRadioButton::indicator:checked{background-color:${t.ide.accent};border-color:${t.ide.accent}}
+/* QGroupBox */
+QGroupBox{border:1px solid ${w.groupBorder};border-radius:4px;margin-top:16px;font-weight:bold}
+QGroupBox::title{subcontrol-origin:margin;subcontrol-position:top left;left:8px;padding:0 3px;color:${w.groupColor};background-color:${t.canvas}}
+/* QProgressBar */
+QProgressBar{background-color:${w.progressBg};border:1px solid ${w.progressBorder};border-radius:3px;text-align:center;color:${w.labelColor}}
+QProgressBar::chunk{background-color:${t.ide.accent};width:20px}
+/* QSlider */
+QSlider::groove:horizontal{border:1px solid ${w.sliderTrack};height:4px;background:${w.sliderTrack};margin:2px 0;border-radius:2px}
+QSlider::handle:horizontal{background:${w.sliderThumb};border:1px solid ${w.sliderThumbBorder};width:12px;height:12px;margin:-5px 0;border-radius:6px}
+/* QTabWidget */
+QTabWidget::pane{border:1px solid ${w.tabBorder};background:${w.tabActiveBg};border-top:none}
+QTabBar::tab{background:${w.tabBarBg};border:1px solid ${w.tabBorder};border-bottom-color:${w.tabBorder};color:${w.tabColor};padding:4px 10px;border-top-left-radius:4px;border-top-right-radius:4px}
+QTabBar::tab:selected{background:${w.tabActiveBg};border-bottom-color:${w.tabActiveBg};margin-bottom:-1px}
+/* Item Views */
+QListWidget,QTreeWidget,QTableWidget{background-color:${w.listBg};border:1px solid ${w.listBorder};color:${w.listColor};outline:none}
+QHeaderView::section{background-color:${w.tableHeaderBg};color:${w.labelColor};padding:4px;border:1px solid ${w.tableBorder}}
+/* QCalendarWidget */
+QCalendarWidget QWidget{background-color:${w.calBg};color:${w.calColor}}
+QCalendarWidget QTableView{background-color:${w.calBg};selection-background-color:${t.ide.accent}}
+/* QLabel */
+QLabel{color:${w.labelColor};background-color:${w.inputBg};border:1px solid transparent;border-radius:3px;padding:2px}
+/* QLCDNumber */
+QLCDNumber{background-color:${w.lcdBg};color:${w.lcdColor};border:2px inset ${w.frameBorder}}
+    `.replace(/\n/g,'');
+};
 
 /* ───── Icon Component ───── */
 const Ico=({name,size=16})=>{
@@ -355,6 +437,7 @@ const defaultEl=(type,x,y,idx,gridSize)=>{
         columnHeaders:type==='QTableWidget'?['Col 1','Col 2','Col 3']:[],
         echoMode:'Normal',
         inputMask:'',
+        keySequence:type==='QKeySequenceEdit'?'Ctrl+O':'',
         styleSheet:'',
     };
 };
@@ -551,13 +634,13 @@ const App=()=>{
         let extra='';
 
         // Whitelists for properties that only apply to certain widgets
-        const HAS_TEXT=new Set(['QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QGroupBox','QImage']);
-        const HAS_ALIGN=new Set(['QLabel','QLineEdit','QCheckBox','QRadioButton','QPushButton','QImage']);
+        const HAS_TEXT=new Set(['QPushButton','QToolButton','QCommandLinkButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QTextBrowser','QCheckBox','QRadioButton','QGroupBox','QImage']);
+        const HAS_ALIGN=new Set(['QLabel','QLineEdit','QImage','QProgressBar','QSpinBox','QDoubleSpinBox','QDateEdit','QTimeEdit','QDateTimeEdit']);
         const HAS_PLACEHOLDER=new Set(['QLineEdit','QTextEdit','QPlainTextEdit']);
-        const HAS_READONLY=new Set(['QLineEdit','QTextEdit','QPlainTextEdit','QSpinBox','QDoubleSpinBox','QDateEdit','QTimeEdit','QDateTimeEdit']);
-        const HAS_FLAT=new Set(['QPushButton','QGroupBox']);
-        const HAS_CHECKABLE=new Set(['QPushButton','QToolButton','QGroupBox']);
-        const HAS_CHECKED=new Set(['QPushButton','QToolButton','QCheckBox','QRadioButton','QGroupBox']);
+        const HAS_READONLY=new Set(['QLineEdit','QTextEdit','QPlainTextEdit','QTextBrowser','QSpinBox','QDoubleSpinBox','QDateEdit','QTimeEdit','QDateTimeEdit']);
+        const HAS_FLAT=new Set(['QPushButton','QCommandLinkButton','QGroupBox']);
+        const HAS_CHECKABLE=new Set(['QPushButton','QToolButton','QCommandLinkButton','QGroupBox']);
+        const HAS_CHECKED=new Set(['QPushButton','QToolButton','QCommandLinkButton','QCheckBox','QRadioButton','QGroupBox']);
         const HAS_PIXMAP=new Set(['QLabel','QImage']);
 
         // Geometry
@@ -577,6 +660,7 @@ const App=()=>{
         if(el.flat&&HAS_FLAT.has(el.type))props+=`${indent}  `+xmlProp('flat','bool','true')+'\n';
         if(el.checkable&&HAS_CHECKABLE.has(el.type))props+=`${indent}  `+xmlProp('checkable','bool','true')+'\n';
         if(el.checked&&HAS_CHECKED.has(el.type))props+=`${indent}  `+xmlProp('checked','bool','true')+'\n';
+        if(el.keySequence&&el.type==='QKeySequenceEdit')props+=`${indent}  `+xmlProp('keySequence','string',el.keySequence)+'\n';
         if(el.pixmap&&HAS_PIXMAP.has(el.type))props+=`${indent}  <property name="pixmap"><pixmap>${escXml(el.pixmap)}</pixmap></property>\n`;
         if(el.value&&(el.type==='QProgressBar'||el.type==='QSlider'||el.type==='QSpinBox'||el.type==='QDoubleSpinBox'||el.type==='QLCDNumber'))
             props+=`${indent}  `+xmlProp('value','number',el.value)+'\n';
@@ -647,7 +731,7 @@ const App=()=>{
   <property name="geometry"><rect><x>0</x><y>0</y><width>${canvasSize.w}</width><height>${canvasSize.h}</height></rect></property>
   <property name="windowTitle"><string>${escXml(windowTitle)}</string></property>
   <widget class="QWidget" name="centralwidget">
-   <property name="styleSheet"><string>background-color:${canvasBg};</string></property>
+   <property name="styleSheet"><string>${escXml(generateThemeQSS(activeTheme))}\nQWidget#centralwidget{background-color:${canvasBg};}</string></property>
 ${wxml}  </widget>
 ${mbar}  <widget class="QStatusBar" name="statusbar"/>
  </widget>
@@ -670,7 +754,9 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
         lines.push(`        MainWindow.setWindowTitle("${windowTitle}")`);
         lines.push(`        self.centralwidget = QWidget(MainWindow)`);
         lines.push(`        self.centralwidget.setObjectName("centralwidget")`);
-        if(canvasBg&&canvasBg!=='#f0f0f0')lines.push(`        self.centralwidget.setStyleSheet("background-color:${canvasBg};")`);
+        const themeQSS = generateThemeQSS(activeTheme);
+        const fullQSS = themeQSS + (canvasBg ? `\nQWidget#centralwidget{background-color:${canvasBg};}` : '');
+        lines.push(`        self.centralwidget.setStyleSheet(\"\"\"${fullQSS}\"\"\")`);
         lines.push('');
 
         elements.forEach(el=>{
@@ -678,14 +764,14 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
             const pyClass=cls==='Line'?'QFrame':cls;
 
             // Whitelists
-            const HAS_TEXT=new Set(['QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QImage']);
+            const HAS_TEXT=new Set(['QPushButton','QToolButton','QCommandLinkButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QTextBrowser','QCheckBox','QRadioButton','QImage']);
             const HAS_TITLE=new Set(['QGroupBox']);
-            const HAS_ALIGN=new Set(['QLabel','QLineEdit','QCheckBox','QRadioButton','QPushButton','QImage']);
+            const HAS_ALIGN=new Set(['QLabel','QLineEdit','QImage','QProgressBar','QSpinBox','QDoubleSpinBox','QDateEdit','QTimeEdit','QDateTimeEdit']);
             const HAS_PLACEHOLDER=new Set(['QLineEdit','QTextEdit','QPlainTextEdit']);
-            const HAS_READONLY=new Set(['QLineEdit','QTextEdit','QPlainTextEdit','QSpinBox','QDoubleSpinBox','QDateEdit','QTimeEdit','QDateTimeEdit']);
-            const HAS_FLAT=new Set(['QPushButton','QGroupBox']);
-            const HAS_CHECKABLE=new Set(['QPushButton','QToolButton','QGroupBox']);
-            const HAS_CHECKED=new Set(['QPushButton','QToolButton','QCheckBox','QRadioButton','QGroupBox']);
+            const HAS_READONLY=new Set(['QLineEdit','QTextEdit','QPlainTextEdit','QTextBrowser','QSpinBox','QDoubleSpinBox','QDateEdit','QTimeEdit','QDateTimeEdit']);
+            const HAS_FLAT=new Set(['QPushButton','QCommandLinkButton','QGroupBox']);
+            const HAS_CHECKABLE=new Set(['QPushButton','QToolButton','QCommandLinkButton','QGroupBox']);
+            const HAS_CHECKED=new Set(['QPushButton','QToolButton','QCommandLinkButton','QCheckBox','QRadioButton','QGroupBox']);
 
             lines.push(`        self.${el.name} = ${pyClass}(self.centralwidget)`);
             lines.push(`        self.${el.name}.setObjectName("${el.name}")`);
@@ -699,6 +785,7 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
             if(el.flat&&HAS_FLAT.has(el.type))lines.push(`        self.${el.name}.setFlat(True)`);
             if(el.checkable&&HAS_CHECKABLE.has(el.type))lines.push(`        self.${el.name}.setCheckable(True)`);
             if(el.checked&&HAS_CHECKED.has(el.type))lines.push(`        self.${el.name}.setChecked(True)`);
+            if(el.keySequence&&el.type==='QKeySequenceEdit')lines.push(`        self.${el.name}.setKeySequence("${el.keySequence.replace(/"/g,'\\"')}")`);
             if(el.type==='QComboBox'&&el.items.length)lines.push(`        self.${el.name}.addItems(${JSON.stringify(el.items)})`);
             if(el.type==='VLine'){lines.push(`        self.${el.name}.setFrameShape(QFrame.Shape.VLine)`);lines.push(`        self.${el.name}.setFrameShadow(QFrame.Shadow.Sunken)`);}
             if(el.type==='HLine'){lines.push(`        self.${el.name}.setFrameShape(QFrame.Shape.HLine)`);lines.push(`        self.${el.name}.setFrameShadow(QFrame.Shadow.Sunken)`);}
@@ -959,7 +1046,10 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
             case 'QTextEdit':case 'QPlainTextEdit':return <div className="w-full h-full flex items-start p-1 overflow-hidden" style={{...s,background:el.bg||tw.inputBg,border:`1px solid ${tw.inputBorder}`,borderRadius:3,color:el.color||tw.inputColor,fontSize:'10px'}}>{el.text||<span style={{color:tw.checkColor,opacity:0.4}}>{el.placeholderText||''}</span>}</div>;
             case 'QCheckBox':return <div className="w-full h-full flex items-center gap-1" style={{...s,color:el.color||tw.checkColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}><span style={{fontSize:14}}>{el.checked?'☑':'☐'}</span>{el.text||'CheckBox'}</div>;
             case 'QRadioButton':return <div className="w-full h-full flex items-center gap-1" style={{...s,color:el.color||tw.checkColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}><span style={{fontSize:14}}>{el.checked?'◉':'○'}</span>{el.text||'RadioButton'}</div>;
+            case 'QCommandLinkButton':return <div className="w-full h-full flex items-center px-2 gap-2" style={{...s,background:el.bg||tw.btnBg,border:`1px solid ${tw.btnBorder}`,borderRadius:4,color:el.color||tw.btnColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}><div style={{width:14,height:14,borderRadius:'50%',background:tw.accent,display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontSize:9}}>➜</div><span style={{fontWeight:'bold'}}>{el.text||'Command Link'}</span></div>;
             case 'QComboBox':return <div className="w-full h-full flex items-center justify-between px-1" style={{background:el.bg||tw.comboBg,border:`1px solid ${tw.comboBorder}`,borderRadius:3,color:el.color||tw.comboColor,fontSize:'11px'}}>{el.items[0]||'ComboBox'}<span style={{fontSize:8}}>▼</span></div>;
+            case 'QFontComboBox':return <div className="w-full h-full flex items-center justify-between px-1" style={{background:el.bg||tw.comboBg,border:`1px solid ${tw.comboBorder}`,borderRadius:3,color:el.color||tw.comboColor,fontSize:'11px'}}><span style={{fontFamily:'Segoe UI'}}>Segoe UI</span><span style={{fontSize:8}}>▼</span></div>;
+            case 'QKeySequenceEdit':return <div className="w-full h-full flex items-center px-1" style={{...s,background:el.bg||tw.inputBg,border:`1px solid ${tw.inputBorder}`,borderRadius:3,color:el.color||tw.inputColor,fontSize:el.fontSize?`${el.fontSize}pt`:'11px'}}><span style={{color:tw.checkColor,opacity:0.6}}>{el.keySequence||'Ctrl+O'}</span></div>;
             case 'QGroupBox':return <div className="w-full h-full relative" style={{border:`1px solid ${tw.groupBorder}`,borderRadius:4,paddingTop:16}}><span className="absolute left-2" style={{top:-8,background:el.bg||canvasBg,padding:'0 4px',fontSize:11,color:el.color||tw.groupColor}}>{el.text||'Group'}</span></div>;
             case 'QFrame':return <div className="w-full h-full" style={{border:`1px solid ${tw.frameBorder}`,background:el.bg||'transparent'}}/>;
             case 'QScrollArea':return <div className="w-full h-full overflow-hidden relative" style={{border:`1px solid ${tw.frameBorder}`,background:el.bg||tw.inputBg}}><div style={{position:'absolute',right:0,top:0,bottom:0,width:12,background:tw.scrollBg}}/></div>;
@@ -1243,7 +1333,7 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
                         </div>
 
                         {/* Alignment — only for widgets that support setAlignment */}
-                        {(['QLabel','QLineEdit','QCheckBox','QRadioButton','QPushButton','QImage'].includes(primaryEl.type))&&(
+                        {(['QLabel','QLineEdit','QImage','QProgressBar','QSpinBox','QDoubleSpinBox','QDateEdit','QTimeEdit','QDateTimeEdit'].includes(primaryEl.type))&&(
                         <div className="panel-section">
                             <span className="panel-label">Alignment</span>
                             <div className="flex gap-1 p-1 rounded-md mb-2" style={{background:'var(--bg)'}}>
@@ -1268,7 +1358,9 @@ ${mbar}  <widget class="QStatusBar" name="statusbar"/>
                                 <><span className="text-[9px] font-bold mb-1 block" style={{color:'var(--text3)'}}>Tabs (one per line)</span><textarea className="prop-input" rows={3} style={{resize:'none'}} value={primaryEl.tabs.join('\n')} onChange={e=>setProp('tabs',e.target.value.split('\n'))} onBlur={commitHistory}/></>
                             :(primaryEl.type==='QStackedWidget'||primaryEl.type==='QToolBox')?
                                 <><span className="text-[9px] font-bold mb-1 block" style={{color:'var(--text3)'}}>Pages (one per line)</span><textarea className="prop-input" rows={3} style={{resize:'none'}} value={primaryEl.pages.join('\n')} onChange={e=>setProp('pages',e.target.value.split('\n'))} onBlur={commitHistory}/></>
-                            :(['QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QGroupBox','QImage'].includes(primaryEl.type))?
+                            :primaryEl.type==='QKeySequenceEdit'?
+                                <><span className="text-[9px] font-bold mb-1 block" style={{color:'var(--text3)'}}>Key Sequence</span><input className="prop-input" value={primaryEl.keySequence} onChange={e=>setProp('keySequence',e.target.value)} onBlur={commitHistory}/></>
+                            :(['QPushButton','QToolButton','QCommandLinkButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QTextBrowser','QCheckBox','QRadioButton','QGroupBox','QImage'].includes(primaryEl.type))?
                                 <textarea className="prop-input" rows={2} style={{resize:'none'}} placeholder={primaryEl.type==='QGroupBox'?'Title':'Text'} value={primaryEl.text} onChange={e=>setProp('text',e.target.value)} onBlur={commitHistory}/>
                             :
                                 <span className="text-[9px]" style={{color:'var(--text3)'}}>No text property</span>
