@@ -105,6 +105,7 @@ class UIGenerator:
         HAS_FLAT = {'QPushButton','QGroupBox'}
         HAS_CHECKABLE = {'QPushButton','QToolButton','QGroupBox','QCheckBox','QRadioButton'}
         HAS_CHECKED = {'QPushButton','QToolButton','QCheckBox','QRadioButton','QGroupBox'}
+        HAS_AUTOFILL = {'QLabel', 'QCheckBox', 'QRadioButton'}
 
         props = ''
 
@@ -114,6 +115,10 @@ class UIGenerator:
         # Identity
         if el.get('objectName'): # Usually handled by name attribute in widget tag, but strictly speaking XML uses name attr
             pass # We use el['name'] in widget tag
+
+        # AutoFillBackground for labels if themed
+        if el['type'] in HAS_AUTOFILL and self.include_theme and self.theme.get('widget', {}).get('defaultBg'):
+            props += self._prop('autoFillBackground', 'bool', True, indent)
 
         # Text
         if el.get('text') and el['type'] in HAS_TEXT and el['type'] != 'QComboBox':

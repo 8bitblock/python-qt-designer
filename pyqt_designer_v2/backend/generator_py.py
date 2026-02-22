@@ -75,6 +75,7 @@ class PythonGenerator:
         HAS_FLAT = {'QPushButton','QGroupBox'}
         HAS_CHECKABLE = {'QPushButton','QToolButton','QGroupBox','QCheckBox','QRadioButton'}
         HAS_CHECKED = {'QPushButton','QToolButton','QCheckBox','QRadioButton','QGroupBox'}
+        HAS_AUTOFILL = {'QLabel', 'QCheckBox', 'QRadioButton'}
 
         for el in self.elements:
             cls = el['type']
@@ -83,6 +84,9 @@ class PythonGenerator:
             lines.append(f"        self.{el['name']} = {py_class}(self.centralwidget)")
             lines.append(f'        self.{el["name"]}.setObjectName("{el["name"]}")')
             lines.append(f"        self.{el['name']}.setGeometry(QRect({int(el['x'])}, {int(el['y'])}, {int(el['w'])}, {int(el['h'])}))")
+
+            if cls in HAS_AUTOFILL and self.include_theme and self.theme.get('widget', {}).get('defaultBg'):
+                lines.append(f'        self.{el["name"]}.setAutoFillBackground(True)')
 
             # Text
             text = el.get('text', '').replace('"', '\\"').replace('\n', '\\n')
