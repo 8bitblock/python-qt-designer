@@ -12,31 +12,66 @@ class UIGenerator:
         self.pyqt_version = pyqt_version
         self.include_theme = include_theme
 
-    def get_global_style(self):
+    def get_widget_style(self, cls):
+        """Returns the specific style for a widget class based on the theme."""
         if not self.include_theme or not self.theme:
             return ""
 
-        def_bg = self.theme.get('widget', {}).get('defaultBg', '')
-        txt = self.theme.get('ide', {}).get('text', '#000000')
-        btn_border = self.theme.get('widget', {}).get('btnBorder', '#555')
-        input_bg = self.theme.get('widget', {}).get('inputBg', def_bg)
-        input_border = self.theme.get('widget', {}).get('inputBorder', '#555')
-        combo_bg = self.theme.get('widget', {}).get('comboBg', def_bg)
-        combo_border = self.theme.get('widget', {}).get('comboBorder', '#555')
-        group_border = self.theme.get('widget', {}).get('groupBorder', '#555')
+        tw = self.theme.get('widget', {})
+        styles = []
 
-        css = f"QWidget{{color:{txt};}}"
+        if cls in ['QPushButton', 'QToolButton', 'QCommandLinkButton']:
+            bg = tw.get('btnBg') or tw.get('defaultBg')
+            border = tw.get('btnBorder')
+            color = tw.get('btnColor')
+            if bg: styles.append(f"background-color:{bg}")
+            if border: styles.append(f"border:1px solid {border}")
+            if color: styles.append(f"color:{color}")
+            styles.append("border-radius:4px;padding:4px")
 
-        if def_bg:
-            css += f"""
-            QPushButton, QToolButton, QCommandLinkButton{{background-color:{def_bg};border:1px solid {btn_border};border-radius:4px;padding:4px;}}
-            QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QDoubleSpinBox, QDateEdit, QTimeEdit, QDateTimeEdit{{background-color:{input_bg};border:1px solid {input_border};border-radius:3px;}}
-            QComboBox, QFontComboBox{{background-color:{combo_bg};border:1px solid {combo_border};border-radius:3px;}}
-            QLabel, QCheckBox, QRadioButton{{background-color:{def_bg};padding:2px;border-radius:2px;}}
-            QGroupBox{{border:1px solid {group_border};border-radius:4px;margin-top:1.5em;}}
-            QGroupBox::title{{subcontrol-origin:margin;subcontrol-position:top left;padding:0 3px;}}
-            """
-        return css.replace('\n', ' ').strip()
+        elif cls in ['QLineEdit', 'QTextEdit', 'QPlainTextEdit', 'QSpinBox', 'QDoubleSpinBox', 'QDateEdit', 'QTimeEdit', 'QDateTimeEdit']:
+            bg = tw.get('inputBg') or tw.get('defaultBg')
+            border = tw.get('inputBorder')
+            color = tw.get('inputColor')
+            if bg: styles.append(f"background-color:{bg}")
+            if border: styles.append(f"border:1px solid {border}")
+            if color: styles.append(f"color:{color}")
+            styles.append("border-radius:3px")
+
+        elif cls in ['QComboBox', 'QFontComboBox']:
+            bg = tw.get('comboBg') or tw.get('defaultBg')
+            border = tw.get('comboBorder')
+            color = tw.get('comboColor')
+            if bg: styles.append(f"background-color:{bg}")
+            if border: styles.append(f"border:1px solid {border}")
+            if color: styles.append(f"color:{color}")
+            styles.append("border-radius:3px")
+
+        elif cls in ['QLabel', 'QCheckBox', 'QRadioButton']:
+            bg = tw.get('defaultBg')
+            color = tw.get('labelColor')
+            if cls in ['QCheckBox', 'QRadioButton']: color = tw.get('checkColor')
+
+            if bg: styles.append(f"background-color:{bg}")
+            if color: styles.append(f"color:{color}")
+            styles.append("padding:2px;border-radius:2px")
+
+        elif cls == 'QGroupBox':
+            border = tw.get('groupBorder')
+            color = tw.get('groupColor')
+            if border: styles.append(f"border:1px solid {border}")
+            if color: styles.append(f"color:{color}")
+            styles.append("border-radius:4px;margin-top:1.5em")
+
+        elif cls in ['QListWidget', 'QTreeWidget', 'QTableWidget']:
+             bg = tw.get('listBg')
+             color = tw.get('listColor')
+             border = tw.get('listBorder')
+             if bg: styles.append(f"background-color:{bg}")
+             if color: styles.append(f"color:{color}")
+             if border: styles.append(f"border:1px solid {border}")
+
+        return ";".join(styles)
 
     def build_hierarchy(self):
         nodes = [e.copy() for e in self.elements]
@@ -113,7 +148,7 @@ class UIGenerator:
         props += f'{indent}<property name="geometry"><rect><x>{int(rx)}</x><y>{int(ry)}</y><width>{int(el["w"])}</width><height>{int(el["h"])}</height></rect></property>\n'
 
         # Identity
-        if el.get('objectName'): # Usually handled by name attribute in widget tag, but strictly speaking XML uses name attr
+        if el.get('objectName'):
             pass # We use el['name'] in widget tag
 
         # AutoFillBackground for labels if themed
@@ -151,25 +186,24 @@ class UIGenerator:
         if 'maximum' in el and el['type'] in {'QProgressBar', 'QSlider', 'QSpinBox', 'QDoubleSpinBox'}:
             props += self._prop('maximum', 'number', el['maximum'], indent)
 
-        # Style
-        # Local StyleSheet (User override)
-        ss = el.get('styleSheet', '')
-        # If we are NOT exporting global theme, we might want to inject local colors if user set them explicitly
-        # But our frontend sets specific props like 'bg', 'color'.
-        # If include_theme is False, we should probably ONLY output manually set styleSheet,
-        # or maybe we should still output local overrides?
-        # User said "not a universal style sheet".
-        # I will assume local overrides (bg, color props) are INTENTIONAL styling by user, so I keep them.
+        # Style (Inline + User Override)
+        theme_style = self.get_widget_style(el['type'])
+        user_style = el.get('styleSheet', '')
 
-        if el.get('bg'): ss += f"background-color:{el['bg']};"
-        if el.get('color'): ss += f"color:{el['color']};"
-        if el.get('fontSize'): ss += f"font-size:{el['fontSize']}pt;"
-        if el.get('fontFamily'): ss += f"font-family:'{el['fontFamily']}';"
-        if el.get('fontWeight') == 'bold': ss += "font-weight:bold;"
-        if el.get('fontItalic'): ss += "font-style:italic;"
+        # Additional User Props overrides (bg, color)
+        if el.get('bg'): user_style += f"background-color:{el['bg']};"
+        if el.get('color'): user_style += f"color:{el['color']};"
+        if el.get('fontSize'): user_style += f"font-size:{el['fontSize']}pt;"
+        if el.get('fontFamily'): user_style += f"font-family:'{el['fontFamily']}';"
+        if el.get('fontWeight') == 'bold': user_style += "font-weight:bold;"
+        if el.get('fontItalic'): user_style += "font-style:italic;"
 
-        if ss:
-            props += self._prop('styleSheet', 'string', ss, indent)
+        final_style = theme_style
+        if user_style:
+            final_style = final_style + ";" + user_style if final_style else user_style
+
+        if final_style:
+            props += self._prop('styleSheet', 'string', final_style, indent)
 
         # Alignment
         if el['type'] in HAS_ALIGN:
@@ -214,12 +248,12 @@ class UIGenerator:
         for el in roots:
             wxml += self._gen_widget(el, el['x'], el['y'], '   ')
 
-        # Global Style
+        # Global Style (Only Canvas BG)
         main_style = ""
         if self.include_theme:
             canvas_bg = self.theme.get('canvas', '#f0f0f0') if self.theme else '#f0f0f0'
-            global_css = self.get_global_style()
-            main_style = f"background-color:{canvas_bg};" + global_css
+            txt = self.theme.get('ide', {}).get('text', '#000000') if self.theme else '#000000'
+            main_style = f"background-color:{canvas_bg};color:{txt};"
 
         style_prop = ""
         if main_style:

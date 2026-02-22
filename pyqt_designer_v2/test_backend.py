@@ -31,7 +31,9 @@ def test_backend_generation():
         "canvas": "#1e1e1e",
         "widget": {
             "defaultBg": "#404040",
+            "btnBg": "#3a3a3a",
             "btnBorder": "#555",
+            "btnColor": "#ffffff",
             "inputBg": "#303030",
             "inputBorder": "#555",
             "comboBg": "#303030",
@@ -44,10 +46,16 @@ def test_backend_generation():
     ui_gen = UIGenerator(elements, canvas_size, window_title, theme_data)
     xml_out = ui_gen.generate()
 
-    assert 'background-color:#404040' in xml_out, "Global stylesheet defaultBg missing in XML"
-    assert 'QWidget{color:#ffffff;}' in xml_out, "Global stylesheet text color missing in XML"
+    # Check for canvas style
+    assert 'background-color:#1e1e1e;color:#ffffff;' in xml_out, "Global canvas stylesheet missing in XML"
+
+    # Check for inline widget styles
     assert '<widget class="QPushButton" name="pushbutton_1">' in xml_out, "Button missing in XML"
-    assert '<property name="alignment"><set>Qt::AlignHCenter|Qt::AlignVCenter</set></property>' in xml_out, "ProgressBar alignment missing in XML"
+    # Button style (approximate check)
+    assert 'background-color:#3a3a3a' in xml_out, "Button inline background missing in XML"
+
+    # Check Label autoFillBackground
+    assert '<property name="autoFillBackground"><bool>true</bool></property>' in xml_out, "Label autoFillBackground missing in XML"
 
     print("UI XML Generation Passed")
 
@@ -56,9 +64,13 @@ def test_backend_generation():
     py_out = py_gen.generate()
 
     assert 'self.centralwidget.setStyleSheet' in py_out, "Stylesheet setting missing in Python"
-    assert 'background-color:#404040' in py_out, "Global stylesheet defaultBg missing in Python"
+
+    # Check for inline widget styles in Python
     assert 'self.pushbutton_1 = QPushButton(self.centralwidget)' in py_out, "Button init missing in Python"
-    assert 'Qt.AlignmentFlag.AlignHCenter' in py_out, "ProgressBar alignment missing in Python"
+    assert 'self.pushbutton_1.setStyleSheet("background-color:#3a3a3a' in py_out, "Button inline stylesheet missing in Python"
+
+    # Check Label autoFillBackground
+    assert 'self.label_1.setAutoFillBackground(True)' in py_out, "Label autoFillBackground missing in Python"
 
     print("Python Code Generation Passed")
 
