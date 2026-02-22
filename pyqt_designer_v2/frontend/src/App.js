@@ -49,6 +49,20 @@ window.Designer.App = () => {
         }
     }, []);
 
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (['Delete', 'Backspace'].includes(e.key)) {
+                if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
+                if (selectedIds.length > 0) {
+                    setElements(prev => prev.filter(el => !selectedIds.includes(el.id)));
+                    setSelectedIds([]);
+                }
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [selectedIds]);
+
     const handleAddWidget = (type, x, y) => {
         const n = elements.length + 1;
         const el = defaultEl(type, x, y, n, snapEnabled ? gridSize : 1, WIDGETS);
@@ -112,14 +126,26 @@ window.Designer.App = () => {
                         <span className="text-xs font-bold" style={{ color: 'var(--text2)' }}>Designer Pro V2</span>
                     </div>
                     <div className="toolbar-sep" />
-                    <button onClick={handleSaveUI} className="toolbar-btn" title="Save .ui"><i data-lucide="save"></i></button>
-                    <button onClick={handleSavePy} className="toolbar-btn" title="Export .py"><i data-lucide="file-code"></i></button>
+                    <button onClick={handleSaveUI} className="toolbar-btn flex gap-2" title="Save .ui">
+                        <i data-lucide="save"></i>
+                        <span className="text-[10px] font-bold">Save UI</span>
+                    </button>
+                    <button onClick={handleSavePy} className="toolbar-btn flex gap-2" title="Export .py">
+                        <i data-lucide="file-code"></i>
+                        <span className="text-[10px] font-bold">Export Python</span>
+                    </button>
                     <div className="toolbar-sep" />
-                    <button onClick={() => setSnapEnabled(!snapEnabled)} className={`toolbar-btn ${snapEnabled ? 'active' : ''}`}><i data-lucide="grid-3x3"></i></button>
-                    <button onClick={() => setPreviewMode(!previewMode)} className={`toolbar-btn ${previewMode ? 'active' : ''}`} style={{ color: previewMode ? 'var(--green)' : 'var(--text3)' }}><i data-lucide="play"></i></button>
+                    <button onClick={() => setSnapEnabled(!snapEnabled)} className={`toolbar-btn flex gap-2 ${snapEnabled ? 'active' : ''}`}>
+                        <i data-lucide="grid-3x3"></i>
+                        <span className="text-[10px] font-bold">Snap</span>
+                    </button>
+                    <button onClick={() => setPreviewMode(!previewMode)} className={`toolbar-btn flex gap-2 ${previewMode ? 'active' : ''}`} style={{ color: previewMode ? 'var(--green)' : 'var(--text3)' }}>
+                        <i data-lucide="play"></i>
+                        <span className="text-[10px] font-bold">Preview</span>
+                    </button>
                 </div>
                 {/* Global Settings Indicator */}
-                <div className="text-[10px] text-zinc-500 font-mono">
+                <div className="text-[10px] text-[var(--text3)] font-mono">
                     PyQt{pyqtVersion} | {exportTheme ? 'Theme Export' : 'No Theme'}
                 </div>
             </div>

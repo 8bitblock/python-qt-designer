@@ -27,10 +27,10 @@ window.Designer.PropertiesPanel = ({
         return (
             <div className="w-72 shrink-0 flex flex-col border-l" style={{ background: 'var(--bg2)', borderColor: 'var(--border)' }}>
                 <div className="flex border-b" style={{ borderColor: 'var(--border)' }}>
-                    <button onClick={() => onTabChange('props')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'props' ? 'border-blue-500 text-blue-400' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}>Properties</button>
-                    <button onClick={() => onTabChange('signals')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'signals' ? 'border-blue-500 text-blue-400' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}>Signals</button>
+                    <button onClick={() => onTabChange('props')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'props' ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-transparent text-[var(--text3)] hover:text-[var(--text)]'}`}>Properties</button>
+                    <button onClick={() => onTabChange('signals')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'signals' ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-transparent text-[var(--text3)] hover:text-[var(--text)]'}`}>Signals</button>
                 </div>
-                <div className="p-4 text-xs text-zinc-500">
+                <div className="p-4 text-xs text-[var(--text3)]">
                     Signal/Slot editor placeholder.
                 </div>
             </div>
@@ -40,8 +40,8 @@ window.Designer.PropertiesPanel = ({
     return (
         <div className="w-72 shrink-0 flex flex-col border-l overflow-hidden" style={{ background: 'var(--bg2)', borderColor: 'var(--border)' }}>
             <div className="flex border-b" style={{ borderColor: 'var(--border)' }}>
-                <button onClick={() => onTabChange('props')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'props' ? 'border-blue-500 text-blue-400' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}>Properties</button>
-                <button onClick={() => onTabChange('signals')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'signals' ? 'border-blue-500 text-blue-400' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}>Signals</button>
+                <button onClick={() => onTabChange('props')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'props' ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-transparent text-[var(--text3)] hover:text-[var(--text)]'}`}>Properties</button>
+                <button onClick={() => onTabChange('signals')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'signals' ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-transparent text-[var(--text3)] hover:text-[var(--text)]'}`}>Signals</button>
             </div>
 
             <div className="flex-1 overflow-y-auto scr">
@@ -50,20 +50,20 @@ window.Designer.PropertiesPanel = ({
                         {/* Identity */}
                         <div className="panel-section">
                             <span className="panel-label">Identity</span>
-                            <div className="prop-row"><span className="text-[9px] font-bold min-w-[40px] text-zinc-500">Name</span><input className="prop-input font-mono text-blue-400" value={element.name} onChange={e => setProp('name', e.target.value)} /></div>
-                            <div className="prop-row"><span className="text-[9px] font-bold min-w-[40px] text-zinc-500">Class</span><span className="text-[10px] font-mono text-zinc-500">{element.type}</span></div>
+                            <div className="prop-row"><span className="text-[9px] font-bold min-w-[40px] text-[var(--text3)]">Name</span><input className="prop-input font-mono" value={element.name} onChange={e => setProp('name', e.target.value)} /></div>
+                            <div className="prop-row"><span className="text-[9px] font-bold min-w-[40px] text-[var(--text3)]">Class</span><span className="text-[10px] font-mono text-[var(--text3)]">{element.type}</span></div>
                             <div className="prop-row mt-1">
                                 <label className="flex items-center gap-2 cursor-pointer select-none">
                                     <input type="checkbox" checked={element.enabled !== false} onChange={e => setProp('enabled', e.target.checked)} />
-                                    <span className="text-[9px] font-bold text-zinc-500">Enabled</span>
+                                    <span className="text-[9px] font-bold text-[var(--text3)]">Enabled</span>
                                 </label>
                                 <label className="flex items-center gap-2 cursor-pointer select-none ml-3">
                                     <input type="checkbox" checked={element.visible !== false} onChange={e => setProp('visible', e.target.checked)} />
-                                    <span className="text-[9px] font-bold text-zinc-500">Visible</span>
+                                    <span className="text-[9px] font-bold text-[var(--text3)]">Visible</span>
                                 </label>
                             </div>
-                            <div className="prop-row mt-1"><span className="text-[9px] font-bold min-w-[40px] text-zinc-500">ToolTip</span><input className="prop-input" value={element.tooltip || ''} onChange={e => setProp('tooltip', e.target.value)} /></div>
-                            <div className="prop-row"><span className="text-[9px] font-bold min-w-[40px] text-zinc-500">Status</span><input className="prop-input" value={element.statusTip || ''} onChange={e => setProp('statusTip', e.target.value)} /></div>
+                            <div className="prop-row mt-1"><span className="text-[9px] font-bold min-w-[40px] text-[var(--text3)]">ToolTip</span><input className="prop-input" value={element.tooltip || ''} onChange={e => setProp('tooltip', e.target.value)} /></div>
+                            <div className="prop-row"><span className="text-[9px] font-bold min-w-[40px] text-[var(--text3)]">Status</span><input className="prop-input" value={element.statusTip || ''} onChange={e => setProp('statusTip', e.target.value)} /></div>
                         </div>
 
                         {/* Geometry */}
@@ -84,19 +84,19 @@ window.Designer.PropertiesPanel = ({
                             <span className="panel-label">Content</span>
                             {['QPushButton', 'QLabel', 'QLineEdit', 'QCheckBox', 'QRadioButton', 'QCommandLinkButton', 'QGroupBox'].includes(element.type) && (
                                 <div className="mb-2">
-                                    <span className="text-[9px] font-bold mb-1 block text-zinc-500">Text / Title</span>
+                                    <span className="text-[9px] font-bold mb-1 block text-[var(--text3)]">Text / Title</span>
                                     <textarea className="prop-input" rows={2} style={{ resize: 'none' }} value={element.text || ''} onChange={e => setProp('text', e.target.value)} />
                                 </div>
                             )}
                             {['QLineEdit', 'QTextEdit', 'QPlainTextEdit'].includes(element.type) && (
                                 <div className="mb-2">
-                                    <span className="text-[9px] font-bold mb-1 block text-zinc-500">Placeholder</span>
+                                    <span className="text-[9px] font-bold mb-1 block text-[var(--text3)]">Placeholder</span>
                                     <input className="prop-input" value={element.placeholderText || ''} onChange={e => setProp('placeholderText', e.target.value)} />
                                 </div>
                             )}
                             {element.type === 'QCommandLinkButton' && (
                                 <div className="mb-2">
-                                    <span className="text-[9px] font-bold mb-1 block text-zinc-500">Description</span>
+                                    <span className="text-[9px] font-bold mb-1 block text-[var(--text3)]">Description</span>
                                     <input className="prop-input" value={element.description || ''} onChange={e => setProp('description', e.target.value)} />
                                 </div>
                             )}
@@ -105,25 +105,25 @@ window.Designer.PropertiesPanel = ({
                                 {['QPushButton', 'QToolButton', 'QGroupBox', 'QCheckBox', 'QRadioButton'].includes(element.type) && (
                                     <label className="flex items-center gap-1 cursor-pointer">
                                         <input type="checkbox" checked={!!element.checkable} onChange={e => setProp('checkable', e.target.checked)} />
-                                        <span className="text-[9px] text-zinc-400">Checkable</span>
+                                        <span className="text-[9px] text-[var(--text2)]">Checkable</span>
                                     </label>
                                 )}
                                 {['QPushButton', 'QToolButton', 'QCheckBox', 'QRadioButton', 'QGroupBox'].includes(element.type) && (
                                     <label className="flex items-center gap-1 cursor-pointer">
                                         <input type="checkbox" checked={!!element.checked} onChange={e => setProp('checked', e.target.checked)} />
-                                        <span className="text-[9px] text-zinc-400">Checked</span>
+                                        <span className="text-[9px] text-[var(--text2)]">Checked</span>
                                     </label>
                                 )}
                                 {['QLineEdit', 'QTextEdit', 'QPlainTextEdit', 'QSpinBox', 'QDoubleSpinBox'].includes(element.type) && (
                                     <label className="flex items-center gap-1 cursor-pointer">
                                         <input type="checkbox" checked={!!element.readOnly} onChange={e => setProp('readOnly', e.target.checked)} />
-                                        <span className="text-[9px] text-zinc-400">ReadOnly</span>
+                                        <span className="text-[9px] text-[var(--text2)]">ReadOnly</span>
                                     </label>
                                 )}
                                 {['QPushButton', 'QGroupBox'].includes(element.type) && (
                                     <label className="flex items-center gap-1 cursor-pointer">
                                         <input type="checkbox" checked={!!element.flat} onChange={e => setProp('flat', e.target.checked)} />
-                                        <span className="text-[9px] text-zinc-400">Flat</span>
+                                        <span className="text-[9px] text-[var(--text2)]">Flat</span>
                                     </label>
                                 )}
                             </div>
@@ -151,7 +151,7 @@ window.Designer.PropertiesPanel = ({
                                 <span className="panel-label">Alignment</span>
                                 <div className="flex gap-2">
                                     <div className="flex-1">
-                                        <span className="text-[9px] font-bold mb-1 block text-zinc-500">Horizontal</span>
+                                        <span className="text-[9px] font-bold mb-1 block text-[var(--text3)]">Horizontal</span>
                                         <select className="prop-select" value={element.hAlign || 'left'} onChange={e => setProp('hAlign', e.target.value)}>
                                             <option value="left">Left</option>
                                             <option value="center">Center</option>
@@ -160,7 +160,7 @@ window.Designer.PropertiesPanel = ({
                                         </select>
                                     </div>
                                     <div className="flex-1">
-                                        <span className="text-[9px] font-bold mb-1 block text-zinc-500">Vertical</span>
+                                        <span className="text-[9px] font-bold mb-1 block text-[var(--text3)]">Vertical</span>
                                         <select className="prop-select" value={element.vAlign || 'center'} onChange={e => setProp('vAlign', e.target.value)}>
                                             <option value="top">Top</option>
                                             <option value="center">Center</option>
@@ -189,18 +189,18 @@ window.Designer.PropertiesPanel = ({
                         <div className="panel-section">
                             <span className="panel-label">Style</span>
                             <div className="flex gap-3 mb-2">
-                                <div><span className="text-[9px] font-bold mb-1 block text-zinc-500">Text</span><div className="prop-color" style={{ backgroundColor: element.color || '#000' }}><input type="color" value={element.color || '#000000'} onChange={e => setProp('color', e.target.value)} /></div></div>
-                                <div><span className="text-[9px] font-bold mb-1 block text-zinc-500">Bg</span><div className="prop-color" style={{ backgroundColor: element.bg || '#fff' }}><input type="color" value={element.bg || '#ffffff'} onChange={e => setProp('bg', e.target.value)} /></div></div>
+                                <div><span className="text-[9px] font-bold mb-1 block text-[var(--text3)]">Text</span><div className="prop-color" style={{ backgroundColor: element.color || '#000' }}><input type="color" value={element.color || '#000000'} onChange={e => setProp('color', e.target.value)} /></div></div>
+                                <div><span className="text-[9px] font-bold mb-1 block text-[var(--text3)]">Bg</span><div className="prop-color" style={{ backgroundColor: element.bg || '#fff' }}><input type="color" value={element.bg || '#ffffff'} onChange={e => setProp('bg', e.target.value)} /></div></div>
                             </div>
-                            <span className="text-[9px] font-bold mb-1 block text-zinc-500">StyleSheet</span>
+                            <span className="text-[9px] font-bold mb-1 block text-[var(--text3)]">StyleSheet</span>
                             <textarea className="prop-input font-mono text-[9px]" rows={4} placeholder="color: red; ..." value={element.styleSheet || ''} onChange={e => setProp('styleSheet', e.target.value)} />
                         </div>
                     </>
                 ) : (
                     <div>
                         <div className="panel-section">
-                            <span className="panel-label">Window Settings</span>
-                            <span className="text-[9px] font-bold mb-1 block text-zinc-500">Title</span>
+                            <span className="panel-label">Canvas Properties</span>
+                            <span className="text-[9px] font-bold mb-1 block text-[var(--text3)]">Title</span>
                             <input className="prop-input mb-2" placeholder="Window Title" value={canvasProps.windowTitle} onChange={e => onCanvasChange('windowTitle', e.target.value)} />
                             <div className="grid grid-cols-2 gap-2 mb-2">
                                 <div className="geo-box"><span className="geo-label">W</span><input type="number" className="prop-input-sm" value={canvasProps.canvasSize.w} onChange={e => onCanvasChange('canvasSize', { ...canvasProps.canvasSize, w: parseInt(e.target.value) || 800 })} /></div>
@@ -212,20 +212,20 @@ window.Designer.PropertiesPanel = ({
                             <span className="panel-label">Generation Settings</span>
 
                             <div className="mb-3">
-                                <span className="text-[9px] font-bold mb-1 block text-zinc-500">PyQt Version</span>
+                                <span className="text-[9px] font-bold mb-1 block text-[var(--text3)]">PyQt Version</span>
                                 <div className="flex gap-2 bg-[var(--bg)] p-1 rounded border border-[var(--border)]">
-                                    <button onClick={() => onPyqtVersionChange(5)} className={`flex-1 text-[10px] py-1 rounded transition-colors ${pyqtVersion === 5 ? 'bg-[var(--accent)] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}>PyQt5</button>
-                                    <button onClick={() => onPyqtVersionChange(6)} className={`flex-1 text-[10px] py-1 rounded transition-colors ${pyqtVersion === 6 ? 'bg-[var(--accent)] text-white' : 'text-zinc-500 hover:text-zinc-300'}`}>PyQt6</button>
+                                    <button onClick={() => onPyqtVersionChange(5)} className={`flex-1 text-[10px] py-1 rounded transition-colors ${pyqtVersion === 5 ? 'bg-[var(--accent)] text-white' : 'text-[var(--text3)] hover:text-[var(--text)]'}`}>PyQt5</button>
+                                    <button onClick={() => onPyqtVersionChange(6)} className={`flex-1 text-[10px] py-1 rounded transition-colors ${pyqtVersion === 6 ? 'bg-[var(--accent)] text-white' : 'text-[var(--text3)] hover:text-[var(--text)]'}`}>PyQt6</button>
                                 </div>
                             </div>
 
                             <div className="mb-3">
-                                <span className="text-[9px] font-bold mb-1 block text-zinc-500">Theme Export</span>
+                                <span className="text-[9px] font-bold mb-1 block text-[var(--text3)]">Theme Export</span>
                                 <label className="flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-[var(--bg)] border border-transparent hover:border-[var(--border)] transition-colors">
                                     <input type="checkbox" checked={exportTheme} onChange={e => onExportThemeChange(e.target.checked)} />
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] font-bold text-zinc-300">Include Theme Colors</span>
-                                        <span className="text-[9px] text-zinc-500">Generate global stylesheet for high contrast</span>
+                                        <span className="text-[10px] font-bold text-[var(--text2)]">Include Theme Colors</span>
+                                        <span className="text-[9px] text-[var(--text3)]">Generate global stylesheet for high contrast</span>
                                     </div>
                                 </label>
                             </div>
@@ -247,7 +247,7 @@ window.Designer.PropertiesPanel = ({
                                     </button>
                                 ))}
                             </div>
-                            <p className="mt-2 text-[9px] text-zinc-500 italic">
+                            <p className="mt-2 text-[9px] text-[var(--text3)] italic">
                                 Use "Midnight" for best contrast.
                             </p>
                         </div>
