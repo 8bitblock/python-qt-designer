@@ -16,7 +16,7 @@ window.Designer.THEMES = {
         },
         canvas: '#1e1e1e',
         widget: {
-            defaultBg: '#404040',
+            defaultBg: '#2d3d4d',
             btnBg: 'linear-gradient(180deg,#3a3a3a,#303030)', btnBorder: '#555555', btnColor: '#ffffff',
             inputBg: '#303030', inputBorder: '#555555', inputColor: '#ffffff',
             comboBg: '#303030', comboBorder: '#555555', comboColor: '#ffffff',
@@ -82,7 +82,7 @@ window.Designer.THEMES = {
         },
         canvas: '#d4d0c8',
         widget: {
-            defaultBg: '#e0e0e0',
+            defaultBg: '#ffffff',
             btnBg: 'linear-gradient(180deg,#fff,#ece9d8)', btnBorder: '#777', btnColor: '#000',
             inputBg: '#fff', inputBorder: '#777', inputColor: '#000',
             comboBg: '#fff', comboBorder: '#777', comboColor: '#000',
