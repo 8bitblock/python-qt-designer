@@ -69,7 +69,7 @@ class PythonGenerator:
         HAS_TEXT = {'QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QImage','QCommandLinkButton','QDockWidget'}
         HAS_TITLE = {'QGroupBox'}
         HAS_WINDOWTITLE = {'QDockWidget'}
-        HAS_ALIGN = {'QLabel','QLineEdit','QImage'}
+        HAS_ALIGN = {'QLabel','QLineEdit','QImage','QProgressBar'}
         HAS_PLACEHOLDER = {'QLineEdit','QTextEdit','QPlainTextEdit'}
         HAS_READONLY = {'QLineEdit','QTextEdit','QPlainTextEdit','QSpinBox','QDoubleSpinBox','QDateEdit','QTimeEdit','QDateTimeEdit'}
         HAS_FLAT = {'QPushButton','QGroupBox'}

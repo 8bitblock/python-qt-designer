@@ -146,7 +146,7 @@ window.Designer.PropertiesPanel = ({
                         )}
 
                         {/* Alignment */}
-                        {['QLabel', 'QLineEdit', 'QImage'].includes(element.type) && (
+                        {['QLabel', 'QLineEdit', 'QImage', 'QProgressBar'].includes(element.type) && (
                             <div className="panel-section">
                                 <span className="panel-label">Alignment</span>
                                 <div className="flex gap-2">

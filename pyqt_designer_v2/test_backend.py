@@ -18,6 +18,10 @@ def test_backend_generation():
         {
             "id": "lbl1", "type": "QLabel", "name": "label_1", "x": 100, "y": 150, "w": 100, "h": 30,
             "text": "Label", "bg": "", "color": ""
+        },
+        {
+            "id": "bar1", "type": "QProgressBar", "name": "progress_1", "x": 100, "y": 200, "w": 200, "h": 22,
+            "value": 50, "hAlign": "center", "vAlign": "center"
         }
     ]
     canvas_size = {"w": 800, "h": 600}
@@ -43,6 +47,7 @@ def test_backend_generation():
     assert 'background-color:#404040' in xml_out, "Global stylesheet defaultBg missing in XML"
     assert 'QWidget{color:#ffffff;}' in xml_out, "Global stylesheet text color missing in XML"
     assert '<widget class="QPushButton" name="pushbutton_1">' in xml_out, "Button missing in XML"
+    assert '<property name="alignment"><set>Qt::AlignHCenter|Qt::AlignVCenter</set></property>' in xml_out, "ProgressBar alignment missing in XML"
 
     print("UI XML Generation Passed")
 
@@ -53,6 +58,7 @@ def test_backend_generation():
     assert 'self.centralwidget.setStyleSheet' in py_out, "Stylesheet setting missing in Python"
     assert 'background-color:#404040' in py_out, "Global stylesheet defaultBg missing in Python"
     assert 'self.pushbutton_1 = QPushButton(self.centralwidget)' in py_out, "Button init missing in Python"
+    assert 'Qt.AlignmentFlag.AlignHCenter' in py_out, "ProgressBar alignment missing in Python"
 
     print("Python Code Generation Passed")
 

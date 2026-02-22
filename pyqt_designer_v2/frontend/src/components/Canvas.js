@@ -140,7 +140,7 @@ window.Designer.Canvas = ({
     };
 
     return (
-        <div className="flex-1 overflow-auto scr grid-bg" onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
+        <div className="flex-1 overflow-auto scr grid-bg min-w-0" onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
             <div style={{ padding: 40, display: 'inline-block', minWidth: '100%', minHeight: '100%' }}>
                 <div ref={canvasRef}
                     className="relative shadow-2xl transition-colors"
