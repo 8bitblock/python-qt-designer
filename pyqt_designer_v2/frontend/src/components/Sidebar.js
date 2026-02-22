@@ -1,0 +1,93 @@
+window.Designer = window.Designer || {};
+
+const { useMemo } = React;
+const Ico = ({ name, size = 16 }) => {
+    const r = React.useRef(null);
+    React.useEffect(() => {
+        if (window.lucide && r.current) {
+            r.current.innerHTML = `<i data-lucide="${name}"></i>`;
+            window.lucide.createIcons({ attrs: { width: size, height: size }, nameAttr: 'data-lucide', root: r.current });
+        }
+    }, [name, size]);
+    return <span ref={r} className="inline-flex items-center justify-center pointer-events-none" />;
+};
+
+window.Designer.Sidebar = ({ activeTab, onTabChange, widgetSearch, setWidgetSearch, elements, selectedIds, onSelect }) => {
+    const WIDGETS = window.Designer.WIDGETS;
+    const CATEGORIES = window.Designer.CATEGORIES;
+
+    const filteredWidgets = useMemo(() => {
+        if (!widgetSearch) return null;
+        const q = widgetSearch.toLowerCase();
+        return Object.entries(WIDGETS).filter(([k, v]) => k.toLowerCase().includes(q) || v.label.toLowerCase().includes(q));
+    }, [widgetSearch]);
+
+    const renderTree = (list, depth = 0) => {
+        return list.map(el => (
+            <div key={el.id}
+                className={`tree-item ${selectedIds.includes(el.id) ? 'selected' : ''}`}
+                style={{ paddingLeft: depth * 12 + 8 }}
+                onClick={(e) => onSelect(el.id, e.shiftKey)}
+            >
+                <Ico name={WIDGETS[el.type]?.icon || 'box'} size={12} />
+                <span className="flex-1 truncate">{el.name}</span>
+                <span className="type-badge">{el.type}</span>
+            </div>
+        ));
+    };
+
+    return (
+        <div className="w-64 shrink-0 flex flex-col border-r overflow-hidden" style={{ background: 'var(--bg2)', borderColor: 'var(--border)' }}>
+            <div className="flex border-b" style={{ borderColor: 'var(--border)' }}>
+                <button onClick={() => onTabChange('widgets')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'widgets' ? 'border-blue-500 text-blue-400' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}>Widgets</button>
+                <button onClick={() => onTabChange('tree')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'tree' ? 'border-blue-500 text-blue-400' : 'border-transparent text-zinc-500 hover:text-zinc-300'}`}>Objects</button>
+            </div>
+
+            {activeTab === 'widgets' ? (
+                <div className="flex-1 overflow-y-auto scr">
+                    <div className="p-3">
+                        <div className="relative mb-3">
+                            <span className="absolute left-2 top-1/2 -translate-y-1/2" style={{ color: 'var(--text3)' }}><Ico name="search" size={12} /></span>
+                            <input className="search-input" placeholder="Search widgets..." value={widgetSearch} onChange={e => setWidgetSearch(e.target.value)} />
+                        </div>
+                    </div>
+
+                    {filteredWidgets ? (
+                        <div className="px-3 pb-3 grid grid-cols-3 gap-2">
+                            {filteredWidgets.map(([type, cfg]) => (
+                                <div key={type} draggable onDragStart={e => e.dataTransfer.setData("widgetType", type)} className="widget-card">
+                                    <div className="icon-wrap"><Ico name={cfg.icon} size={18} /></div>
+                                    <span>{cfg.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        Object.entries(CATEGORIES).map(([catName, cat]) => (
+                            <div key={catName} className="mb-1">
+                                <div className="flex items-center gap-2 px-4 py-2" style={{ color: 'var(--text3)' }}>
+                                    <Ico name={cat.icon} size={12} />
+                                    <span className="text-[10px] font-bold uppercase tracking-wider">{catName}</span>
+                                </div>
+                                <div className="px-3 pb-2 grid grid-cols-3 gap-1.5">
+                                    {cat.items.map(type => {
+                                        const cfg = WIDGETS[type]; if (!cfg) return null;
+                                        return (
+                                            <div key={type} draggable onDragStart={e => e.dataTransfer.setData("widgetType", type)} className="widget-card">
+                                                <div className="icon-wrap"><Ico name={cfg.icon} size={16} /></div>
+                                                <span>{cfg.label}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            ) : (
+                <div className="flex-1 overflow-y-auto scr py-2">
+                    {elements.length === 0 ? <div className="text-center py-8 text-zinc-500 text-xs">No widgets</div> : renderTree(elements)}
+                </div>
+            )}
+        </div>
+    );
+};
