@@ -137,6 +137,18 @@ class PythonGenerator:
             if user_style:
                 final_style = final_style + ";" + user_style if final_style else user_style
 
+            if cls in ['QPushButton', 'QToolButton', 'QCommandLinkButton'] and self.include_theme:
+                pressed_bg = self.theme.get('widget', {}).get('btnPressedBg')
+                if pressed_bg:
+                    pressed_style = f"{cls}:pressed{{background:{pressed_bg};border-style:inset;padding:5px 3px 3px 5px}}"
+                    if final_style:
+                        # Wrap current style in a selector if it's properties-only, or just append pressed state?
+                        # Since final_style contains properties like "background:...", we need to apply them to the widget.
+                        # Qt allows "properties; selector { properties }" syntax.
+                        final_style = f"{final_style};{pressed_style}"
+                    else:
+                        final_style = pressed_style
+
             if final_style:
                 lines.append(f'        self.{el["name"]}.setStyleSheet("{final_style}")')
 

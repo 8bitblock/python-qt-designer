@@ -17,7 +17,7 @@ window.Designer.THEMES = {
         canvas: '#1e1e1e',
         widget: {
             defaultBg: '#2d3d4d',
-            btnBg: 'linear-gradient(180deg,#3a3a3a,#303030)', btnBorder: '#555555', btnColor: '#ffffff',
+            btnBg: 'linear-gradient(180deg,#3a3a3a,#303030)', btnPressedBg: 'linear-gradient(180deg,#2a2a2a,#202020)', btnBorder: '#555555', btnColor: '#ffffff',
             inputBg: '#303030', inputBorder: '#555555', inputColor: '#ffffff',
             comboBg: '#303030', comboBorder: '#555555', comboColor: '#ffffff',
             checkColor: '#ffffff', groupBorder: '#555555', groupColor: '#ffffff',
@@ -50,7 +50,7 @@ window.Designer.THEMES = {
         canvas: '#ffffff',
         widget: {
             defaultBg: '#e5e5e5',
-            btnBg: 'linear-gradient(180deg,#f0f0f0,#e0e0e0)', btnBorder: '#bbbbbb', btnColor: '#000000',
+            btnBg: 'linear-gradient(180deg,#f0f0f0,#e0e0e0)', btnPressedBg: 'linear-gradient(180deg,#d0d0d0,#c0c0c0)', btnBorder: '#bbbbbb', btnColor: '#000000',
             inputBg: '#f5f5f5', inputBorder: '#bbbbbb', inputColor: '#000000',
             comboBg: '#f5f5f5', comboBorder: '#bbbbbb', comboColor: '#000000',
             checkColor: '#000000', groupBorder: '#bbbbbb', groupColor: '#000000',
@@ -83,7 +83,7 @@ window.Designer.THEMES = {
         canvas: '#d4d0c8',
         widget: {
             defaultBg: '#ffffff',
-            btnBg: 'linear-gradient(180deg,#fff,#ece9d8)', btnBorder: '#777', btnColor: '#000',
+            btnBg: 'linear-gradient(180deg,#fff,#ece9d8)', btnPressedBg: 'linear-gradient(180deg,#ddd,#ccc)', btnBorder: '#777', btnColor: '#000',
             inputBg: '#fff', inputBorder: '#777', inputColor: '#000',
             comboBg: '#fff', comboBorder: '#777', comboColor: '#000',
             checkColor: '#000', groupBorder: '#777', groupColor: '#000',
@@ -116,7 +116,7 @@ window.Designer.THEMES = {
         canvas: '#000800',
         widget: {
             defaultBg: '#002800',
-            btnBg: 'linear-gradient(180deg,#003a00,#002800)', btnBorder: '#00cc00', btnColor: '#00ff00',
+            btnBg: 'linear-gradient(180deg,#003a00,#002800)', btnPressedBg: 'linear-gradient(180deg,#002a00,#001800)', btnBorder: '#00cc00', btnColor: '#00ff00',
             inputBg: '#001800', inputBorder: '#00bb00', inputColor: '#00ff00',
             comboBg: '#001800', comboBorder: '#00bb00', comboColor: '#00ff00',
             checkColor: '#00ff00', groupBorder: '#00bb00', groupColor: '#00ff00',

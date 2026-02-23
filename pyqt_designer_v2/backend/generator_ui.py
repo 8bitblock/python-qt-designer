@@ -202,6 +202,15 @@ class UIGenerator:
         if user_style:
             final_style = final_style + ";" + user_style if final_style else user_style
 
+        if el['type'] in ['QPushButton', 'QToolButton', 'QCommandLinkButton'] and self.include_theme:
+            pressed_bg = self.theme.get('widget', {}).get('btnPressedBg')
+            if pressed_bg:
+                pressed_style = f"{el['type']}:pressed{{background:{pressed_bg};border-style:inset;padding:5px 3px 3px 5px}}"
+                if final_style:
+                    final_style = f"{final_style};{pressed_style}"
+                else:
+                    final_style = pressed_style
+
         if final_style:
             props += self._prop('styleSheet', 'string', final_style, indent)
 

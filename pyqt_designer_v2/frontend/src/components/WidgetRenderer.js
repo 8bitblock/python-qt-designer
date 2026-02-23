@@ -33,7 +33,7 @@ window.Designer.WidgetRenderer = ({ el, theme }) => {
         case 'QPushButton':
         case 'QCommandLinkButton':
             return (
-                <div className="w-full h-full flex items-center px-2 shadow-sm transition-all"
+                <div className="w-full h-full flex items-center px-2 shadow-sm transition-all widget-btn"
                     style={{
                         ...s,
                         background: el.bg || tw.defaultBg || tw.btnBg,
@@ -54,7 +54,7 @@ window.Designer.WidgetRenderer = ({ el, theme }) => {
             );
         case 'QToolButton':
             return (
-                <div className="w-full h-full flex items-center justify-center shadow-sm"
+                <div className="w-full h-full flex items-center justify-center shadow-sm widget-btn"
                     style={{
                         ...s,
                         background: el.bg || tw.defaultBg || tw.btnBg,
