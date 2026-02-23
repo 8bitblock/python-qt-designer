@@ -180,8 +180,22 @@ window.Designer.PropertiesPanel = ({
                             </select>
                             <div className="flex gap-2 items-center">
                                 <input type="number" className="prop-input-sm" placeholder="Size" value={element.fontSize || ''} onChange={e => setProp('fontSize', parseInt(e.target.value) || 0)} />
-                                <button onClick={() => setProp('fontWeight', element.fontWeight === 'bold' ? 'normal' : 'bold')} className={`toggle-btn ${element.fontWeight === 'bold' ? 'active' : ''}`} style={{ fontWeight: 'bold' }}>B</button>
-                                <button onClick={() => setProp('fontItalic', !element.fontItalic)} className={`toggle-btn ${element.fontItalic ? 'active' : ''}`} style={{ fontStyle: 'italic' }}>I</button>
+                                <button
+                                    aria-label="Bold"
+                                    aria-pressed={element.fontWeight === 'bold'}
+                                    title="Bold"
+                                    onClick={() => setProp('fontWeight', element.fontWeight === 'bold' ? 'normal' : 'bold')}
+                                    className={`toggle-btn ${element.fontWeight === 'bold' ? 'active' : ''}`}
+                                    style={{ fontWeight: 'bold' }}
+                                >B</button>
+                                <button
+                                    aria-label="Italic"
+                                    aria-pressed={!!element.fontItalic}
+                                    title="Italic"
+                                    onClick={() => setProp('fontItalic', !element.fontItalic)}
+                                    className={`toggle-btn ${element.fontItalic ? 'active' : ''}`}
+                                    style={{ fontStyle: 'italic' }}
+                                >I</button>
                             </div>
                         </div>
 
