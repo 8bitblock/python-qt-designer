@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PyQt6 Designer Pro</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="root"></div>
+
+<!-- Load scripts sequentially to populate window.Designer -->
+<script type="text/babel" src="src/constants.js"></script>
+<script type="text/babel" src="src/utils/helpers.js"></script>
+<script type="text/babel" src="src/components/WidgetRenderer.js"></script>
+<script type="text/babel" src="src/components/Sidebar.js"></script>
+<script type="text/babel" src="src/components/Canvas.js"></script>
+<script type="text/babel" src="src/components/PropertiesPanel.js"></script>
+<script type="text/babel" src="src/App.js"></script>
+
+<script type="text/babel">
+    // Mount App
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<window.Designer.App />);
+</script>
+
+</body>
+</html>
