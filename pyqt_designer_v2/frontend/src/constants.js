@@ -3,10 +3,15 @@ window.Designer = window.Designer || {};
 
 window.Designer.FONT_FAMILIES = ['Segoe UI','Arial','Helvetica Neue','Times New Roman','Courier New','Verdana','Georgia','Trebuchet MS','Tahoma','Palatino','Lucida Console','Consolas','Roboto','Open Sans','monospace','sans-serif','serif'];
 
+/* Modern Rounded Theme System */
+/* Colors: Surface (bg), Surface2 (bg2), Border, Text, Text2, Primary (accent), Hover, Pressed */
+
 window.Designer.THEMES = {
     midnight: {
         name: 'Midnight',
         swatch: '#1e1e1e',
+        borderRadius: '6px',
+        fontFamily: '"Segoe UI", "Roboto", "Helvetica Neue", sans-serif',
         ide: {
             bg: '#1e1e1e', bg2: '#252526', bg3: '#37373d', bg4: '#454545',
             border: '#333333', border2: '#404040',
@@ -17,30 +22,50 @@ window.Designer.THEMES = {
         canvas: '#1e1e1e',
         widget: {
             defaultBg: '#2d3d4d',
-            btnBg: 'linear-gradient(180deg,#3a3a3a,#303030)', btnHoverBg: 'linear-gradient(180deg,#4a4a4a,#404040)', btnPressedBg: 'linear-gradient(180deg,#2a2a2a,#202020)', btnBorder: '#555555', btnColor: '#ffffff',
+            // Button: subtle, flat, rounded
+            btnBg: '#3a3a3a', btnHoverBg: '#4a4a4a', btnPressedBg: '#2a2a2a',
+            btnBorder: '1px solid #555555', btnColor: '#ffffff',
+            // Command Link: Card-like
             cmdBtnBg: '#353535', cmdBtnHoverBg: '#454545',
-            inputBg: '#303030', inputBorder: '#555555', inputColor: '#ffffff',
-            comboBg: '#303030', comboBorder: '#555555', comboColor: '#ffffff',
-            checkColor: '#ffffff', groupBorder: '#555555', groupColor: '#ffffff',
-            frameBorder: '#555555',
-            progressBg: '#252526', progressBorder: '#555555', progressFill: 'linear-gradient(90deg,#007acc,#0098ff)',
-            sliderTrack: '#444444', sliderThumb: '#007acc', sliderThumbBorder: '#fff',
-            spinBg: '#303030', spinBorder: '#555555', spinColor: '#ffffff',
+            // Input: Recessed, darker/lighter
+            inputBg: '#252526', inputBorder: '1px solid #555555', inputColor: '#ffffff', inputFocusBorder: '1px solid #007acc',
+            // Combo
+            comboBg: '#252526', comboBorder: '1px solid #555555', comboColor: '#ffffff',
+            // Check/Radio
+            checkColor: '#ffffff',
+            // GroupBox
+            groupBorder: '1px solid #555555', groupColor: '#ffffff',
+            // Frame
+            frameBorder: '1px solid #555555',
+            // Progress
+            progressBg: '#252526', progressBorder: '1px solid #555555', progressFill: 'linear-gradient(90deg,#007acc,#0098ff)',
+            // Slider
+            sliderTrack: '#444444', sliderThumb: '#007acc', sliderThumbBorder: '1px solid #ffffff',
+            // Spin
+            spinBg: '#252526', spinBorder: '1px solid #555555', spinColor: '#ffffff',
+            // LCD
             lcdBg: '#000000', lcdColor: '#00ff00',
-            listBg: '#252526', listBorder: '#555555', listColor: '#ffffff', listSelBg: '#004c75', listSelColor: '#ffffff', listItemBorder: '#3e3e3e',
-            treeBg: '#252526', treeBorder: '#555555', treeColor: '#ffffff',
-            tableBg: '#252526', tableBorder: '#555555', tableColor: '#ffffff', tableHeaderBg: '#3e3e3e',
-            tabBarBg: '#252526', tabActiveBg: '#1e1e1e', tabBorder: '#555555', tabColor: '#ffffff',
-            calBg: '#252526', calBorder: '#555555', calColor: '#ffffff', calHeaderBg: '#3e3e3e', calCellColor: '#ffffff',
-            dateBg: '#303030', dateBorder: '#555555', dateColor: '#ffffff',
-            scrollBg: '#3e3e3e',
-            dialBg: 'conic-gradient(from 220deg,#007acc 0%,#007acc 45%,#333333 45%,#333333 100%)', dialBorder: '#555555',
+            // List/Tree/Table
+            listBg: '#252526', listBorder: '1px solid #555555', listColor: '#ffffff', listSelBg: '#004c75', listSelColor: '#ffffff', listItemBorder: '1px solid #3e3e3e',
+            treeBg: '#252526', treeBorder: '1px solid #555555', treeColor: '#ffffff',
+            tableBg: '#252526', tableBorder: '1px solid #555555', tableColor: '#ffffff', tableHeaderBg: '#3e3e3e',
+            // Tabs
+            tabBarBg: '#252526', tabActiveBg: '#1e1e1e', tabBorder: '1px solid #555555', tabColor: '#ffffff',
+            // Calendar/Date
+            calBg: '#252526', calBorder: '1px solid #555555', calColor: '#ffffff', calHeaderBg: '#3e3e3e', calCellColor: '#ffffff',
+            dateBg: '#252526', dateBorder: '1px solid #555555', dateColor: '#ffffff',
+            // Scroll
+            scrollBg: '#3e3e3e', scrollHandle: '#555555', scrollHandleHover: '#666666',
+            // Dial
+            dialBg: 'conic-gradient(from 220deg,#007acc 0%,#007acc 45%,#333333 45%,#333333 100%)', dialBorder: '1px solid #555555',
             labelColor: '#ffffff'
         }
     },
     snow: {
         name: 'Snow',
         swatch: '#ffffff',
+        borderRadius: '6px',
+        fontFamily: '"Segoe UI", "Roboto", "Helvetica Neue", sans-serif',
         ide: {
             bg: '#f3f3f3', bg2: '#ffffff', bg3: '#e8e8e8', bg4: '#d0d0d0',
             border: '#e0e0e0', border2: '#c0c0c0',
@@ -50,31 +75,51 @@ window.Designer.THEMES = {
         },
         canvas: '#ffffff',
         widget: {
-            defaultBg: '#e5e5e5',
-            btnBg: 'linear-gradient(180deg,#f0f0f0,#e0e0e0)', btnHoverBg: 'linear-gradient(180deg,#ffffff,#f0f0f0)', btnPressedBg: 'linear-gradient(180deg,#d0d0d0,#c0c0c0)', btnBorder: '#bbbbbb', btnColor: '#000000',
+            defaultBg: '#ffffff',
+            // Button: subtle gray, hover to white
+            btnBg: '#f5f5f5', btnHoverBg: '#ffffff', btnPressedBg: '#e0e0e0',
+            btnBorder: '1px solid #cccccc', btnColor: '#333333',
+            // Command Link
             cmdBtnBg: '#f9f9f9', cmdBtnHoverBg: '#ffffff',
-            inputBg: '#f5f5f5', inputBorder: '#bbbbbb', inputColor: '#000000',
-            comboBg: '#f5f5f5', comboBorder: '#bbbbbb', comboColor: '#000000',
-            checkColor: '#000000', groupBorder: '#bbbbbb', groupColor: '#000000',
-            frameBorder: '#bbbbbb',
-            progressBg: '#e6e6e6', progressBorder: '#bbbbbb', progressFill: 'linear-gradient(90deg,#0078d4,#00bcf2)',
-            sliderTrack: '#d0d0d0', sliderThumb: '#ffffff', sliderThumbBorder: '#0078d4',
-            spinBg: '#f5f5f5', spinBorder: '#bbbbbb', spinColor: '#000000',
+            // Input: White, subtle border
+            inputBg: '#ffffff', inputBorder: '1px solid #cccccc', inputColor: '#333333', inputFocusBorder: '1px solid #0078d4',
+            // Combo
+            comboBg: '#ffffff', comboBorder: '1px solid #cccccc', comboColor: '#333333',
+            // Check
+            checkColor: '#333333',
+            // Group
+            groupBorder: '1px solid #cccccc', groupColor: '#333333',
+            // Frame
+            frameBorder: '1px solid #cccccc',
+            // Progress
+            progressBg: '#e6e6e6', progressBorder: '1px solid #cccccc', progressFill: 'linear-gradient(90deg,#0078d4,#00bcf2)',
+            // Slider
+            sliderTrack: '#d0d0d0', sliderThumb: '#ffffff', sliderThumbBorder: '1px solid #0078d4',
+            // Spin
+            spinBg: '#ffffff', spinBorder: '1px solid #cccccc', spinColor: '#333333',
+            // LCD
             lcdBg: '#000000', lcdColor: '#00ff00',
-            listBg: '#ffffff', listBorder: '#bbbbbb', listColor: '#000000', listSelBg: '#cde6f7', listSelColor: '#000000', listItemBorder: '#f0f0f0',
-            treeBg: '#ffffff', treeBorder: '#bbbbbb', treeColor: '#000000',
-            tableBg: '#ffffff', tableBorder: '#bbbbbb', tableColor: '#000000', tableHeaderBg: '#f0f0f0',
-            tabBarBg: '#f0f0f0', tabActiveBg: '#ffffff', tabBorder: '#bbbbbb', tabColor: '#000000',
-            calBg: '#ffffff', calBorder: '#bbbbbb', calColor: '#000000', calHeaderBg: '#f0f0f0', calCellColor: '#000000',
-            dateBg: '#f5f5f5', dateBorder: '#bbbbbb', dateColor: '#000000',
-            scrollBg: '#f0f0f0',
-            dialBg: 'conic-gradient(from 220deg,#0078d4 0%,#0078d4 45%,#e0e0e0 45%,#e0e0e0 100%)', dialBorder: '#cccccc',
-            labelColor: '#000000'
+            // List/Tree
+            listBg: '#ffffff', listBorder: '1px solid #cccccc', listColor: '#333333', listSelBg: '#cde6f7', listSelColor: '#333333', listItemBorder: '1px solid #f0f0f0',
+            treeBg: '#ffffff', treeBorder: '1px solid #cccccc', treeColor: '#333333',
+            tableBg: '#ffffff', tableBorder: '1px solid #cccccc', tableColor: '#333333', tableHeaderBg: '#f0f0f0',
+            // Tabs
+            tabBarBg: '#f0f0f0', tabActiveBg: '#ffffff', tabBorder: '1px solid #cccccc', tabColor: '#333333',
+            // Cal
+            calBg: '#ffffff', calBorder: '1px solid #cccccc', calColor: '#333333', calHeaderBg: '#f0f0f0', calCellColor: '#333333',
+            dateBg: '#ffffff', dateBorder: '1px solid #cccccc', dateColor: '#333333',
+            // Scroll
+            scrollBg: '#f0f0f0', scrollHandle: '#cccccc', scrollHandleHover: '#bbbbbb',
+            // Dial
+            dialBg: 'conic-gradient(from 220deg,#0078d4 0%,#0078d4 45%,#e0e0e0 45%,#e0e0e0 100%)', dialBorder: '1px solid #cccccc',
+            labelColor: '#333333'
         }
     },
     classic: {
         name: 'Classic',
         swatch: '#c0c0c0',
+        borderRadius: '4px', // Slightly sharper for Classic, but still modern
+        fontFamily: '"Segoe UI", "Tahoma", sans-serif',
         ide: {
             bg: '#d4d0c8', bg2: '#ece9d8', bg3: '#f7f6f2', bg4: '#aaa',
             border: '#888', border2: '#666',
@@ -85,30 +130,33 @@ window.Designer.THEMES = {
         canvas: '#d4d0c8',
         widget: {
             defaultBg: '#ffffff',
-            btnBg: 'linear-gradient(180deg,#fff,#ece9d8)', btnHoverBg: 'linear-gradient(180deg,#ffffff,#f5f5f5)', btnPressedBg: 'linear-gradient(180deg,#ddd,#ccc)', btnBorder: '#777', btnColor: '#000',
+            btnBg: '#ece9d8', btnHoverBg: '#f7f6f2', btnPressedBg: '#d4d0c8',
+            btnBorder: '1px solid #777777', btnColor: '#000000',
             cmdBtnBg: '#fcfcfc', cmdBtnHoverBg: '#ffffff',
-            inputBg: '#fff', inputBorder: '#777', inputColor: '#000',
-            comboBg: '#fff', comboBorder: '#777', comboColor: '#000',
-            checkColor: '#000', groupBorder: '#777', groupColor: '#000',
-            frameBorder: '#777',
-            progressBg: '#fff', progressBorder: '#777', progressFill: 'linear-gradient(90deg,#000080,#0000ff)',
-            sliderTrack: '#999', sliderThumb: '#ece9d8', sliderThumbBorder: '#444',
-            spinBg: '#fff', spinBorder: '#777', spinColor: '#000',
-            lcdBg: '#000', lcdColor: '#0f0',
-            listBg: '#fff', listBorder: '#777', listColor: '#000', listSelBg: '#000080', listSelColor: '#fff', listItemBorder: '#eee',
-            treeBg: '#fff', treeBorder: '#777', treeColor: '#000',
-            tableBg: '#fff', tableBorder: '#777', tableColor: '#000', tableHeaderBg: '#ece9d8',
-            tabBarBg: '#ece9d8', tabActiveBg: '#d4d0c8', tabBorder: '#777', tabColor: '#000',
-            calBg: '#fff', calBorder: '#777', calColor: '#000', calHeaderBg: '#ece9d8', calCellColor: '#000',
-            dateBg: '#fff', dateBorder: '#777', dateColor: '#000',
-            scrollBg: '#ece9d8',
-            dialBg: 'conic-gradient(from 220deg,#000080 0%,#000080 45%,#ccc 45%,#ccc 100%)', dialBorder: '#777',
-            labelColor: '#000'
+            inputBg: '#ffffff', inputBorder: '1px solid #777777', inputColor: '#000000', inputFocusBorder: '1px solid #000080',
+            comboBg: '#ffffff', comboBorder: '1px solid #777777', comboColor: '#000000',
+            checkColor: '#000000', groupBorder: '1px solid #777777', groupColor: '#000000',
+            frameBorder: '1px solid #777777',
+            progressBg: '#ffffff', progressBorder: '1px solid #777777', progressFill: 'linear-gradient(90deg,#000080,#0000ff)',
+            sliderTrack: '#999999', sliderThumb: '#ece9d8', sliderThumbBorder: '1px solid #444444',
+            spinBg: '#ffffff', spinBorder: '1px solid #777777', spinColor: '#000000',
+            lcdBg: '#000000', lcdColor: '#00ff00',
+            listBg: '#ffffff', listBorder: '1px solid #777777', listColor: '#000000', listSelBg: '#000080', listSelColor: '#ffffff', listItemBorder: '1px solid #eeeeee',
+            treeBg: '#ffffff', treeBorder: '1px solid #777777', treeColor: '#000000',
+            tableBg: '#ffffff', tableBorder: '1px solid #777777', tableColor: '#000000', tableHeaderBg: '#ece9d8',
+            tabBarBg: '#ece9d8', tabActiveBg: '#d4d0c8', tabBorder: '1px solid #777777', tabColor: '#000000',
+            calBg: '#ffffff', calBorder: '1px solid #777777', calColor: '#000000', calHeaderBg: '#ece9d8', calCellColor: '#000000',
+            dateBg: '#ffffff', dateBorder: '1px solid #777777', dateColor: '#000000',
+            scrollBg: '#ece9d8', scrollHandle: '#999999', scrollHandleHover: '#777777',
+            dialBg: 'conic-gradient(from 220deg,#000080 0%,#000080 45%,#cccccc 45%,#cccccc 100%)', dialBorder: '1px solid #777777',
+            labelColor: '#000000'
         }
     },
     hacker: {
         name: 'Hacker',
         swatch: '#001100',
+        borderRadius: '0px', // Hacker stays sharp
+        fontFamily: '"Consolas", "Courier New", monospace',
         ide: {
             bg: '#000a00', bg2: '#001a00', bg3: '#002200', bg4: '#003300',
             border: '#003300', border2: '#004400',
@@ -119,24 +167,25 @@ window.Designer.THEMES = {
         canvas: '#000800',
         widget: {
             defaultBg: '#002800',
-            btnBg: 'linear-gradient(180deg,#003a00,#002800)', btnHoverBg: 'linear-gradient(180deg,#004a00,#003800)', btnPressedBg: 'linear-gradient(180deg,#002a00,#001800)', btnBorder: '#00cc00', btnColor: '#00ff00',
+            btnBg: '#003a00', btnHoverBg: '#004a00', btnPressedBg: '#002a00',
+            btnBorder: '1px solid #00cc00', btnColor: '#00ff00',
             cmdBtnBg: '#002000', cmdBtnHoverBg: '#003000',
-            inputBg: '#001800', inputBorder: '#00bb00', inputColor: '#00ff00',
-            comboBg: '#001800', comboBorder: '#00bb00', comboColor: '#00ff00',
-            checkColor: '#00ff00', groupBorder: '#00bb00', groupColor: '#00ff00',
-            frameBorder: '#00bb00',
-            progressBg: '#001800', progressBorder: '#00bb00', progressFill: 'linear-gradient(90deg,#005500,#00ff00)',
-            sliderTrack: '#004400', sliderThumb: '#00ff00', sliderThumbBorder: '#000',
-            spinBg: '#001800', spinBorder: '#00bb00', spinColor: '#00ff00',
+            inputBg: '#001800', inputBorder: '1px solid #00bb00', inputColor: '#00ff00', inputFocusBorder: '1px solid #00ff00',
+            comboBg: '#001800', comboBorder: '1px solid #00bb00', comboColor: '#00ff00',
+            checkColor: '#00ff00', groupBorder: '1px solid #00bb00', groupColor: '#00ff00',
+            frameBorder: '1px solid #00bb00',
+            progressBg: '#001800', progressBorder: '1px solid #00bb00', progressFill: 'linear-gradient(90deg,#005500,#00ff00)',
+            sliderTrack: '#004400', sliderThumb: '#00ff00', sliderThumbBorder: '1px solid #000000',
+            spinBg: '#001800', spinBorder: '1px solid #00bb00', spinColor: '#00ff00',
             lcdBg: '#000500', lcdColor: '#00ff00',
-            listBg: '#001800', listBorder: '#00bb00', listColor: '#00ff00', listSelBg: '#006600', listSelColor: '#00ff00', listItemBorder: '#003300',
-            treeBg: '#001800', treeBorder: '#00bb00', treeColor: '#00ff00',
-            tableBg: '#001800', tableBorder: '#00bb00', tableColor: '#00ff00', tableHeaderBg: '#003300',
-            tabBarBg: '#003300', tabActiveBg: '#001800', tabBorder: '#00bb00', tabColor: '#00ff00',
-            calBg: '#001800', calBorder: '#00bb00', calColor: '#00ff00', calHeaderBg: '#003300', calCellColor: '#00cc00',
-            dateBg: '#001800', dateBorder: '#00bb00', dateColor: '#00ff00',
-            scrollBg: '#004400',
-            dialBg: 'conic-gradient(from 220deg,#00ff00 0%,#00ff00 45%,#004400 45%,#004400 100%)', dialBorder: '#00bb00',
+            listBg: '#001800', listBorder: '1px solid #00bb00', listColor: '#00ff00', listSelBg: '#006600', listSelColor: '#00ff00', listItemBorder: '1px solid #003300',
+            treeBg: '#001800', treeBorder: '1px solid #00bb00', treeColor: '#00ff00',
+            tableBg: '#001800', tableBorder: '1px solid #00bb00', tableColor: '#00ff00', tableHeaderBg: '#003300',
+            tabBarBg: '#003300', tabActiveBg: '#001800', tabBorder: '1px solid #00bb00', tabColor: '#00ff00',
+            calBg: '#001800', calBorder: '1px solid #00bb00', calColor: '#00ff00', calHeaderBg: '#003300', calCellColor: '#00cc00',
+            dateBg: '#001800', dateBorder: '1px solid #00bb00', dateColor: '#00ff00',
+            scrollBg: '#004400', scrollHandle: '#006600', scrollHandleHover: '#008800',
+            dialBg: 'conic-gradient(from 220deg,#00ff00 0%,#00ff00 45%,#004400 45%,#004400 100%)', dialBorder: '1px solid #00bb00',
             labelColor: '#00ff00'
         }
     }

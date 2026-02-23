@@ -34,75 +34,227 @@ class UIGenerator:
         xml += ' </connections>\n'
         return xml
 
-    def get_widget_style(self, cls):
-        """Returns the specific style for a widget class based on the theme."""
+    def generate_stylesheet(self):
+        """Generates a global QSS stylesheet based on the theme."""
         if not self.include_theme or not self.theme:
             return ""
 
         tw = self.theme.get('widget', {})
-        styles = []
+        ide = self.theme.get('ide', {})
+        canvas_bg = self.theme.get('canvas', '#f0f0f0')
+        text_color = ide.get('text', '#000000')
 
-        if cls in ['QPushButton', 'QToolButton']:
-            bg = tw.get('btnBg') or tw.get('defaultBg')
-            border = tw.get('btnBorder')
-            color = tw.get('btnColor')
-            if bg: styles.append(f"background-color:{bg}")
-            if border: styles.append(f"border:1px solid {border}")
-            if color: styles.append(f"color:{color}")
-            styles.append("border-radius:4px;padding:4px")
+        radius = self.theme.get('borderRadius', '4px')
+        font_family = self.theme.get('fontFamily', '"Segoe UI", sans-serif')
 
-        elif cls == 'QCommandLinkButton':
-            bg = tw.get('cmdBtnBg') or tw.get('btnBg') or tw.get('defaultBg')
-            border = tw.get('btnBorder')
-            color = tw.get('btnColor')
-            if bg: styles.append(f"background-color:{bg}")
-            if border: styles.append(f"border:1px solid {border}")
-            if color: styles.append(f"color:{color}")
-            styles.append("border-radius:4px;padding:6px;text-align:left")
+        # Base Styles
+        qss = f"""
+        QMainWindow {{
+            background-color: {canvas_bg};
+            color: {text_color};
+        }}
+        QWidget {{
+            font-family: {font_family};
+            font-size: 10pt;
+        }}
+        """
 
-        elif cls in ['QLineEdit', 'QTextEdit', 'QPlainTextEdit', 'QSpinBox', 'QDoubleSpinBox', 'QDateEdit', 'QTimeEdit', 'QDateTimeEdit']:
-            bg = tw.get('inputBg') or tw.get('defaultBg')
-            border = tw.get('inputBorder')
-            color = tw.get('inputColor')
-            if bg: styles.append(f"background-color:{bg}")
-            if border: styles.append(f"border:1px solid {border}")
-            if color: styles.append(f"color:{color}")
-            styles.append("border-radius:3px")
+        # Buttons
+        qss += f"""
+        QPushButton, QToolButton {{
+            background-color: {tw.get('btnBg', '#e0e0e0')};
+            border: {tw.get('btnBorder', '1px solid #999')};
+            color: {tw.get('btnColor', '#000')};
+            border-radius: {radius};
+            padding: 6px 12px;
+        }}
+        QPushButton:hover, QToolButton:hover {{
+            background-color: {tw.get('btnHoverBg', '#eeeeee')};
+        }}
+        QPushButton:pressed, QToolButton:pressed {{
+            background-color: {tw.get('btnPressedBg', '#cccccc')};
+        }}
+        """
 
-        elif cls in ['QComboBox', 'QFontComboBox']:
-            bg = tw.get('comboBg') or tw.get('defaultBg')
-            border = tw.get('comboBorder')
-            color = tw.get('comboColor')
-            if bg: styles.append(f"background-color:{bg}")
-            if border: styles.append(f"border:1px solid {border}")
-            if color: styles.append(f"color:{color}")
-            styles.append("border-radius:3px")
+        # Command Link Button (Card Style)
+        qss += f"""
+        QCommandLinkButton {{
+            background-color: {tw.get('cmdBtnBg', tw.get('btnBg'))};
+            border: {tw.get('btnBorder', '1px solid #999')};
+            color: {tw.get('btnColor', '#000')};
+            border-radius: {radius};
+            padding: 8px;
+            text-align: left;
+        }}
+        QCommandLinkButton:hover {{
+            background-color: {tw.get('cmdBtnHoverBg', tw.get('btnHoverBg'))};
+        }}
+        """
 
-        elif cls in ['QLabel', 'QCheckBox', 'QRadioButton']:
-            bg = tw.get('defaultBg')
-            color = tw.get('labelColor')
-            if cls in ['QCheckBox', 'QRadioButton']: color = tw.get('checkColor')
+        # Inputs
+        input_bg = tw.get('inputBg', '#fff')
+        input_border = tw.get('inputBorder', '1px solid #ccc')
+        input_color = tw.get('inputColor', '#000')
+        input_focus = tw.get('inputFocusBorder', '1px solid blue')
 
-            if bg: styles.append(f"background-color:{bg}")
-            if color: styles.append(f"color:{color}")
-            styles.append("padding:2px;border-radius:2px")
+        qss += f"""
+        QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QDoubleSpinBox, QDateEdit, QTimeEdit, QDateTimeEdit {{
+            background-color: {input_bg};
+            border: {input_border};
+            color: {input_color};
+            border-radius: {radius};
+            padding: 4px;
+        }}
+        QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus, QSpinBox:focus {{
+            border: {input_focus};
+        }}
+        """
 
-        elif cls == 'QGroupBox':
-            border = tw.get('groupBorder')
-            color = tw.get('groupColor')
-            if border: styles.append(f"border:1px solid {border}")
-            if color: styles.append(f"color:{color}")
-            styles.append("border-radius:4px;margin-top:1.5em")
+        # ComboBox
+        qss += f"""
+        QComboBox, QFontComboBox {{
+            background-color: {tw.get('comboBg', '#fff')};
+            border: {tw.get('comboBorder', '1px solid #ccc')};
+            color: {tw.get('comboColor', '#000')};
+            border-radius: {radius};
+            padding: 4px;
+        }}
+        QComboBox::drop-down {{
+            subcontrol-origin: padding;
+            subcontrol-position: top right;
+            width: 20px;
+            border-left-width: 0px;
+            border-top-right-radius: {radius};
+            border-bottom-right-radius: {radius};
+        }}
+        """
 
-        elif cls in ['QListWidget', 'QTreeWidget', 'QTableWidget']:
-             bg = tw.get('listBg')
-             color = tw.get('listColor')
-             border = tw.get('listBorder')
-             if bg: styles.append(f"background-color:{bg}")
-             if color: styles.append(f"color:{color}")
-             if border: styles.append(f"border:1px solid {border}")
+        # Labels & Checks
+        qss += f"""
+        QLabel {{
+            color: {tw.get('labelColor', text_color)};
+            padding: 2px;
+        }}
+        QCheckBox, QRadioButton {{
+            color: {tw.get('checkColor', text_color)};
+            spacing: 5px;
+        }}
+        QCheckBox::indicator, QRadioButton::indicator {{
+            width: 16px;
+            height: 16px;
+        }}
+        """
 
-        return ";".join(styles)
+        # GroupBox
+        qss += f"""
+        QGroupBox {{
+            border: {tw.get('groupBorder', '1px solid #ccc')};
+            border-radius: {radius};
+            margin-top: 1.5em;
+            color: {tw.get('groupColor', text_color)};
+        }}
+        QGroupBox::title {{
+            subcontrol-origin: margin;
+            subcontrol-position: top left;
+            padding: 0 5px;
+            left: 10px;
+        }}
+        """
+
+        # Lists/Trees/Tables
+        list_bg = tw.get('listBg', '#fff')
+        list_color = tw.get('listColor', '#000')
+        list_border = tw.get('listBorder', '1px solid #ccc')
+        list_sel_bg = tw.get('listSelBg', 'blue')
+        list_sel_color = tw.get('listSelColor', '#fff')
+
+        qss += f"""
+        QListWidget, QTreeWidget, QTableWidget {{
+            background-color: {list_bg};
+            color: {list_color};
+            border: {list_border};
+            border-radius: {radius};
+            outline: 0;
+        }}
+        QListWidget::item:selected, QTreeWidget::item:selected, QTableWidget::item:selected {{
+            background-color: {list_sel_bg};
+            color: {list_sel_color};
+        }}
+        QHeaderView::section {{
+            background-color: {tw.get('tableHeaderBg', '#eee')};
+            color: {list_color};
+            padding: 4px;
+            border: 0px;
+            border-bottom: 1px solid #ccc;
+        }}
+        """
+
+        # Tabs
+        qss += f"""
+        QTabWidget::pane {{
+            border: {tw.get('tabBorder', '1px solid #ccc')};
+            border-radius: {radius};
+            background-color: {tw.get('tabActiveBg', '#fff')};
+        }}
+        QTabBar::tab {{
+            background-color: {tw.get('tabBarBg', '#eee')};
+            color: {tw.get('tabColor', '#000')};
+            padding: 6px 12px;
+            border-top-left-radius: {radius};
+            border-top-right-radius: {radius};
+            margin-right: 2px;
+        }}
+        QTabBar::tab:selected {{
+            background-color: {tw.get('tabActiveBg', '#fff')};
+            border-bottom-color: {tw.get('tabActiveBg', '#fff')};
+        }}
+        """
+
+        # Scrollbars (Modern Touch)
+        sb_bg = tw.get('scrollBg', '#f0f0f0')
+        sb_handle = tw.get('scrollHandle', '#ccc')
+        sb_hover = tw.get('scrollHandleHover', '#bbb')
+
+        qss += f"""
+        QScrollBar:vertical {{
+            border: none;
+            background: {sb_bg};
+            width: 10px;
+            margin: 0px;
+            border-radius: 5px;
+        }}
+        QScrollBar::handle:vertical {{
+            background: {sb_handle};
+            min-height: 20px;
+            border-radius: 5px;
+        }}
+        QScrollBar::handle:vertical:hover {{
+            background: {sb_hover};
+        }}
+        QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
+            height: 0px;
+        }}
+        QScrollBar:horizontal {{
+            border: none;
+            background: {sb_bg};
+            height: 10px;
+            margin: 0px;
+            border-radius: 5px;
+        }}
+        QScrollBar::handle:horizontal {{
+            background: {sb_handle};
+            min-width: 20px;
+            border-radius: 5px;
+        }}
+        QScrollBar::handle:horizontal:hover {{
+            background: {sb_hover};
+        }}
+        QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {{
+            width: 0px;
+        }}
+        """
+
+        return qss
 
     def build_hierarchy(self):
         nodes = [e.copy() for e in self.elements]
@@ -156,6 +308,20 @@ class UIGenerator:
         elif type_ == 'set':
             return f'{indent}<property name="{name}"><set>{val}</set></property>\n'
         return ''
+
+    def get_user_style_overrides(self, el):
+        """Returns ONLY the user-defined style overrides."""
+        user_style = el.get('styleSheet', '')
+
+        # Additional User Props overrides
+        if el.get('bg'): user_style += f"background-color:{el['bg']};"
+        if el.get('color'): user_style += f"color:{el['color']};"
+        if el.get('fontSize'): user_style += f"font-size:{el['fontSize']}pt;"
+        if el.get('fontFamily'): user_style += f"font-family:'{el['fontFamily']}';"
+        if el.get('fontWeight') == 'bold': user_style += "font-weight:bold;"
+        if el.get('fontItalic'): user_style += "font-style:italic;"
+
+        return user_style
 
     def _gen_widget(self, el, rx, ry, indent='    '):
         # Mappings
@@ -219,44 +385,10 @@ class UIGenerator:
         if 'maximum' in el and el['type'] in {'QProgressBar', 'QSlider', 'QSpinBox', 'QDoubleSpinBox'}:
             props += self._prop('maximum', 'number', el['maximum'], indent)
 
-        # Style (Inline + User Override)
-        theme_style = self.get_widget_style(el['type'])
-        user_style = el.get('styleSheet', '')
-
-        # Additional User Props overrides (bg, color)
-        if el.get('bg'): user_style += f"background-color:{el['bg']};"
-        if el.get('color'): user_style += f"color:{el['color']};"
-        if el.get('fontSize'): user_style += f"font-size:{el['fontSize']}pt;"
-        if el.get('fontFamily'): user_style += f"font-family:'{el['fontFamily']}';"
-        if el.get('fontWeight') == 'bold': user_style += "font-weight:bold;"
-        if el.get('fontItalic'): user_style += "font-style:italic;"
-
-        final_style = theme_style
+        # Style (User Override Only)
+        user_style = self.get_user_style_overrides(el)
         if user_style:
-            final_style = final_style + ";" + user_style if final_style else user_style
-
-        if el['type'] in ['QPushButton', 'QToolButton', 'QCommandLinkButton'] and self.include_theme:
-            widget_theme = self.theme.get('widget', {})
-
-            # Hover State
-            hover_bg = None
-            if el['type'] == 'QCommandLinkButton':
-                hover_bg = widget_theme.get('cmdBtnHoverBg')
-            if not hover_bg:
-                hover_bg = widget_theme.get('btnHoverBg')
-
-            if hover_bg:
-                hover_style = f"{el['type']}:hover{{background:{hover_bg};}}"
-                final_style = f"{final_style};{hover_style}" if final_style else hover_style
-
-            # Pressed State
-            pressed_bg = widget_theme.get('btnPressedBg')
-            if pressed_bg:
-                pressed_style = f"{el['type']}:pressed{{background:{pressed_bg};border-style:inset;padding:5px 3px 3px 5px}}"
-                final_style = f"{final_style};{pressed_style}" if final_style else pressed_style
-
-        if final_style:
-            props += self._prop('styleSheet', 'string', final_style, indent)
+            props += self._prop('styleSheet', 'string', user_style, indent)
 
         # Alignment
         if el['type'] in HAS_ALIGN:
@@ -301,16 +433,12 @@ class UIGenerator:
         for el in roots:
             wxml += self._gen_widget(el, el['x'], el['y'], '   ')
 
-        # Global Style (Only Canvas BG)
-        main_style = ""
-        if self.include_theme:
-            canvas_bg = self.theme.get('canvas', '#f0f0f0') if self.theme else '#f0f0f0'
-            txt = self.theme.get('ide', {}).get('text', '#000000') if self.theme else '#000000'
-            main_style = f"background-color:{canvas_bg};color:{txt};"
-
+        # Global Style Injection
         style_prop = ""
-        if main_style:
-            style_prop = f'<property name="styleSheet"><string>{esc_xml(main_style)}</string></property>'
+        if self.include_theme:
+            global_style = self.generate_stylesheet()
+            if global_style:
+                style_prop = f'<property name="styleSheet"><string>{esc_xml(global_style)}</string></property>'
 
         return f"""<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
