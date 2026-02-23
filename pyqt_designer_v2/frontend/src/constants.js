@@ -58,7 +58,7 @@ window.Designer.THEMES = {
             scrollBg: '#3e3e3e', scrollHandle: '#555555', scrollHandleHover: '#666666',
             // Dial
             dialBg: 'conic-gradient(from 220deg,#007acc 0%,#007acc 45%,#333333 45%,#333333 100%)', dialBorder: '1px solid #555555',
-            labelColor: '#ffffff'
+            labelColor: '#ffffff', labelBg: '#252526'
         }
     },
     snow: {
@@ -112,7 +112,7 @@ window.Designer.THEMES = {
             scrollBg: '#f0f0f0', scrollHandle: '#cccccc', scrollHandleHover: '#bbbbbb',
             // Dial
             dialBg: 'conic-gradient(from 220deg,#0078d4 0%,#0078d4 45%,#e0e0e0 45%,#e0e0e0 100%)', dialBorder: '1px solid #cccccc',
-            labelColor: '#333333'
+            labelColor: '#333333', labelBg: '#f0f0f0'
         }
     },
     classic: {
@@ -149,7 +149,7 @@ window.Designer.THEMES = {
             dateBg: '#ffffff', dateBorder: '1px solid #777777', dateColor: '#000000',
             scrollBg: '#ece9d8', scrollHandle: '#999999', scrollHandleHover: '#777777',
             dialBg: 'conic-gradient(from 220deg,#000080 0%,#000080 45%,#cccccc 45%,#cccccc 100%)', dialBorder: '1px solid #777777',
-            labelColor: '#000000'
+            labelColor: '#000000', labelBg: '#ffffff'
         }
     },
     hacker: {
@@ -186,7 +186,7 @@ window.Designer.THEMES = {
             dateBg: '#001800', dateBorder: '1px solid #00bb00', dateColor: '#00ff00',
             scrollBg: '#004400', scrollHandle: '#006600', scrollHandleHover: '#008800',
             dialBg: 'conic-gradient(from 220deg,#00ff00 0%,#00ff00 45%,#004400 45%,#004400 100%)', dialBorder: '1px solid #00bb00',
-            labelColor: '#00ff00'
+            labelColor: '#00ff00', labelBg: '#001800'
         }
     }
 };

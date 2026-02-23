@@ -132,7 +132,9 @@ class UIGenerator:
         # Labels & Checks
         qss += f"""
         QLabel {{
+            background-color: {tw.get('labelBg', 'transparent')};
             color: {tw.get('labelColor', text_color)};
+            border-radius: {radius};
             padding: 2px;
         }}
         QCheckBox, QRadioButton {{
