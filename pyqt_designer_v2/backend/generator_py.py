@@ -19,7 +19,7 @@ class PythonGenerator:
         tw = self.theme.get('widget', {})
         styles = []
 
-        if cls in ['QPushButton', 'QToolButton', 'QCommandLinkButton']:
+        if cls in ['QPushButton', 'QToolButton']:
             bg = tw.get('btnBg') or tw.get('defaultBg')
             border = tw.get('btnBorder')
             color = tw.get('btnColor')
@@ -27,6 +27,15 @@ class PythonGenerator:
             if border: styles.append(f"border:1px solid {border}")
             if color: styles.append(f"color:{color}")
             styles.append("border-radius:4px;padding:4px")
+
+        elif cls == 'QCommandLinkButton':
+            bg = tw.get('cmdBtnBg') or tw.get('btnBg') or tw.get('defaultBg')
+            border = tw.get('btnBorder')
+            color = tw.get('btnColor')
+            if bg: styles.append(f"background-color:{bg}")
+            if border: styles.append(f"border:1px solid {border}")
+            if color: styles.append(f"color:{color}")
+            styles.append("border-radius:4px;padding:6px;text-align:left")
 
         elif cls in ['QLineEdit', 'QTextEdit', 'QPlainTextEdit', 'QSpinBox', 'QDoubleSpinBox', 'QDateEdit', 'QTimeEdit', 'QDateTimeEdit']:
             bg = tw.get('inputBg') or tw.get('defaultBg')
@@ -143,16 +152,24 @@ class PythonGenerator:
                 final_style = final_style + ";" + user_style if final_style else user_style
 
             if cls in ['QPushButton', 'QToolButton', 'QCommandLinkButton'] and self.include_theme:
-                pressed_bg = self.theme.get('widget', {}).get('btnPressedBg')
+                widget_theme = self.theme.get('widget', {})
+
+                # Hover State
+                hover_bg = None
+                if cls == 'QCommandLinkButton':
+                    hover_bg = widget_theme.get('cmdBtnHoverBg')
+                if not hover_bg:
+                    hover_bg = widget_theme.get('btnHoverBg')
+
+                if hover_bg:
+                    hover_style = f"{cls}:hover{{background:{hover_bg};}}"
+                    final_style = f"{final_style};{hover_style}" if final_style else hover_style
+
+                # Pressed State
+                pressed_bg = widget_theme.get('btnPressedBg')
                 if pressed_bg:
                     pressed_style = f"{cls}:pressed{{background:{pressed_bg};border-style:inset;padding:5px 3px 3px 5px}}"
-                    if final_style:
-                        # Wrap current style in a selector if it's properties-only, or just append pressed state?
-                        # Since final_style contains properties like "background:...", we need to apply them to the widget.
-                        # Qt allows "properties; selector { properties }" syntax.
-                        final_style = f"{final_style};{pressed_style}"
-                    else:
-                        final_style = pressed_style
+                    final_style = f"{final_style};{pressed_style}" if final_style else pressed_style
 
             if final_style:
                 lines.append(f'        self.{el["name"]}.setStyleSheet("{final_style}")')
