@@ -262,6 +262,26 @@ class PythonGenerator:
             lines.append("from PyQt6.QtCore import *")
             lines.append("from PyQt6.QtGui import *\n")
 
+        # AutoScaler Class
+        lines.append("class AutoScaler(QGraphicsView):")
+        lines.append("    def __init__(self, scene, parent=None):")
+        lines.append("        super().__init__(scene, parent)")
+        if self.pyqt_version == 5:
+            lines.append("        self.setFrameShape(QFrame.NoFrame)")
+        else:
+            lines.append("        self.setFrameShape(QFrame.Shape.NoFrame)")
+        lines.append("        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff if hasattr(Qt, 'ScrollBarPolicy') else Qt.ScrollBarAlwaysOff)")
+        lines.append("        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff if hasattr(Qt, 'ScrollBarPolicy') else Qt.ScrollBarAlwaysOff)")
+        lines.append("        self.setStyleSheet('background: transparent;')")
+
+        lines.append("    def resizeEvent(self, event):")
+        lines.append("        super().resizeEvent(event)")
+        if self.pyqt_version == 5:
+            lines.append("        self.fitInView(self.sceneRect(), Qt.KeepAspectRatio)")
+        else:
+            lines.append("        self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)")
+        lines.append("")
+
         lines.append("class Ui_MainWindow:")
         lines.append("    def setupUi(self, MainWindow):")
         lines.append('        MainWindow.setObjectName("MainWindow")')
@@ -273,11 +293,13 @@ class PythonGenerator:
             global_style = self.generate_stylesheet()
             # Escape newlines for python string
             global_style_py = global_style.replace('\n', '')
-            # We can use triple quotes but indentation is tricky. Let's keep it simple.
             lines.append(f'        MainWindow.setStyleSheet("""{global_style}""")')
 
-        lines.append("        self.centralwidget = QWidget(MainWindow)")
-        lines.append('        self.centralwidget.setObjectName("centralwidget")')
+        # Setup Scene and Container
+        lines.append(f"        self.scene = QGraphicsScene(0, 0, {int(self.canvas_size['w'])}, {int(self.canvas_size['h'])})")
+        lines.append("        self.container = QWidget()")
+        lines.append(f"        self.container.setGeometry(0, 0, {int(self.canvas_size['w'])}, {int(self.canvas_size['h'])})")
+        lines.append('        self.container.setObjectName("container")')
 
         HAS_TEXT = {'QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QImage','QCommandLinkButton'}
         HAS_TITLE = {'QGroupBox'}
@@ -298,7 +320,8 @@ class PythonGenerator:
             elif cls == 'QImage':
                 py_class = 'QLabel'
 
-            lines.append(f"        self.{el['name']} = {py_class}(self.centralwidget)")
+            # Parent is self.container instead of self.centralwidget
+            lines.append(f"        self.{el['name']} = {py_class}(self.container)")
             lines.append(f'        self.{el["name"]}.setObjectName("{el["name"]}")')
             lines.append(f"        self.{el['name']}.setGeometry(QRect({int(el['x'])}, {int(el['y'])}, {int(el['w'])}, {int(el['h'])}))")
 
@@ -395,7 +418,12 @@ class PythonGenerator:
 
             lines.append("")
 
-        lines.append("        MainWindow.setCentralWidget(self.centralwidget)")
+        # Add container to scene, set view as central
+        lines.append("        self.scene.addWidget(self.container)")
+        lines.append("        self.view = AutoScaler(self.scene)")
+        lines.append('        self.view.setObjectName("view")')
+        lines.append("        MainWindow.setCentralWidget(self.view)")
+
         lines.append("        self.statusbar = QStatusBar(MainWindow)")
         lines.append("        MainWindow.setStatusBar(self.statusbar)")
 

@@ -10,6 +10,7 @@ except ImportError:
 import json
 from .generator_ui import UIGenerator
 from .generator_py import PythonGenerator
+from .parser_ui import UIParser
 
 class DesignerBridge(QObject):
     ui_imported = pyqtSignal(str)
@@ -103,6 +104,15 @@ class DesignerBridge(QObject):
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
-                    self.ui_imported.emit(content)
+
+                    parser = UIParser()
+                    data = parser.parse(content)
+
+                    if data:
+                        json_str = json.dumps(data)
+                        self.ui_imported.emit(json_str)
+                    else:
+                        print("Failed to parse UI file")
+
             except Exception as e:
                 print(f"Error loading: {e}")

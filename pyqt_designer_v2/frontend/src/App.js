@@ -42,8 +42,19 @@ window.Designer.App = () => {
         if (window.qt) {
             new QWebChannel(qt.webChannelTransport, (ch) => {
                 window.pyBridge = ch.objects.pyBridge;
-                window.pyBridge.ui_imported.connect((xml) => {
-                    console.log("Import not fully implemented in frontend v2 yet");
+                window.pyBridge.ui_imported.connect((jsonStr) => {
+                    try {
+                        const data = JSON.parse(jsonStr);
+                        if (data.elements) setElements(data.elements);
+                        if (data.meta) {
+                            if (data.meta.canvasSize) setCanvasSize(data.meta.canvasSize);
+                            if (data.meta.windowTitle) setWindowTitle(data.meta.windowTitle);
+                        }
+                        setSelectedIds([]);
+                        setConnections([]);
+                    } catch (e) {
+                        console.error("Failed to parse imported UI JSON", e);
+                    }
                 });
             });
         }
@@ -117,6 +128,11 @@ window.Designer.App = () => {
         window.pyBridge.save_python_file(JSON.stringify(data));
     };
 
+    const handleImportUI = () => {
+        if (!window.pyBridge) return alert("Not connected to Python backend");
+        window.pyBridge.import_ui_file();
+    };
+
     const handleAddConnection = (conn) => {
         setConnections([...connections, conn]);
     };
@@ -134,6 +150,10 @@ window.Designer.App = () => {
                         <span className="text-xs font-bold" style={{ color: 'var(--text2)' }}>Designer Pro V2</span>
                     </div>
                     <div className="toolbar-sep" />
+                    <button onClick={handleImportUI} className="toolbar-btn flex gap-2" title="Import .ui">
+                        <i data-lucide="folder-open"></i>
+                        <span className="text-[10px] font-bold">Import UI</span>
+                    </button>
                     <button onClick={handleSaveUI} className="toolbar-btn flex gap-2" title="Save .ui">
                         <i data-lucide="save"></i>
                         <span className="text-[10px] font-bold">Save UI</span>
