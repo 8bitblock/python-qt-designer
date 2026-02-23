@@ -117,6 +117,14 @@ window.Designer.App = () => {
         window.pyBridge.save_python_file(JSON.stringify(data));
     };
 
+    const handleAddConnection = (conn) => {
+        setConnections([...connections, conn]);
+    };
+
+    const handleDeleteConnection = (conn) => {
+        setConnections(connections.filter(c => c !== conn));
+    };
+
     return (
         <div className="flex h-screen w-screen flex-col overflow-hidden select-none">
             <div className="h-12 shrink-0 flex items-center justify-between px-3 border-b" style={{ background: 'var(--bg2)', borderColor: 'var(--border)' }}>
@@ -187,6 +195,7 @@ window.Designer.App = () => {
                     activeTab={rightPanel}
                     onTabChange={setRightPanel}
                     element={primaryEl}
+                    elements={elements}
                     onChange={handlePropChange}
                     canvasProps={{ windowTitle, canvasSize }}
                     onCanvasChange={handleCanvasChange}
@@ -194,6 +203,8 @@ window.Designer.App = () => {
                     activeTheme={activeTheme}
                     onThemeChange={setActiveTheme}
                     connections={connections}
+                    onAddConnection={handleAddConnection}
+                    onDeleteConnection={handleDeleteConnection}
                     pyqtVersion={pyqtVersion}
                     onPyqtVersionChange={setPyqtVersion}
                     exportTheme={exportTheme}

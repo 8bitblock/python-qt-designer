@@ -9,6 +9,7 @@ class PythonGenerator:
         self.connections = connections or []
         self.pyqt_version = pyqt_version
         self.include_theme = include_theme
+        self.id_map = {e['id']: e['name'] for e in elements}
 
     def get_widget_style(self, cls):
         """Returns the specific style for a widget class based on the theme."""
@@ -102,7 +103,7 @@ class PythonGenerator:
             lines.append(f'        self.centralwidget.setStyleSheet("{main_style}")')
             lines.append("")
 
-        HAS_TEXT = {'QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QImage','QCommandLinkButton','QDockWidget'}
+        HAS_TEXT = {'QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QImage','QCommandLinkButton'}
         HAS_TITLE = {'QGroupBox'}
         HAS_WINDOWTITLE = {'QDockWidget'}
         HAS_ALIGN = {'QLabel','QLineEdit','QImage','QProgressBar'}
@@ -115,7 +116,11 @@ class PythonGenerator:
 
         for el in self.elements:
             cls = el['type']
-            py_class = 'QFrame' if cls in ['VLine', 'HLine'] else cls
+            py_class = cls
+            if cls in ['VLine', 'HLine']:
+                py_class = 'QFrame'
+            elif cls == 'QImage':
+                py_class = 'QLabel'
 
             lines.append(f"        self.{el['name']} = {py_class}(self.centralwidget)")
             lines.append(f'        self.{el["name"]}.setObjectName("{el["name"]}")')
@@ -159,7 +164,7 @@ class PythonGenerator:
             # Text
             text = el.get('text', '').replace('"', '\\"').replace('\n', '\\n')
             if text:
-                if cls in HAS_TEXT and cls != 'QComboBox' and cls != 'QDockWidget':
+                if cls in HAS_TEXT:
                     lines.append(f'        self.{el["name"]}.setText("{text}")')
                 if cls in HAS_TITLE:
                     lines.append(f'        self.{el["name"]}.setTitle("{text}")')
@@ -249,12 +254,14 @@ class PythonGenerator:
             for c in self.connections:
                 sig = c['signal'].split('(')[0]
                 slt = c['slot'].split('(')[0]
-                sender = c['sender']
-                receiver = c['receiver']
-                if receiver == 'MainWindow':
-                    lines.append(f"        self.{sender}.{sig}.connect(MainWindow.{slt})")
-                else:
-                    lines.append(f"        self.{sender}.{sig}.connect(self.{receiver}.{slt})")
+                sender = self.id_map.get(c['senderId'])
+                receiver = 'MainWindow' if c['receiverId'] == 'MainWindow' else self.id_map.get(c['receiverId'])
+
+                if sender and receiver:
+                    if receiver == 'MainWindow':
+                        lines.append(f"        self.{sender}.{sig}.connect(MainWindow.{slt})")
+                    else:
+                        lines.append(f"        self.{sender}.{sig}.connect(self.{receiver}.{slt})")
 
         lines.append("\nif __name__ == \"__main__\":")
         lines.append("    import sys")

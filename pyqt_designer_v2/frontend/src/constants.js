@@ -215,5 +215,6 @@ window.Designer.COMMON_SLOTS = {
     QAbstractButton: ['click()', 'animateClick()', 'toggle()', 'setChecked(bool)'],
     QComboBox: ['clear()'],
     QProgressBar: ['reset()', 'setValue(int)'],
-    QKeySequenceEdit: ['clear()', 'setKeySequence(QKeySequence)']
+    QKeySequenceEdit: ['clear()', 'setKeySequence(QKeySequence)'],
+    QLabel: ['clear()', 'setText(QString)', 'setNum(int)', 'setNum(double)']
 };

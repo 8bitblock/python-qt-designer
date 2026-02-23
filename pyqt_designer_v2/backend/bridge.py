@@ -22,6 +22,7 @@ class DesignerBridge(QObject):
         data = json.loads(data_json)
         # Parse data
         elements = data.get('elements', [])
+        connections = data.get('connections', [])
         meta = data.get('meta', {})
         canvas_size = meta.get('canvasSize', {'w':800, 'h':600})
         window_title = meta.get('windowTitle', 'MainWindow')
@@ -30,7 +31,7 @@ class DesignerBridge(QObject):
         export_theme = meta.get('exportTheme', True)
 
         # Generate XML
-        gen = UIGenerator(elements, canvas_size, window_title, theme, pyqt_version, export_theme)
+        gen = UIGenerator(elements, canvas_size, window_title, theme, connections, pyqt_version, export_theme)
         xml_content = gen.generate()
 
         if PYQT_VERSION == 6:

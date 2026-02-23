@@ -4,13 +4,35 @@ def esc_xml(s):
     return str(s).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
 
 class UIGenerator:
-    def __init__(self, elements, canvas_size, window_title, theme_data, pyqt_version=6, include_theme=True):
+    def __init__(self, elements, canvas_size, window_title, theme_data, connections=None, pyqt_version=6, include_theme=True):
         self.elements = elements
         self.canvas_size = canvas_size
         self.window_title = window_title
         self.theme = theme_data
+        self.connections = connections or []
         self.pyqt_version = pyqt_version
         self.include_theme = include_theme
+        self.id_map = {e['id']: e['name'] for e in elements}
+
+    def _gen_connections(self):
+        if not self.connections:
+            return ""
+
+        xml = ' <connections>\n'
+        for c in self.connections:
+            sender = self.id_map.get(c['senderId'])
+            receiver = 'MainWindow' if c['receiverId'] == 'MainWindow' else self.id_map.get(c['receiverId'])
+
+            if sender and receiver:
+                xml += '  <connection>\n'
+                xml += f'   <sender>{sender}</sender>\n'
+                xml += f'   <signal>{c["signal"]}</signal>\n'
+                xml += f'   <receiver>{receiver}</receiver>\n'
+                xml += f'   <slot>{c["slot"]}</slot>\n'
+                xml += '  </connection>\n'
+
+        xml += ' </connections>\n'
+        return xml
 
     def get_widget_style(self, cls):
         """Returns the specific style for a widget class based on the theme."""
@@ -131,6 +153,8 @@ class UIGenerator:
         xml_cls = el['type']
         if xml_cls == 'VLine' or xml_cls == 'HLine':
             xml_cls = 'Line'
+        elif xml_cls == 'QImage':
+            xml_cls = 'QLabel'
 
         # Whitelists
         HAS_TEXT = {'QPushButton','QToolButton','QLabel','QLineEdit','QTextEdit','QPlainTextEdit','QCheckBox','QRadioButton','QGroupBox','QImage','QCommandLinkButton','QDockWidget'}
@@ -156,7 +180,7 @@ class UIGenerator:
             props += self._prop('autoFillBackground', 'bool', True, indent)
 
         # Text
-        if el.get('text') and el['type'] in HAS_TEXT and el['type'] != 'QComboBox':
+        if el.get('text') and el['type'] in HAS_TEXT:
             prop_name = 'text'
             if el['type'] == 'QGroupBox': prop_name = 'title'
             if el['type'] == 'QDockWidget': prop_name = 'windowTitle'
@@ -279,4 +303,4 @@ class UIGenerator:
 {wxml}  </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
-</ui>"""
+{self._gen_connections()}</ui>"""
