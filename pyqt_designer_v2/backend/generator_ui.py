@@ -433,7 +433,7 @@ class UIGenerator:
         roots = self.build_hierarchy()
         wxml = ''
         for el in roots:
-            wxml += self._gen_widget(el, el['x'], el['y'], '   ')
+            wxml += self._gen_widget(el, el['x'], el['y'], '    ')
 
         # Global Style Injection
         style_prop = ""
@@ -441,6 +441,28 @@ class UIGenerator:
             global_style = self.generate_stylesheet()
             if global_style:
                 style_prop = f'<property name="styleSheet"><string>{esc_xml(global_style)}</string></property>'
+
+        # We need to wrap the user content in a fixed-size container widget,
+        # which is then placed inside the QGraphicsView.
+        # However, standard .ui files are strict about hierarchy.
+        # We'll set the central widget to be a QGraphicsView.
+        # But QGraphicsView in .ui doesn't easily allow adding a "scene" or "container" internally via XML.
+        # The standard way is: centralwidget -> QGraphicsView.
+        # The "content" must be loaded separately or added via code.
+        # BUT, to make the .ui useful on its own, we usually want the widgets visible.
+        # If we put them in a QGraphicsView, they won't show up unless we use a scene.
+
+        # A workaround for the "ScaleAwareLoader" plan:
+        # We generate the XML *exactly* as before (centralwidget -> widgets),
+        # BUT we wrap them all in a single QWidget container named "design_container".
+        # Then the Loader script will:
+        # 1. Load the UI.
+        # 2. Take "design_container" out.
+        # 3. Create a QGraphicsView/Scene.
+        # 4. Put "design_container" into the scene.
+        # 5. Set QGraphicsView as central widget.
+
+        # This keeps the .ui file viewable in standard Designer (mostly) and makes the loader logic simple.
 
         return f"""<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
@@ -450,7 +472,10 @@ class UIGenerator:
   <property name="windowTitle"><string>{esc_xml(self.window_title)}</string></property>
   <widget class="QWidget" name="centralwidget">
    {style_prop}
-{wxml}  </widget>
+   <widget class="QWidget" name="design_container">
+    <property name="geometry"><rect><x>0</x><y>0</y><width>{int(self.canvas_size['w'])}</width><height>{int(self.canvas_size['h'])}</height></rect></property>
+{wxml}   </widget>
+  </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
 {self._gen_connections()}</ui>"""
