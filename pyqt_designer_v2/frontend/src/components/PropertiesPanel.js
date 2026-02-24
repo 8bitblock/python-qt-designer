@@ -1,5 +1,16 @@
 window.Designer = window.Designer || {};
 
+const Ico = ({ name, size = 16 }) => {
+    const r = React.useRef(null);
+    React.useEffect(() => {
+        if (window.lucide && r.current) {
+            r.current.innerHTML = `<i data-lucide="${name}"></i>`;
+            window.lucide.createIcons({ attrs: { width: size, height: size }, nameAttr: 'data-lucide', root: r.current });
+        }
+    }, [name, size]);
+    return <span ref={r} className="inline-flex items-center justify-center pointer-events-none" />;
+};
+
 window.Designer.PropertiesPanel = ({
     activeTab,
     onTabChange,
@@ -17,7 +28,8 @@ window.Designer.PropertiesPanel = ({
     onPyqtVersionChange,
     exportTheme,
     onExportThemeChange,
-    elements
+    elements,
+    onMoveElement
 }) => {
 
     const { useState } = React;
@@ -182,6 +194,25 @@ window.Designer.PropertiesPanel = ({
                             </div>
                             <div className="prop-row mt-1"><span className="text-[9px] font-bold min-w-[40px] text-[var(--text3)]">ToolTip</span><input className="prop-input" value={element.tooltip || ''} onChange={e => setProp('tooltip', e.target.value)} /></div>
                             <div className="prop-row"><span className="text-[9px] font-bold min-w-[40px] text-[var(--text3)]">Status</span><input className="prop-input" value={element.statusTip || ''} onChange={e => setProp('statusTip', e.target.value)} /></div>
+                        </div>
+
+                        {/* Arrangement */}
+                        <div className="panel-section">
+                            <span className="panel-label">Arrangement</span>
+                            <div className="flex gap-2">
+                                <button onClick={() => onMoveElement(element.id, 'front')} className="flex-1 py-1 rounded border border-[var(--border)] hover:bg-[var(--bg3)] text-[var(--text3)] hover:text-[var(--text)] flex items-center justify-center gap-1 transition-colors" title="Bring to Front">
+                                    <Ico name="chevrons-up" size={14} />
+                                </button>
+                                <button onClick={() => onMoveElement(element.id, 'forward')} className="flex-1 py-1 rounded border border-[var(--border)] hover:bg-[var(--bg3)] text-[var(--text3)] hover:text-[var(--text)] flex items-center justify-center gap-1 transition-colors" title="Bring Forward">
+                                    <Ico name="chevron-up" size={14} />
+                                </button>
+                                <button onClick={() => onMoveElement(element.id, 'backward')} className="flex-1 py-1 rounded border border-[var(--border)] hover:bg-[var(--bg3)] text-[var(--text3)] hover:text-[var(--text)] flex items-center justify-center gap-1 transition-colors" title="Send Backward">
+                                    <Ico name="chevron-down" size={14} />
+                                </button>
+                                <button onClick={() => onMoveElement(element.id, 'back')} className="flex-1 py-1 rounded border border-[var(--border)] hover:bg-[var(--bg3)] text-[var(--text3)] hover:text-[var(--text)] flex items-center justify-center gap-1 transition-colors" title="Send to Back">
+                                    <Ico name="chevrons-down" size={14} />
+                                </button>
+                            </div>
                         </div>
 
                         {/* Geometry */}

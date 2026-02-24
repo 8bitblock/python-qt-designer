@@ -141,6 +141,27 @@ window.Designer.App = () => {
         setConnections(connections.filter(c => c !== conn));
     };
 
+    const handleMoveElement = (id, direction) => {
+        const idx = elements.findIndex(e => e.id === id);
+        if (idx === -1) return;
+        const newEls = [...elements];
+        const el = newEls[idx];
+        newEls.splice(idx, 1);
+
+        if (direction === 'front') {
+            newEls.push(el);
+        } else if (direction === 'back') {
+            newEls.unshift(el);
+        } else if (direction === 'forward') {
+            const newIdx = Math.min(idx + 1, newEls.length);
+            newEls.splice(newIdx, 0, el);
+        } else if (direction === 'backward') {
+            const newIdx = Math.max(idx - 1, 0);
+            newEls.splice(newIdx, 0, el);
+        }
+        setElements(newEls);
+    };
+
     return (
         <div className="flex h-screen w-screen flex-col overflow-hidden select-none">
             <div className="h-12 shrink-0 flex items-center justify-between px-3 border-b" style={{ background: 'var(--bg2)', borderColor: 'var(--border)' }}>
@@ -229,6 +250,7 @@ window.Designer.App = () => {
                     onPyqtVersionChange={setPyqtVersion}
                     exportTheme={exportTheme}
                     onExportThemeChange={setExportTheme}
+                    onMoveElement={handleMoveElement}
                 />
             </div>
         </div>

@@ -164,7 +164,6 @@ window.Designer.Canvas = ({
                                 className="absolute"
                                 style={{
                                     left: el.x, top: el.y, width: el.w, height: el.h,
-                                    zIndex: el.zIndex,
                                     outline: (!previewMode && isSel) ? `2px solid ${theme.ide.accent}` : 'none',
                                     cursor: previewMode ? 'default' : 'move'
                                 }}

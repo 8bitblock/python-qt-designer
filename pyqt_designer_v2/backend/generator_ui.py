@@ -259,9 +259,12 @@ class UIGenerator:
         return qss
 
     def build_hierarchy(self):
-        nodes = [e.copy() for e in self.elements]
-        for n in nodes:
+        nodes = []
+        for i, e in enumerate(self.elements):
+            n = e.copy()
+            n['_original_idx'] = i
             n['children'] = []
+            nodes.append(n)
 
         roots = []
         # Sort by area (width * height) ascending
@@ -294,6 +297,18 @@ class UIGenerator:
                 best_parent['children'].append(node)
             else:
                 roots.append(node)
+
+        # Re-sort roots and children by original index (Z-order)
+        roots.sort(key=lambda x: x['_original_idx'])
+
+        def sort_children(n):
+            if n['children']:
+                n['children'].sort(key=lambda x: x['_original_idx'])
+                for c in n['children']:
+                    sort_children(c)
+
+        for r in roots:
+            sort_children(r)
 
         return roots
 
