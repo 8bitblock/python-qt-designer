@@ -23,6 +23,7 @@ window.Designer.App = () => {
     const [zoom, setZoom] = useState(1);
     const [widgetSearch, setWidgetSearch] = useState('');
     const [connections, setConnections] = useState([]);
+    const [clipboard, setClipboard] = useState([]);
 
     // New Settings State
     const [pyqtVersion, setPyqtVersion] = useState(6);
@@ -62,17 +63,38 @@ window.Designer.App = () => {
 
     useEffect(() => {
         const handleKeyDown = (e) => {
+            if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
+
             if (['Delete', 'Backspace'].includes(e.key)) {
-                if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
                 if (selectedIds.length > 0) {
                     setElements(prev => prev.filter(el => !selectedIds.includes(el.id)));
                     setSelectedIds([]);
                 }
             }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+                e.preventDefault();
+                if (selectedIds.length > 0) {
+                    setClipboard(elements.filter(el => selectedIds.includes(el.id)));
+                }
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+                e.preventDefault();
+                if (clipboard.length > 0) {
+                    const newEls = clipboard.map(el => ({
+                        ...el,
+                        id: window.Designer.uid(),
+                        x: el.x + 20,
+                        y: el.y + 20,
+                        name: el.name + '_copy'
+                    }));
+                    setElements(prev => [...prev, ...newEls]);
+                    setSelectedIds(newEls.map(el => el.id));
+                }
+            }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedIds]);
+    }, [selectedIds, clipboard, elements]);
 
     const handleAddWidget = (type, x, y) => {
         const n = elements.length + 1;
@@ -139,6 +161,26 @@ window.Designer.App = () => {
 
     const handleDeleteConnection = (conn) => {
         setConnections(connections.filter(c => c !== conn));
+    };
+
+    const handleDuplicate = (ids) => {
+        const toDup = elements.filter(el => ids.includes(el.id));
+        if (toDup.length === 0) return;
+
+        const newEls = toDup.map(el => ({
+            ...el,
+            id: window.Designer.uid(),
+            x: el.x + 20,
+            y: el.y + 20,
+            name: el.name + '_copy'
+        }));
+        setElements(prev => [...prev, ...newEls]);
+        setSelectedIds(newEls.map(el => el.id));
+    };
+
+    const handleDelete = (ids) => {
+        setElements(prev => prev.filter(el => !ids.includes(el.id)));
+        setSelectedIds([]);
     };
 
     const handleMoveElement = (id, direction) => {
@@ -227,9 +269,9 @@ window.Designer.App = () => {
                         else setSelectedIds(shift ? (selectedIds.includes(id) ? selectedIds : [...selectedIds, id]) : [id]);
                     }}
                     onUpdate={handleUpdate}
-                    onContextMenu={(e, id) => {
-                        setSelectedIds([id]);
-                    }}
+                    onMoveElement={handleMoveElement}
+                    onDuplicate={handleDuplicate}
+                    onDelete={handleDelete}
                 />
 
                 <PropertiesPanel

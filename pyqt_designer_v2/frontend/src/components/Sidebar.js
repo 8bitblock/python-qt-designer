@@ -23,7 +23,8 @@ window.Designer.Sidebar = ({ activeTab, onTabChange, widgetSearch, setWidgetSear
     }, [widgetSearch]);
 
     const renderTree = (list, depth = 0) => {
-        return list.map(el => (
+        // Reverse the list to show top-most elements first (like a Layers panel)
+        return [...list].reverse().map(el => (
             <div key={el.id}
                 className={`tree-item ${selectedIds.includes(el.id) ? 'selected' : ''}`}
                 style={{ paddingLeft: depth * 12 + 8 }}
