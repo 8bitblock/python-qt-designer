@@ -16,6 +16,7 @@ window.Designer.Canvas = ({
     onAddWidget,
     onSelect,
     onUpdate,
+    onEditStart,
     onMoveElement,
     onDuplicate,
     onDelete,
@@ -47,6 +48,7 @@ window.Designer.Canvas = ({
         if (previewMode) return;
         e.stopPropagation();
         onSelect(id, e.shiftKey);
+        if (onEditStart) onEditStart();
 
         dragRef.current = {
             mode: 'move',
@@ -61,6 +63,8 @@ window.Designer.Canvas = ({
         e.stopPropagation();
         e.preventDefault();
         onSelect(id, false);
+        if (onEditStart) onEditStart();
+
         dragRef.current = {
             mode: 'resize',
             handle,
