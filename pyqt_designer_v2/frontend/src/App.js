@@ -24,6 +24,7 @@ window.Designer.App = () => {
     const [widgetSearch, setWidgetSearch] = useState('');
     const [connections, setConnections] = useState([]);
     const [clipboard, setClipboard] = useState([]);
+    const [hoverId, setHoverId] = useState(null);
 
     // New Settings State
     const [pyqtVersion, setPyqtVersion] = useState(6);
@@ -111,6 +112,10 @@ window.Designer.App = () => {
 
     const handlePropChange = (key, val) => {
         setElements(elements.map(el => selectedIds.includes(el.id) ? { ...el, [key]: val } : el));
+    };
+
+    const handleNameChange = (id, newName) => {
+        setElements(elements.map(el => el.id === id ? { ...el, name: newName } : el));
     };
 
     const handleCanvasChange = (key, val) => {
@@ -250,6 +255,9 @@ window.Designer.App = () => {
                     elements={elements}
                     selectedIds={selectedIds}
                     onSelect={(id, multi) => setSelectedIds(multi ? [...selectedIds, id] : [id])}
+                    hoverId={hoverId}
+                    setHoverId={setHoverId}
+                    onNameChange={handleNameChange}
                 />
 
                 <Canvas
@@ -272,6 +280,8 @@ window.Designer.App = () => {
                     onMoveElement={handleMoveElement}
                     onDuplicate={handleDuplicate}
                     onDelete={handleDelete}
+                    hoverId={hoverId}
+                    setHoverId={setHoverId}
                 />
 
                 <PropertiesPanel

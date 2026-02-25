@@ -18,7 +18,9 @@ window.Designer.Canvas = ({
     onUpdate,
     onMoveElement,
     onDuplicate,
-    onDelete
+    onDelete,
+    hoverId,
+    setHoverId
 }) => {
     const canvasRef = useRef(null);
     const dragRef = useRef({ mode: null, startX: 0, startY: 0, initEls: [] });
@@ -169,14 +171,18 @@ window.Designer.Canvas = ({
                 >
                     {elements.map(el => {
                         const isSel = selectedIds.includes(el.id);
+                        const isHover = el.id === hoverId;
                         return (
                             <div key={el.id}
                                 className="absolute"
                                 style={{
                                     left: el.x, top: el.y, width: el.w, height: el.h,
-                                    outline: (!previewMode && isSel) ? `2px solid ${theme.ide.accent}` : 'none',
-                                    cursor: previewMode ? 'default' : 'move'
+                                    outline: (!previewMode && isSel) ? `2px solid ${theme.ide.accent}` : (isHover ? `1px dashed ${theme.ide.accent}` : 'none'),
+                                    cursor: previewMode ? 'default' : 'move',
+                                    zIndex: isHover ? 9999 : 'auto'
                                 }}
+                                onMouseEnter={() => setHoverId(el.id)}
+                                onMouseLeave={() => setHoverId(null)}
                                 onMouseDown={e => startMove(e, el.id)}
                                 onContextMenu={e => {
                                     e.preventDefault();
