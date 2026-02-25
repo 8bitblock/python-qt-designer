@@ -16,11 +16,22 @@ window.Designer.Canvas = ({
     onAddWidget,
     onSelect,
     onUpdate,
-    onContextMenu
+    onMoveElement,
+    onDuplicate,
+    onDelete,
+    hoverId,
+    setHoverId
 }) => {
     const canvasRef = useRef(null);
     const dragRef = useRef({ mode: null, startX: 0, startY: 0, initEls: [] });
     const [rubberBand, setRubberBand] = useState(null);
+    const [ctxMenu, setCtxMenu] = useState(null);
+
+    useEffect(() => {
+        const closeMenu = () => setCtxMenu(null);
+        window.addEventListener('click', closeMenu);
+        return () => window.removeEventListener('click', closeMenu);
+    }, []);
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -75,6 +86,7 @@ window.Designer.Canvas = ({
             rubberStart: { x, y }
         };
         setRubberBand({ x, y, w: 0, h: 0 });
+        if (ctxMenu) setCtxMenu(null);
     };
 
     const handleMouseMove = useCallback((e) => {
@@ -159,17 +171,27 @@ window.Designer.Canvas = ({
                 >
                     {elements.map(el => {
                         const isSel = selectedIds.includes(el.id);
+                        const isHover = el.id === hoverId;
                         return (
                             <div key={el.id}
                                 className="absolute"
                                 style={{
                                     left: el.x, top: el.y, width: el.w, height: el.h,
-                                    zIndex: el.zIndex,
-                                    outline: (!previewMode && isSel) ? `2px solid ${theme.ide.accent}` : 'none',
-                                    cursor: previewMode ? 'default' : 'move'
+                                    outline: (!previewMode && isSel) ? `2px solid ${theme.ide.accent}` : (isHover ? `1px dashed ${theme.ide.accent}` : 'none'),
+                                    cursor: previewMode ? 'default' : 'move',
+                                    zIndex: isHover ? 9999 : 'auto'
                                 }}
+                                onMouseEnter={() => setHoverId(el.id)}
+                                onMouseLeave={() => setHoverId(null)}
                                 onMouseDown={e => startMove(e, el.id)}
-                                onContextMenu={e => onContextMenu(e, el.id)}
+                                onContextMenu={e => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    if (!selectedIds.includes(el.id)) {
+                                        onSelect(el.id, false);
+                                    }
+                                    setCtxMenu({ x: e.clientX, y: e.clientY, id: el.id });
+                                }}
                             >
                                 <WidgetRenderer el={el} theme={theme} />
 
@@ -191,6 +213,30 @@ window.Designer.Canvas = ({
                         <div className="rubber-band"
                             style={{ left: rubberBand.x, top: rubberBand.y, width: rubberBand.w, height: rubberBand.h }}
                         />
+                    )}
+
+                    {ctxMenu && (
+                        <div className="ctx-menu" style={{ left: ctxMenu.x, top: ctxMenu.y }}>
+                            <button className="ctx-item" onClick={() => onMoveElement(ctxMenu.id, 'front')}>
+                                <i className="w-3 h-3" data-lucide="chevrons-up"></i> Bring to Front
+                            </button>
+                            <button className="ctx-item" onClick={() => onMoveElement(ctxMenu.id, 'forward')}>
+                                <i className="w-3 h-3" data-lucide="chevron-up"></i> Bring Forward
+                            </button>
+                            <button className="ctx-item" onClick={() => onMoveElement(ctxMenu.id, 'backward')}>
+                                <i className="w-3 h-3" data-lucide="chevron-down"></i> Send Backward
+                            </button>
+                            <button className="ctx-item" onClick={() => onMoveElement(ctxMenu.id, 'back')}>
+                                <i className="w-3 h-3" data-lucide="chevrons-down"></i> Send to Back
+                            </button>
+                            <div className="ctx-sep" />
+                            <button className="ctx-item" onClick={() => onDuplicate(selectedIds)}>
+                                <i className="w-3 h-3" data-lucide="copy"></i> Duplicate
+                            </button>
+                            <button className="ctx-item danger" onClick={() => onDelete(selectedIds)}>
+                                <i className="w-3 h-3" data-lucide="trash-2"></i> Delete
+                            </button>
+                        </div>
                     )}
                 </div>
             </div>

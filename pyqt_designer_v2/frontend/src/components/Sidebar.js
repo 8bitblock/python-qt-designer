@@ -1,9 +1,9 @@
 window.Designer = window.Designer || {};
 
-const { useMemo } = React;
+const { useMemo, useState, useRef, useEffect } = React;
 const Ico = ({ name, size = 16 }) => {
-    const r = React.useRef(null);
-    React.useEffect(() => {
+    const r = useRef(null);
+    useEffect(() => {
         if (window.lucide && r.current) {
             r.current.innerHTML = `<i data-lucide="${name}"></i>`;
             window.lucide.createIcons({ attrs: { width: size, height: size }, nameAttr: 'data-lucide', root: r.current });
@@ -12,9 +12,11 @@ const Ico = ({ name, size = 16 }) => {
     return <span ref={r} className="inline-flex items-center justify-center pointer-events-none" />;
 };
 
-window.Designer.Sidebar = ({ activeTab, onTabChange, widgetSearch, setWidgetSearch, elements, selectedIds, onSelect }) => {
+window.Designer.Sidebar = ({ activeTab, onTabChange, widgetSearch, setWidgetSearch, elements, selectedIds, onSelect, hoverId, setHoverId, onNameChange }) => {
     const WIDGETS = window.Designer.WIDGETS;
     const CATEGORIES = window.Designer.CATEGORIES;
+    const [editingId, setEditingId] = useState(null);
+    const [editName, setEditName] = useState('');
 
     const filteredWidgets = useMemo(() => {
         if (!widgetSearch) return null;
@@ -22,18 +24,55 @@ window.Designer.Sidebar = ({ activeTab, onTabChange, widgetSearch, setWidgetSear
         return Object.entries(WIDGETS).filter(([k, v]) => k.toLowerCase().includes(q) || v.label.toLowerCase().includes(q));
     }, [widgetSearch]);
 
+    const handleRenameStart = (e, el) => {
+        e.stopPropagation(); // prevent select
+        setEditingId(el.id);
+        setEditName(el.name);
+    };
+
+    const handleRenameSubmit = () => {
+        if (editingId && editName.trim()) {
+            onNameChange(editingId, editName.trim());
+        }
+        setEditingId(null);
+    };
+
     const renderTree = (list, depth = 0) => {
-        return list.map(el => (
-            <div key={el.id}
-                className={`tree-item ${selectedIds.includes(el.id) ? 'selected' : ''}`}
-                style={{ paddingLeft: depth * 12 + 8 }}
-                onClick={(e) => onSelect(el.id, e.shiftKey)}
-            >
-                <Ico name={WIDGETS[el.type]?.icon || 'box'} size={12} />
-                <span className="flex-1 truncate">{el.name}</span>
-                <span className="type-badge">{el.type}</span>
-            </div>
-        ));
+        // Reverse the list to show top-most elements first (like a Layers panel)
+        return [...list].reverse().map(el => {
+            const isHover = el.id === hoverId;
+            const isEditing = el.id === editingId;
+
+            return (
+                <div key={el.id}
+                    className={`tree-item ${selectedIds.includes(el.id) ? 'selected' : ''}`}
+                    style={{
+                        paddingLeft: depth * 12 + 8,
+                        background: isHover ? 'var(--bg3)' : undefined
+                    }}
+                    onClick={(e) => onSelect(el.id, e.shiftKey)}
+                    onDoubleClick={(e) => handleRenameStart(e, el)}
+                    onMouseEnter={() => setHoverId(el.id)}
+                    onMouseLeave={() => setHoverId(null)}
+                >
+                    <Ico name={WIDGETS[el.type]?.icon || 'box'} size={12} />
+                    {isEditing ? (
+                        <input
+                            autoFocus
+                            className="bg-[var(--bg)] text-[var(--text)] text-[10px] border border-[var(--accent)] rounded px-1 flex-1 min-w-0 outline-none"
+                            value={editName}
+                            onChange={e => setEditName(e.target.value)}
+                            onBlur={handleRenameSubmit}
+                            onKeyDown={e => e.key === 'Enter' && handleRenameSubmit()}
+                            onClick={e => e.stopPropagation()}
+                        />
+                    ) : (
+                        <span className="flex-1 truncate">{el.name}</span>
+                    )}
+                    <span className="type-badge">{el.type}</span>
+                </div>
+            );
+        });
     };
 
     return (

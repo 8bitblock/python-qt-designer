@@ -23,6 +23,8 @@ window.Designer.App = () => {
     const [zoom, setZoom] = useState(1);
     const [widgetSearch, setWidgetSearch] = useState('');
     const [connections, setConnections] = useState([]);
+    const [clipboard, setClipboard] = useState([]);
+    const [hoverId, setHoverId] = useState(null);
 
     // New Settings State
     const [pyqtVersion, setPyqtVersion] = useState(6);
@@ -62,17 +64,38 @@ window.Designer.App = () => {
 
     useEffect(() => {
         const handleKeyDown = (e) => {
+            if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
+
             if (['Delete', 'Backspace'].includes(e.key)) {
-                if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
                 if (selectedIds.length > 0) {
                     setElements(prev => prev.filter(el => !selectedIds.includes(el.id)));
                     setSelectedIds([]);
                 }
             }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+                e.preventDefault();
+                if (selectedIds.length > 0) {
+                    setClipboard(elements.filter(el => selectedIds.includes(el.id)));
+                }
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+                e.preventDefault();
+                if (clipboard.length > 0) {
+                    const newEls = clipboard.map(el => ({
+                        ...el,
+                        id: window.Designer.uid(),
+                        x: el.x + 20,
+                        y: el.y + 20,
+                        name: el.name + '_copy'
+                    }));
+                    setElements(prev => [...prev, ...newEls]);
+                    setSelectedIds(newEls.map(el => el.id));
+                }
+            }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedIds]);
+    }, [selectedIds, clipboard, elements]);
 
     const handleAddWidget = (type, x, y) => {
         const n = elements.length + 1;
@@ -89,6 +112,10 @@ window.Designer.App = () => {
 
     const handlePropChange = (key, val) => {
         setElements(elements.map(el => selectedIds.includes(el.id) ? { ...el, [key]: val } : el));
+    };
+
+    const handleNameChange = (id, newName) => {
+        setElements(elements.map(el => el.id === id ? { ...el, name: newName } : el));
     };
 
     const handleCanvasChange = (key, val) => {
@@ -141,6 +168,47 @@ window.Designer.App = () => {
         setConnections(connections.filter(c => c !== conn));
     };
 
+    const handleDuplicate = (ids) => {
+        const toDup = elements.filter(el => ids.includes(el.id));
+        if (toDup.length === 0) return;
+
+        const newEls = toDup.map(el => ({
+            ...el,
+            id: window.Designer.uid(),
+            x: el.x + 20,
+            y: el.y + 20,
+            name: el.name + '_copy'
+        }));
+        setElements(prev => [...prev, ...newEls]);
+        setSelectedIds(newEls.map(el => el.id));
+    };
+
+    const handleDelete = (ids) => {
+        setElements(prev => prev.filter(el => !ids.includes(el.id)));
+        setSelectedIds([]);
+    };
+
+    const handleMoveElement = (id, direction) => {
+        const idx = elements.findIndex(e => e.id === id);
+        if (idx === -1) return;
+        const newEls = [...elements];
+        const el = newEls[idx];
+        newEls.splice(idx, 1);
+
+        if (direction === 'front') {
+            newEls.push(el);
+        } else if (direction === 'back') {
+            newEls.unshift(el);
+        } else if (direction === 'forward') {
+            const newIdx = Math.min(idx + 1, newEls.length);
+            newEls.splice(newIdx, 0, el);
+        } else if (direction === 'backward') {
+            const newIdx = Math.max(idx - 1, 0);
+            newEls.splice(newIdx, 0, el);
+        }
+        setElements(newEls);
+    };
+
     return (
         <div className="flex h-screen w-screen flex-col overflow-hidden select-none">
             <div className="h-12 shrink-0 flex items-center justify-between px-3 border-b" style={{ background: 'var(--bg2)', borderColor: 'var(--border)' }}>
@@ -187,6 +255,9 @@ window.Designer.App = () => {
                     elements={elements}
                     selectedIds={selectedIds}
                     onSelect={(id, multi) => setSelectedIds(multi ? [...selectedIds, id] : [id])}
+                    hoverId={hoverId}
+                    setHoverId={setHoverId}
+                    onNameChange={handleNameChange}
                 />
 
                 <Canvas
@@ -206,9 +277,11 @@ window.Designer.App = () => {
                         else setSelectedIds(shift ? (selectedIds.includes(id) ? selectedIds : [...selectedIds, id]) : [id]);
                     }}
                     onUpdate={handleUpdate}
-                    onContextMenu={(e, id) => {
-                        setSelectedIds([id]);
-                    }}
+                    onMoveElement={handleMoveElement}
+                    onDuplicate={handleDuplicate}
+                    onDelete={handleDelete}
+                    hoverId={hoverId}
+                    setHoverId={setHoverId}
                 />
 
                 <PropertiesPanel
@@ -229,6 +302,7 @@ window.Designer.App = () => {
                     onPyqtVersionChange={setPyqtVersion}
                     exportTheme={exportTheme}
                     onExportThemeChange={setExportTheme}
+                    onMoveElement={handleMoveElement}
                 />
             </div>
         </div>
