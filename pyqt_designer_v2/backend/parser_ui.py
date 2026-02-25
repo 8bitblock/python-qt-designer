@@ -65,6 +65,17 @@ class UIParser:
                 # Fallback
                 pass
 
+        # Check for 'design_container' wrapper (workaround for AutoScaler)
+        # If found, we must unwrap it to avoid nested containers on re-import
+        container = None
+        for child in start_node:
+            if child.tag == "widget" and child.get("name") == "design_container":
+                container = child
+                break
+
+        if container is not None:
+            start_node = container
+
         # Parse children
         # Note: We do NOT add the main window / central widget itself to the elements list,
         # as it represents the canvas container.
