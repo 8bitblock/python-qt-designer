@@ -10,6 +10,7 @@ except ImportError:
 import json
 from .generator_ui import UIGenerator
 from .generator_py import PythonGenerator
+from .parser_ui import UIParser
 
 class DesignerBridge(QObject):
     ui_imported = pyqtSignal(str)
@@ -22,6 +23,7 @@ class DesignerBridge(QObject):
         data = json.loads(data_json)
         # Parse data
         elements = data.get('elements', [])
+        connections = data.get('connections', [])
         meta = data.get('meta', {})
         canvas_size = meta.get('canvasSize', {'w':800, 'h':600})
         window_title = meta.get('windowTitle', 'MainWindow')
@@ -30,7 +32,7 @@ class DesignerBridge(QObject):
         export_theme = meta.get('exportTheme', True)
 
         # Generate XML
-        gen = UIGenerator(elements, canvas_size, window_title, theme, pyqt_version, export_theme)
+        gen = UIGenerator(elements, canvas_size, window_title, theme, connections, pyqt_version, export_theme)
         xml_content = gen.generate()
 
         if PYQT_VERSION == 6:
@@ -102,6 +104,15 @@ class DesignerBridge(QObject):
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
-                    self.ui_imported.emit(content)
+
+                    parser = UIParser()
+                    data = parser.parse(content)
+
+                    if data:
+                        json_str = json.dumps(data)
+                        self.ui_imported.emit(json_str)
+                    else:
+                        print("Failed to parse UI file")
+
             except Exception as e:
                 print(f"Error loading: {e}")

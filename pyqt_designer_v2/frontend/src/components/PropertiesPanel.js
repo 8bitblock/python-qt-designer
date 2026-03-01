@@ -1,5 +1,16 @@
 window.Designer = window.Designer || {};
 
+const Ico = ({ name, size = 16 }) => {
+    const r = React.useRef(null);
+    React.useEffect(() => {
+        if (window.lucide && r.current) {
+            r.current.innerHTML = `<i data-lucide="${name}"></i>`;
+            window.lucide.createIcons({ attrs: { width: size, height: size }, nameAttr: 'data-lucide', root: r.current });
+        }
+    }, [name, size]);
+    return <span ref={r} className="inline-flex items-center justify-center pointer-events-none" />;
+};
+
 window.Designer.PropertiesPanel = ({
     activeTab,
     onTabChange,
@@ -16,23 +27,142 @@ window.Designer.PropertiesPanel = ({
     pyqtVersion,
     onPyqtVersionChange,
     exportTheme,
-    onExportThemeChange
+    onExportThemeChange,
+    elements,
+    onMoveElement
 }) => {
 
+    const { useState } = React;
     const FONT_FAMILIES = window.Designer.FONT_FAMILIES;
 
     const setProp = (k, v) => onChange(k, v);
 
+    // Signals Tab Logic
+    const [signalData, setSignalData] = useState({ signal: '', receiverId: '', slot: '' });
+
+    const INHERITANCE = {
+        QPushButton: 'QAbstractButton',
+        QToolButton: 'QAbstractButton',
+        QRadioButton: 'QAbstractButton',
+        QCheckBox: 'QAbstractButton',
+        QCommandLinkButton: 'QAbstractButton',
+        QSpinBox: 'QAbstractSpinBox',
+        QDoubleSpinBox: 'QAbstractSpinBox'
+    };
+
+    const getSignals = (type) => {
+        const parent = INHERITANCE[type];
+        const exact = window.Designer.COMMON_SIGNALS[type] || [];
+        const inherited = parent ? (window.Designer.COMMON_SIGNALS[parent] || []) : [];
+        return [...new Set([...exact, ...inherited])];
+    };
+
+    const getSlots = (type) => {
+        if (!type || type === 'MainWindow') return window.Designer.COMMON_SLOTS['QWidget'] || [];
+        const parent = INHERITANCE[type];
+        const exact = window.Designer.COMMON_SLOTS[type] || [];
+        const inherited = parent ? (window.Designer.COMMON_SLOTS[parent] || []) : [];
+        const common = window.Designer.COMMON_SLOTS['QWidget'] || [];
+        return [...new Set([...exact, ...inherited, ...common])];
+    };
+
+    const handleAddSignal = () => {
+        if (signalData.signal && signalData.receiverId && signalData.slot && element) {
+            onAddConnection({
+                senderId: element.id,
+                signal: signalData.signal,
+                receiverId: signalData.receiverId,
+                slot: signalData.slot
+            });
+            setSignalData({ signal: '', receiverId: '', slot: '' });
+        }
+    };
+
     if (activeTab === 'signals') {
+        const availableSignals = element ? getSignals(element.type) : [];
+        const receiverElement = elements ? elements.find(e => e.id === signalData.receiverId) : null;
+        const receiverType = signalData.receiverId === 'MainWindow' ? 'MainWindow' : (receiverElement ? receiverElement.type : null);
+        const availableSlots = receiverType ? getSlots(receiverType) : [];
+
+        // Filter connections for current element
+        const myConnections = element ? connections.filter(c => c.senderId === element.id) : [];
+
         return (
             <div className="w-72 shrink-0 flex flex-col border-l" style={{ background: 'var(--bg2)', borderColor: 'var(--border)' }}>
                 <div className="flex border-b" style={{ borderColor: 'var(--border)' }}>
                     <button onClick={() => onTabChange('props')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'props' ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-transparent text-[var(--text3)] hover:text-[var(--text)]'}`}>Properties</button>
                     <button onClick={() => onTabChange('signals')} className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider border-b-2 transition-colors ${activeTab === 'signals' ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-transparent text-[var(--text3)] hover:text-[var(--text)]'}`}>Signals</button>
                 </div>
-                <div className="p-4 text-xs text-[var(--text3)]">
-                    Signal/Slot editor placeholder.
-                </div>
+
+                {element ? (
+                    <div className="p-3 flex flex-col gap-3 h-full overflow-hidden">
+                        <div className="flex flex-col gap-2 p-2 rounded bg-[var(--bg)] border border-[var(--border)]">
+                            <span className="text-[9px] font-bold text-[var(--text3)] uppercase">New Connection</span>
+
+                            {/* Signal */}
+                            <div>
+                                <label className="text-[9px] text-[var(--text3)] block mb-1">Signal (Sender: {element.name})</label>
+                                <select className="prop-select" value={signalData.signal} onChange={e => setSignalData({...signalData, signal: e.target.value})}>
+                                    <option value="">Select Signal...</option>
+                                    {availableSignals.map(s => <option key={s} value={s}>{s}</option>)}
+                                </select>
+                            </div>
+
+                            {/* Receiver */}
+                            <div>
+                                <label className="text-[9px] text-[var(--text3)] block mb-1">Receiver</label>
+                                <select className="prop-select" value={signalData.receiverId} onChange={e => setSignalData({...signalData, receiverId: e.target.value, slot: ''})}>
+                                    <option value="">Select Receiver...</option>
+                                    <option value="MainWindow">MainWindow</option>
+                                    {elements.filter(e => e.id !== element.id).map(e => (
+                                        <option key={e.id} value={e.id}>{e.name} ({e.type})</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Slot */}
+                            <div>
+                                <label className="text-[9px] text-[var(--text3)] block mb-1">Slot</label>
+                                <select className="prop-select" value={signalData.slot} onChange={e => setSignalData({...signalData, slot: e.target.value})} disabled={!signalData.receiverId}>
+                                    <option value="">Select Slot...</option>
+                                    {availableSlots.map(s => <option key={s} value={s}>{s}</option>)}
+                                </select>
+                            </div>
+
+                            <button onClick={handleAddSignal} disabled={!signalData.signal || !signalData.receiverId || !signalData.slot} className="mt-1 bg-[var(--accent)] text-white text-[10px] py-1 rounded font-bold hover:opacity-90 disabled:opacity-50">
+                                Add Connection
+                            </button>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto min-h-0">
+                            <span className="text-[9px] font-bold text-[var(--text3)] uppercase mb-2 block">Active Connections</span>
+                            {myConnections.length === 0 ? (
+                                <p className="text-[10px] text-[var(--text3)] italic">No connections defined.</p>
+                            ) : (
+                                <div className="flex flex-col gap-1">
+                                    {myConnections.map((c, i) => {
+                                        const recName = c.receiverId === 'MainWindow' ? 'MainWindow' : (elements.find(e => e.id === c.receiverId)?.name || 'Unknown');
+                                        return (
+                                            <div key={i} className="flex items-center justify-between p-2 rounded bg-[var(--bg)] border border-[var(--border)] text-[10px]">
+                                                <div className="flex flex-col overflow-hidden">
+                                                    <span className="font-mono text-[var(--text)] truncate" title={`${c.signal} -> ${c.slot}`}>{c.signal} <span className="text-[var(--text3)]">→</span></span>
+                                                    <span className="font-mono text-[var(--text2)] truncate" title={recName}>{recName}.{c.slot}</span>
+                                                </div>
+                                                <button onClick={() => onDeleteConnection(c)} className="text-[var(--red)] hover:bg-[var(--bg2)] p-1 rounded">
+                                                    <i data-lucide="trash-2" style={{width:12, height:12}}></i>
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                ) : (
+                    <div className="p-4 text-xs text-[var(--text3)]">
+                        Select a widget to edit signals.
+                    </div>
+                )}
             </div>
         );
     }
@@ -64,6 +194,25 @@ window.Designer.PropertiesPanel = ({
                             </div>
                             <div className="prop-row mt-1"><span className="text-[9px] font-bold min-w-[40px] text-[var(--text3)]">ToolTip</span><input className="prop-input" value={element.tooltip || ''} onChange={e => setProp('tooltip', e.target.value)} /></div>
                             <div className="prop-row"><span className="text-[9px] font-bold min-w-[40px] text-[var(--text3)]">Status</span><input className="prop-input" value={element.statusTip || ''} onChange={e => setProp('statusTip', e.target.value)} /></div>
+                        </div>
+
+                        {/* Arrangement */}
+                        <div className="panel-section">
+                            <span className="panel-label">Arrangement</span>
+                            <div className="flex gap-2">
+                                <button onClick={() => onMoveElement(element.id, 'front')} className="flex-1 py-1 rounded border border-[var(--border)] hover:bg-[var(--bg3)] text-[var(--text3)] hover:text-[var(--text)] flex items-center justify-center gap-1 transition-colors" title="Bring to Front">
+                                    <Ico name="chevrons-up" size={14} />
+                                </button>
+                                <button onClick={() => onMoveElement(element.id, 'forward')} className="flex-1 py-1 rounded border border-[var(--border)] hover:bg-[var(--bg3)] text-[var(--text3)] hover:text-[var(--text)] flex items-center justify-center gap-1 transition-colors" title="Bring Forward">
+                                    <Ico name="chevron-up" size={14} />
+                                </button>
+                                <button onClick={() => onMoveElement(element.id, 'backward')} className="flex-1 py-1 rounded border border-[var(--border)] hover:bg-[var(--bg3)] text-[var(--text3)] hover:text-[var(--text)] flex items-center justify-center gap-1 transition-colors" title="Send Backward">
+                                    <Ico name="chevron-down" size={14} />
+                                </button>
+                                <button onClick={() => onMoveElement(element.id, 'back')} className="flex-1 py-1 rounded border border-[var(--border)] hover:bg-[var(--bg3)] text-[var(--text3)] hover:text-[var(--text)] flex items-center justify-center gap-1 transition-colors" title="Send to Back">
+                                    <Ico name="chevrons-down" size={14} />
+                                </button>
+                            </div>
                         </div>
 
                         {/* Geometry */}
