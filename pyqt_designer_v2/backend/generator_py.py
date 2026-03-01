@@ -37,34 +37,72 @@ class PythonGenerator:
         """
 
         # Buttons
+        btn_bg = tw.get('btnBg', '#e0e0e0')
+        btn_border = tw.get('btnBorder', '1px solid #999')
+        btn_color = tw.get('btnColor', '#000')
+        btn_hover = tw.get('btnHoverBg', '#eeeeee')
+        btn_pressed = tw.get('btnPressedBg', '#cccccc')
+        btn_disabled = tw.get('btnBgDisabled', canvas_bg)
+
         qss += f"""
         QPushButton, QToolButton {{
-            background-color: {tw.get('btnBg', '#e0e0e0')};
-            border: {tw.get('btnBorder', '1px solid #999')};
-            color: {tw.get('btnColor', '#000')};
+            background-color: {btn_bg};
+            border: {btn_border};
+            color: {btn_color};
             border-radius: {radius};
             padding: 6px 12px;
         }}
         QPushButton:hover, QToolButton:hover {{
-            background-color: {tw.get('btnHoverBg', '#eeeeee')};
+            background-color: {btn_hover};
         }}
         QPushButton:pressed, QToolButton:pressed {{
-            background-color: {tw.get('btnPressedBg', '#cccccc')};
+            background-color: {btn_pressed};
+        }}
+        QPushButton:disabled, QToolButton:disabled {{
+            background-color: {btn_disabled};
+            border: 1px solid #d0d0d0;
+            color: #888888;
+        }}
+        """
+
+        # Flat Buttons
+        qss += f"""
+        QPushButton[flat="true"] {{
+            background-color: transparent;
+            border: none;
+        }}
+        QPushButton[flat="true"]:hover {{
+            background-color: rgba(0, 0, 0, 0.05);
+        }}
+        QPushButton[flat="true"]:pressed {{
+            background-color: rgba(0, 0, 0, 0.1);
+        }}
+        QPushButton[flat="true"]:disabled {{
+            background-color: transparent;
+            color: #888888;
         }}
         """
 
         # Command Link Button (Card Style)
+        cmd_btn_bg = tw.get('cmdBtnBg', btn_bg)
+        cmd_btn_hover = tw.get('cmdBtnHoverBg', btn_hover)
+
         qss += f"""
         QCommandLinkButton {{
-            background-color: {tw.get('cmdBtnBg', tw.get('btnBg'))};
-            border: {tw.get('btnBorder', '1px solid #999')};
-            color: {tw.get('btnColor', '#000')};
+            background-color: {cmd_btn_bg};
+            border: {btn_border};
+            color: {btn_color};
             border-radius: {radius};
             padding: 8px;
             text-align: left;
         }}
         QCommandLinkButton:hover {{
-            background-color: {tw.get('cmdBtnHoverBg', tw.get('btnHoverBg'))};
+            background-color: {cmd_btn_hover};
+        }}
+        QCommandLinkButton:disabled {{
+            background-color: {btn_disabled};
+            border: 1px solid #d0d0d0;
+            color: #888888;
         }}
         """
 
@@ -85,14 +123,23 @@ class PythonGenerator:
         QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus, QSpinBox:focus {{
             border: {input_focus};
         }}
+        QLineEdit:disabled, QTextEdit:disabled, QPlainTextEdit:disabled, QSpinBox:disabled, QDoubleSpinBox:disabled, QDateEdit:disabled, QTimeEdit:disabled, QDateTimeEdit:disabled {{
+            background-color: #f5f5f5;
+            color: #888888;
+            border: 1px solid #d0d0d0;
+        }}
         """
 
         # ComboBox
+        combo_bg = tw.get('comboBg', '#fff')
+        combo_border = tw.get('comboBorder', '1px solid #ccc')
+        combo_color = tw.get('comboColor', '#000')
+
         qss += f"""
         QComboBox, QFontComboBox {{
-            background-color: {tw.get('comboBg', '#fff')};
-            border: {tw.get('comboBorder', '1px solid #ccc')};
-            color: {tw.get('comboColor', '#000')};
+            background-color: {combo_bg};
+            border: {combo_border};
+            color: {combo_color};
             border-radius: {radius};
             padding: 4px;
         }}
@@ -104,18 +151,27 @@ class PythonGenerator:
             border-top-right-radius: {radius};
             border-bottom-right-radius: {radius};
         }}
+        QComboBox:disabled {{
+            background-color: #f5f5f5;
+            color: #888888;
+            border: 1px solid #d0d0d0;
+        }}
         """
 
         # Labels & Checks
+        label_bg = tw.get('labelBg', 'transparent')
+        label_color = tw.get('labelColor', text_color)
+        check_color = tw.get('checkColor', text_color)
+
         qss += f"""
         QLabel {{
-            background-color: {tw.get('labelBg', 'transparent')};
-            color: {tw.get('labelColor', text_color)};
+            background-color: {label_bg};
+            color: {label_color};
             border-radius: {radius};
             padding: 2px;
         }}
         QCheckBox, QRadioButton {{
-            color: {tw.get('checkColor', text_color)};
+            color: {check_color};
             spacing: 5px;
         }}
         QCheckBox::indicator, QRadioButton::indicator {{
@@ -125,12 +181,15 @@ class PythonGenerator:
         """
 
         # GroupBox
+        group_border = tw.get('groupBorder', '1px solid #ccc')
+        group_color = tw.get('groupColor', text_color)
+
         qss += f"""
         QGroupBox {{
-            border: {tw.get('groupBorder', '1px solid #ccc')};
+            border: {group_border};
             border-radius: {radius};
             margin-top: 1.5em;
-            color: {tw.get('groupColor', text_color)};
+            color: {group_color};
         }}
         QGroupBox::title {{
             subcontrol-origin: margin;
@@ -146,6 +205,7 @@ class PythonGenerator:
         list_border = tw.get('listBorder', '1px solid #ccc')
         list_sel_bg = tw.get('listSelBg', 'blue')
         list_sel_color = tw.get('listSelColor', '#fff')
+        table_header_bg = tw.get('tableHeaderBg', '#eee')
 
         qss += f"""
         QListWidget, QTreeWidget, QTableWidget {{
@@ -160,7 +220,7 @@ class PythonGenerator:
             color: {list_sel_color};
         }}
         QHeaderView::section {{
-            background-color: {tw.get('tableHeaderBg', '#eee')};
+            background-color: {table_header_bg};
             color: {list_color};
             padding: 4px;
             border: 0px;
@@ -169,23 +229,28 @@ class PythonGenerator:
         """
 
         # Tabs
+        tab_border = tw.get('tabBorder', '1px solid #ccc')
+        tab_active_bg = tw.get('tabActiveBg', '#fff')
+        tab_bar_bg = tw.get('tabBarBg', '#eee')
+        tab_color = tw.get('tabColor', '#000')
+
         qss += f"""
         QTabWidget::pane {{
-            border: {tw.get('tabBorder', '1px solid #ccc')};
+            border: {tab_border};
             border-radius: {radius};
-            background-color: {tw.get('tabActiveBg', '#fff')};
+            background-color: {tab_active_bg};
         }}
         QTabBar::tab {{
-            background-color: {tw.get('tabBarBg', '#eee')};
-            color: {tw.get('tabColor', '#000')};
+            background-color: {tab_bar_bg};
+            color: {tab_color};
             padding: 6px 12px;
             border-top-left-radius: {radius};
             border-top-right-radius: {radius};
             margin-right: 2px;
         }}
         QTabBar::tab:selected {{
-            background-color: {tw.get('tabActiveBg', '#fff')};
-            border-bottom-color: {tw.get('tabActiveBg', '#fff')};
+            background-color: {tab_active_bg};
+            border-bottom-color: {tab_active_bg};
         }}
         """
 
