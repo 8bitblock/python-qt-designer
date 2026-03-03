@@ -38,8 +38,9 @@ class UIParser:
                 return None
 
         # Window Properties
-        self.window_title = self._get_prop_val(main_widget, "windowTitle") or "MainWindow"
-        rect = self._get_rect(main_widget)
+        main_props = self._get_props_dict(main_widget)
+        self.window_title = main_props.get("windowTitle") or "MainWindow"
+        rect = main_props.get("geometry")
         if rect:
             self.canvas_size = {'w': rect['w'], 'h': rect['h']}
 
@@ -122,6 +123,7 @@ class UIParser:
     def _process_widget(self, node, parent_abs_x, parent_abs_y, from_layout=False):
         w_class = node.get("class")
         w_name = node.get("name")
+        props = self._get_props_dict(node)
 
         if from_layout:
             # Use passed coordinates
@@ -130,7 +132,7 @@ class UIParser:
             final_x = parent_abs_x
             final_y = parent_abs_y
         else:
-            rect = self._get_rect(node)
+            rect = props.get("geometry")
             if not rect:
                 rect = {'x': 0, 'y': 0, 'w': 100, 'h': 30}
 
@@ -141,7 +143,7 @@ class UIParser:
         el = {
             "id": str(uuid.uuid4()),
             "name": w_name,
-            "type": self._map_class(w_class, node),
+            "type": self._map_class(w_class, props),
             "x": final_x,
             "y": final_y,
             "w": w,
@@ -149,63 +151,73 @@ class UIParser:
         }
 
         # Properties
-        self._extract_props(node, el)
+        self._extract_props(props, el)
 
         self.elements.append(el)
 
         # Recurse
         self._parse_children(node, final_x, final_y)
 
-    def _map_class(self, w_class, node):
+    def _map_class(self, w_class, props):
         if w_class == "Line":
             # Check orientation
-            orient = self._get_prop_val(node, "orientation")
+            orient = props.get("orientation")
             return "VLine" if orient == "Qt::Vertical" else "HLine"
         return w_class
 
-    def _extract_props(self, node, el):
+    def _extract_props(self, props, el):
         # Text
-        text = self._get_prop_val(node, "text")
+        text = props.get("text")
         if not text and el["type"] == "QGroupBox":
-            text = self._get_prop_val(node, "title")
+            text = props.get("title")
         if text: el["text"] = text
 
         # Checkable
-        if self._get_prop_val(node, "checkable") == "true": el["checkable"] = True
-        if self._get_prop_val(node, "checked") == "true": el["checked"] = True
+        if props.get("checkable") == "true": el["checkable"] = True
+        if props.get("checked") == "true": el["checked"] = True
 
         # Stylesheet
-        ss = self._get_prop_val(node, "styleSheet")
+        ss = props.get("styleSheet")
         if ss: el["styleSheet"] = ss
 
         # Tooltip
-        tt = self._get_prop_val(node, "toolTip")
+        tt = props.get("toolTip")
         if tt: el["tooltip"] = tt
 
         # Value
-        val = self._get_prop_val(node, "value")
+        val = props.get("value")
         if val:
             try: el["value"] = float(val)
             except: pass
 
-    def _get_rect(self, node):
-        for prop in node.findall("property"):
-            if prop.get("name") == "geometry":
+    def _get_props_dict(self, node):
+        props = {}
+        for prop in node.iterfind("property"):
+            name = prop.get("name")
+            # Special case for geometry
+            if name == "geometry":
                 rect = prop.find("rect")
                 if rect is not None:
-                    return {
+                    props[name] = {
                         'x': int(rect.find("x").text),
                         'y': int(rect.find("y").text),
                         'w': int(rect.find("width").text),
                         'h': int(rect.find("height").text)
                     }
-        return None
+                continue
+
+            # Standard tags
+            for tag in ['string', 'bool', 'number', 'enum', 'set', 'cstring']:
+                val = prop.find(tag)
+                if val is not None:
+                    props[name] = val.text
+                    break
+        return props
+
+    def _get_rect(self, node):
+        # Deprecated: use props dict
+        return self._get_props_dict(node).get("geometry")
 
     def _get_prop_val(self, node, name):
-        for prop in node.findall("property"):
-            if prop.get("name") == name:
-                for tag in ['string', 'bool', 'number', 'enum', 'set', 'cstring']:
-                    val = prop.find(tag)
-                    if val is not None:
-                        return val.text
-        return None
+        # Deprecated: use props dict
+        return self._get_props_dict(node).get(name)
