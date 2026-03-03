@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script>
+        const { useState, useEffect, useMemo } = React;
+
+        const App = () => {
+            const [elements, setElements] = useState([]);
+            const [selectedIds, setSelectedIds] = useState([4999]);
+            const [hoverId, setHoverId] = useState(null);
+
+            useEffect(() => {
+                const els = [];
+                for (let i = 0; i < 10000; i++) {
+                    els.push({ id: i });
+                }
+                setElements(els);
+            }, []);
+
+            // Optimized:
+            const t0 = performance.now();
+            const primaryEl = useMemo(() => elements.find(e => e.id === selectedIds[0]), [elements, selectedIds[0]]);
+            const t1 = performance.now();
+
+            useEffect(() => {
+                if (elements.length > 0) {
+                    let renders = 0;
+                    const startTime = performance.now();
+                    const interval = setInterval(() => {
+                        setHoverId(renders);
+                        renders++;
+                        if (renders >= 1000) {
+                            clearInterval(interval);
+                            const totalTime = performance.now() - startTime;
+                            window.benchmarkDone = true;
+                            window.benchmarkResult = totalTime;
+                        }
+                    }, 0);
+                }
+            }, [elements]);
+
+            return React.createElement('div', null, `Hover: ${hoverId}`);
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(App));
+    </script>
+</body>
+</html>
