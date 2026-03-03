@@ -4,7 +4,10 @@ const Ico = ({ name, size = 16 }) => {
     const r = React.useRef(null);
     React.useEffect(() => {
         if (window.lucide && r.current) {
-            r.current.innerHTML = `<i data-lucide="${name}"></i>`;
+            r.current.textContent = '';
+            const i = document.createElement('i');
+            i.dataset.lucide = name;
+            r.current.appendChild(i);
             window.lucide.createIcons({ attrs: { width: size, height: size }, nameAttr: 'data-lucide', root: r.current });
         }
     }, [name, size]);
