@@ -109,7 +109,7 @@ def test_backend_generation():
     assert 'border-radius: 6px;' in py_out, "Modern border-radius missing in Python QSS"
 
     # Check for widget init
-    assert 'self.pushbutton_1 = QPushButton(self.centralwidget)' in py_out, "Button init missing in Python"
+    assert 'self.pushbutton_1 = QPushButton(self.container)' in py_out, "Button init missing in Python"
 
     # Check absence of inline style for default button
     # The string 'self.pushbutton_1.setStyleSheet' should NOT appear because no user overrides were provided in mock data
@@ -123,7 +123,7 @@ def test_backend_generation():
     assert 'self.pushbutton_1.clicked.connect(self.label_1.clear)' in py_out, "Connection missing in Python"
 
     # Check QImage mapping
-    assert 'self.image_1 = QLabel(self.centralwidget)' in py_out, "QImage should be mapped to QLabel in Python"
+    assert 'self.image_1 = QLabel(self.container)' in py_out, "QImage should be mapped to QLabel in Python"
 
     # Check Validation
     assert 'Should not exist' not in py_out, "Invalid text property generated for ProgressBar in Python"
