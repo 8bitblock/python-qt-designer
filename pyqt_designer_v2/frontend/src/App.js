@@ -476,37 +476,37 @@ window.Designer.App = () => {
                         <span className="text-[10px] font-bold">Redo</span>
                     </button>
                     <div className="toolbar-sep" />
-                    <button onClick={() => handleAlign('left')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} title="Align Left">
+                    <button onClick={() => handleAlign('left')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} aria-label="Align Left" title="Align Left">
                         <Ico name="align-left" />
                     </button>
-                    <button onClick={() => handleAlign('center')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} title="Align Horizontal Center">
+                    <button onClick={() => handleAlign('center')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} aria-label="Align Horizontal Center" title="Align Horizontal Center">
                         <Ico name="align-center-horizontal" />
                     </button>
-                    <button onClick={() => handleAlign('right')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} title="Align Right">
+                    <button onClick={() => handleAlign('right')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} aria-label="Align Right" title="Align Right">
                         <Ico name="align-right" />
                     </button>
                     <div className="toolbar-sep" />
-                    <button onClick={() => handleAlign('top')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} title="Align Top">
+                    <button onClick={() => handleAlign('top')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} aria-label="Align Top" title="Align Top">
                         <Ico name="align-start-vertical" />
                     </button>
-                    <button onClick={() => handleAlign('middle')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} title="Align Vertical Center">
+                    <button onClick={() => handleAlign('middle')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} aria-label="Align Vertical Center" title="Align Vertical Center">
                         <Ico name="align-center-vertical" />
                     </button>
-                    <button onClick={() => handleAlign('bottom')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} title="Align Bottom">
+                    <button onClick={() => handleAlign('bottom')} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} aria-label="Align Bottom" title="Align Bottom">
                         <Ico name="align-end-vertical" />
                     </button>
                     <div className="toolbar-sep" />
-                    <button onClick={() => handleDistribute('horizontal')} disabled={selectedIds.length < 3} className={`toolbar-btn ${selectedIds.length < 3 ? 'opacity-50' : ''}`} title="Distribute Horizontally">
+                    <button onClick={() => handleDistribute('horizontal')} disabled={selectedIds.length < 3} className={`toolbar-btn ${selectedIds.length < 3 ? 'opacity-50' : ''}`} aria-label="Distribute Horizontally" title="Distribute Horizontally">
                         <Ico name="align-horizontal-distribute-center" />
                     </button>
-                    <button onClick={() => handleDistribute('vertical')} disabled={selectedIds.length < 3} className={`toolbar-btn ${selectedIds.length < 3 ? 'opacity-50' : ''}`} title="Distribute Vertically">
+                    <button onClick={() => handleDistribute('vertical')} disabled={selectedIds.length < 3} className={`toolbar-btn ${selectedIds.length < 3 ? 'opacity-50' : ''}`} aria-label="Distribute Vertically" title="Distribute Vertically">
                         <Ico name="align-vertical-distribute-center" />
                     </button>
                     <div className="toolbar-sep" />
-                    <button onClick={handleGroup} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} title="Group">
+                    <button onClick={handleGroup} disabled={selectedIds.length < 2} className={`toolbar-btn ${selectedIds.length < 2 ? 'opacity-50' : ''}`} aria-label="Group" title="Group">
                         <Ico name="group" />
                     </button>
-                    <button onClick={handleUngroup} disabled={selectedIds.length === 0} className={`toolbar-btn ${selectedIds.length === 0 ? 'opacity-50' : ''}`} title="Ungroup">
+                    <button onClick={handleUngroup} disabled={selectedIds.length === 0} className={`toolbar-btn ${selectedIds.length === 0 ? 'opacity-50' : ''}`} aria-label="Ungroup" title="Ungroup">
                         <Ico name="ungroup" />
                     </button>
                     <div className="toolbar-sep" />
