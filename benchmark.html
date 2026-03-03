@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        const elements = [];
+        for (let i = 0; i < 5000; i++) {
+            elements.push({ id: `widget_${i}`, name: `Widget ${i}` });
+        }
+        const selectedIds = [`widget_4999`];
+
+        function runBaseline() {
+            let start = performance.now();
+            for (let i = 0; i < 10000; i++) {
+                const primaryEl = elements.find(e => e.id === selectedIds[0]);
+            }
+            return performance.now() - start;
+        }
+
+        function runOptimized() {
+            let start = performance.now();
+            // Simulate useMemo by only computing once since deps didn't change
+            let memoizedResult = null;
+            let lastDeps = [null, null];
+
+            for (let i = 0; i < 10000; i++) {
+                const currentDeps = [elements, selectedIds[0]];
+                if (lastDeps[0] !== currentDeps[0] || lastDeps[1] !== currentDeps[1]) {
+                    memoizedResult = elements.find(e => e.id === selectedIds[0]);
+                    lastDeps = currentDeps;
+                }
+                const primaryEl = memoizedResult;
+            }
+            return performance.now() - start;
+        }
+
+        window.baselineTime = runBaseline();
+        window.optimizedTime = runOptimized();
+        window.benchmarkDone = true;
+    </script>
+</head>
+<body></body>
+</html>

@@ -1,6 +1,6 @@
 window.Designer = window.Designer || {};
 
-const { useState, useEffect, useRef, useCallback } = React;
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
 const Ico = ({ name, size = 16 }) => {
     const r = useRef(null);
@@ -49,7 +49,7 @@ window.Designer.App = () => {
     const [exportTheme, setExportTheme] = useState(true);
 
     const theme = THEMES[activeTheme];
-    const primaryEl = elements.find(e => e.id === selectedIds[0]);
+    const primaryEl = useMemo(() => elements.find(e => e.id === selectedIds[0]), [elements, selectedIds[0]]);
     const bridge = window.qt?.webChannelTransport ? window.pyBridge : null;
 
     const saveHistory = () => {
