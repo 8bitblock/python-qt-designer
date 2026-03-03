@@ -4,7 +4,9 @@ import os
 
 class CORSRequestHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
-        self.send_header('Access-Control-Allow-Origin', '*')
+        # Restrict CORS to the local server origin to fix security vulnerability
+        origin = f"http://127.0.0.1:{self.server.server_port}"
+        self.send_header('Access-Control-Allow-Origin', origin)
         SimpleHTTPRequestHandler.end_headers(self)
 
     def log_message(self, format, *args):
