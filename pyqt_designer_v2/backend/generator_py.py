@@ -36,13 +36,18 @@ class PythonGenerator:
         }}
         """
 
+        # Common Disabled Styles (Theme Aware)
+        disabled_bg = ide.get('bg3', tw.get('btnBgDisabled', canvas_bg)) # A darker/dimmer surface color
+        disabled_border = ide.get('border', '1px solid #d0d0d0') # The subtle border for inputs/frames in the theme
+        if not disabled_border.startswith('1px'): disabled_border = f'1px solid {disabled_border}'
+        disabled_color = ide.get('text3', '#888888') # The dim/placeholder text color
+
         # Buttons
         btn_bg = tw.get('btnBg', '#e0e0e0')
         btn_border = tw.get('btnBorder', '1px solid #999')
         btn_color = tw.get('btnColor', '#000')
         btn_hover = tw.get('btnHoverBg', '#eeeeee')
         btn_pressed = tw.get('btnPressedBg', '#cccccc')
-        btn_disabled = tw.get('btnBgDisabled', canvas_bg)
 
         qss += f"""
         QPushButton, QToolButton {{
@@ -59,27 +64,27 @@ class PythonGenerator:
             background-color: {btn_pressed};
         }}
         QPushButton:disabled, QToolButton:disabled {{
-            background-color: {btn_disabled};
-            border: 1px solid #d0d0d0;
-            color: #888888;
+            background-color: {disabled_bg};
+            border: {disabled_border};
+            color: {disabled_color};
         }}
         """
 
-        # Flat Buttons
+        # Flat Buttons (Using the native :flat pseudo-state for dynamic updates)
         qss += f"""
-        QPushButton[flat="true"] {{
+        QPushButton:flat {{
             background-color: transparent;
             border: none;
         }}
-        QPushButton[flat="true"]:hover {{
-            background-color: rgba(0, 0, 0, 0.05);
+        QPushButton:flat:hover {{
+            background-color: rgba(128, 128, 128, 0.1);
         }}
-        QPushButton[flat="true"]:pressed {{
-            background-color: rgba(0, 0, 0, 0.1);
+        QPushButton:flat:pressed {{
+            background-color: rgba(128, 128, 128, 0.2);
         }}
-        QPushButton[flat="true"]:disabled {{
+        QPushButton:flat:disabled {{
             background-color: transparent;
-            color: #888888;
+            color: {disabled_color};
         }}
         """
 
@@ -100,9 +105,9 @@ class PythonGenerator:
             background-color: {cmd_btn_hover};
         }}
         QCommandLinkButton:disabled {{
-            background-color: {btn_disabled};
-            border: 1px solid #d0d0d0;
-            color: #888888;
+            background-color: {disabled_bg};
+            border: {disabled_border};
+            color: {disabled_color};
         }}
         """
 
@@ -124,9 +129,9 @@ class PythonGenerator:
             border: {input_focus};
         }}
         QLineEdit:disabled, QTextEdit:disabled, QPlainTextEdit:disabled, QSpinBox:disabled, QDoubleSpinBox:disabled, QDateEdit:disabled, QTimeEdit:disabled, QDateTimeEdit:disabled {{
-            background-color: #f5f5f5;
-            color: #888888;
-            border: 1px solid #d0d0d0;
+            background-color: {disabled_bg};
+            color: {disabled_color};
+            border: {disabled_border};
         }}
         """
 
@@ -152,9 +157,9 @@ class PythonGenerator:
             border-bottom-right-radius: {radius};
         }}
         QComboBox:disabled {{
-            background-color: #f5f5f5;
-            color: #888888;
-            border: 1px solid #d0d0d0;
+            background-color: {disabled_bg};
+            color: {disabled_color};
+            border: {disabled_border};
         }}
         """
 
