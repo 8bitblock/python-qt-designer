@@ -46,8 +46,6 @@ class UIParser:
 
         # Determine where to start parsing children (CentralWidget or Direct)
         start_node = main_widget
-        start_x = 0
-        start_y = 0
 
         # If it's QMainWindow, we look for centralwidget
         is_mainwindow = main_widget.get("class") == "QMainWindow"
