@@ -49,7 +49,22 @@ window.Designer.App = () => {
     const [exportTheme, setExportTheme] = useState(true);
 
     const theme = THEMES[activeTheme];
-    const primaryEl = useMemo(() => elements.find(e => e.id === selectedIds[0]), [elements, selectedIds[0]]);
+
+    const elementIndexMap = useMemo(() => {
+        const map = new Map();
+        for (let i = 0; i < elements.length; i++) {
+            map.set(elements[i].id, i);
+        }
+        return map;
+    }, [elements]);
+
+    const primaryEl = useMemo(() => {
+        const id = selectedIds[0];
+        if (!id) return undefined;
+        const idx = elementIndexMap.get(id);
+        return idx !== undefined ? elements[idx] : undefined;
+    }, [elements, selectedIds[0], elementIndexMap]);
+
     const bridge = window.qt?.webChannelTransport ? window.pyBridge : null;
 
     const saveHistory = () => {
@@ -345,8 +360,8 @@ window.Designer.App = () => {
 
     const handleMoveElement = (id, direction) => {
         saveHistory();
-        const idx = elements.findIndex(e => e.id === id);
-        if (idx === -1) return;
+        const idx = elementIndexMap.get(id);
+        if (idx === undefined) return;
         const newEls = [...elements];
         const el = newEls[idx];
         newEls.splice(idx, 1);
